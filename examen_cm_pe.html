@@ -482,8 +482,9 @@ function renderQuestion(container, q) {
     </div>`;
   }
 
-  html += `<button class="btn-conf" id="bc-${q.id}" onclick="confirmItem('${q.id}')" disabled>Confirmar →</button>`;
-  html += `<div class="fb" id="fb-${q.id}"></div>`;
+    html += `<button class="btn-conf" id="bc-${q.id}" onclick="confirmItem('${q.id}')" ${answers[q.id]!==undefined && !confirmed[q.id] ? '' : 'disabled'}>${confirmed[q.id]?'✓ Confirmado':'Confirmar →'}</button>
+    ${confirmed[q.id] ? `<button class="btn-conf" style="margin-left:8px; border-color:var(--muted); color:var(--muted);" onclick="unlock('${q.id}')">✏️ Editar</button>` : ''}
+    <div class="fb" id="fb-${q.id}" style="${confirmed[q.id]?'display:block':''}"></div>`;
   card.innerHTML = html;
   container.appendChild(card);
 }
@@ -520,8 +521,9 @@ function renderExercise(container, ex) {
         oninput="pickNum('${step.id}')" onkeydown="if(event.key==='Enter')confirmStep('${ex.id}','${step.id}',${si})">
       <span class="num-unit">${step.unit}</span>
     </div>`;
-    html += `<button class="btn-conf" id="bc-${step.id}" onclick="confirmStep('${ex.id}','${step.id}',${si})" disabled>Confirmar →</button>`;
-    html += `<div class="fb" id="fb-${step.id}"></div>`;
+    html += `<button class="btn-conf" id="bc-${step.id}" onclick="confirmStep('${ex.id}','${step.id}',${si})" ${answers[step.id]!==undefined && !confirmed[step.id] ? '' : 'disabled'}>${confirmed[step.id]?'✓ Confirmado':'Confirmar →'}</button>
+    ${confirmed[step.id] ? `<button class="btn-conf" style="margin-left:8px; border-color:var(--muted); color:var(--muted);" onclick="unlock('${step.id}')">✏️ Editar</button>` : ''}
+    <div class="fb" id="fb-${step.id}" style="${confirmed[step.id]?'display:block':''}"></div>`;
     card.innerHTML = html;
     container.appendChild(card);
   });
@@ -570,6 +572,12 @@ function renderExercise(container, ex) {
 /* ═══════════════════════════════════════════════
    INTERACTION
 ═══════════════════════════════════════════════ */
+function unlock(id) {
+  confirmed[id] = false;
+  if (correct[id]) { score--; correct[id] = false; }
+  renderAll(); updatePB();
+}
+
 function pickOpt(qid, oi) {
   if (confirmed[qid]) return;
   answers[qid] = oi;
@@ -592,34 +600,20 @@ function pickNum(qid) {
 function confirmItem(qid) {
   if (confirmed[qid] || answers[qid] === undefined) return;
   confirmed[qid] = true;
-  document.getElementById(`bc-${qid}`).disabled = true;
   const q = ITEMS.find(i => i.id === qid);
   let ok = false;
 
   if (q.type === 'mc') {
     ok = answers[qid] === q.ans;
-    document.querySelectorAll(`[id^="o-${qid}-"]`).forEach((el,j)=>{
-      el.classList.add('disabled');
-      if (j === q.ans) el.classList.add('correct-opt');
-      else if (j === answers[qid] && !ok) el.classList.add('wrong-opt');
-    });
   } else if (q.type === 'tf') {
     ok = answers[qid] === q.ans;
-    const bt = document.getElementById(`tf-${qid}-t`);
-    const bf = document.getElementById(`tf-${qid}-f`);
-    bt.classList.add('disabled'); bf.classList.add('disabled');
-    (q.ans ? bt : bf).classList.add('tf-ok');
-    if (!ok) (answers[qid] ? bt : bf).classList.add('tf-err');
   } else {
     ok = Math.abs(answers[qid] - q.ans) <= (q.tol || 0);
-    const inp = document.getElementById(`ni-${qid}`);
-    inp.classList.add(ok ? 'ok' : 'err');
-    inp.disabled = true;
   }
 
   correct[qid] = ok;
   if (ok) score++;
-  showFB(qid, ok, q.fb, q.type === 'numeric' && !ok ? `$${fmt(q.ans)} ${q.unit}` : null);
+  renderAll();
   updatePB();
   checkDone();
 }
@@ -627,17 +621,13 @@ function confirmItem(qid) {
 function confirmStep(exId, stepId, stepIdx) {
   if (confirmed[stepId] || answers[stepId] === undefined) return;
   confirmed[stepId] = true;
-  document.getElementById(`bc-${stepId}`).disabled = true;
   const ex = ITEMS.find(i => i.id === exId);
   const step = ex.steps[stepIdx];
   const ok = Math.abs(answers[stepId] - step.ans) <= (step.tol || 5);
   correct[stepId] = ok;
   if (ok) score++;
 
-  const inp = document.getElementById(`ni-${stepId}`);
-  inp.classList.add(ok ? 'ok' : 'err');
-  inp.disabled = true;
-  showFB(stepId, ok, step.fb, !ok ? `${fmt(step.ans)} ${step.unit}` : null);
+  renderAll();
   updatePB();
 
   // Check if all steps confirmed → reveal chart
@@ -657,6 +647,7 @@ function confirmStep(exId, stepId, stepIdx) {
 
 function showFB(id, ok, text, correctVal) {
   const fb = document.getElementById(`fb-${id}`);
+  if(!fb) return;
   fb.className = `fb ${ok ? 'ok-fb' : 'err-fb'}`;
   fb.innerHTML = (ok ? '✓ ' : '✗ ') + text + (correctVal ? ` → <strong>Correcto: ${correctVal}</strong>` : '');
 }
@@ -681,7 +672,8 @@ function checkDone() {
 ═══════════════════════════════════════════════ */
 function fmt(n) {
   if (n === undefined || n === null) return '0';
-  return Math.round(n).toLocaleString('es-AR');
+  const s = n < 0 ? '-' : '';
+  return s + Math.round(Math.abs(n)).toLocaleString('es-AR');
 }
 
 function drawBEChart(ex) {

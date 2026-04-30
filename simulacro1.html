@@ -477,7 +477,12 @@ function showFb(q){
 }
 
 function upd(){const d=Object.keys(conf).length;document.getElementById('pbf').style.width=`${d/TOTAL*100}%`;document.getElementById('pbt').textContent=`${d} / ${TOTAL}`;document.getElementById('sp').textContent=`Puntaje: ${score}`;}
-function fmt(n){return Math.round(Math.abs(n)).toLocaleString('es-AR');}
+function fmt(n){
+  if(n===undefined||n===null)return '0';
+  const s = n < 0 ? '-' : '';
+  return s + Math.round(Math.abs(n)).toLocaleString('es-AR');
+}
+
 
 async function showRes(){
   document.getElementById('exam').style.display='none';

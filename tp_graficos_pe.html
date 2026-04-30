@@ -324,16 +324,18 @@ td.zona-roja{color:var(--red);font-weight:700;font-family:var(--mono);font-size:
         <div class="q-row"><span class="q-num-badge">1.1</span><span class="q-type-badge">Lectura</span><div class="q-text">Observá el gráfico. ¿En qué cantidad de platos se cruzan las líneas de Ingresos y Costos Totales? Ese es el Punto de Equilibrio.</div></div>
         <div class="q-hint">📐 El cruce de ambas líneas = PE. Buscá el punto dorado en el gráfico.</div>
         <div class="num-row"><input class="num-in" id="n-1-1" type="number" placeholder="0" oninput="pickN('1-1')" onkeydown="if(event.key==='Enter')confN('1-1',600,0,'platos')"><span class="num-unit">platos</span></div>
-        <button class="btn-conf" id="bc-1-1" onclick="confN('1-1',600,0,'platos')" disabled>Confirmar</button>
-        <div class="fb" id="fb-1-1"></div>
+        <button class="btn-conf" id="bc-1-1" onclick="confN('1-1',600,0,'platos')" ${answers['1-1']!==undefined && !confirmed['1-1'] ? '' : 'disabled'}>${confirmed['1-1']?'✓ Confirmado':'Confirmar'}</button>
+        ${confirmed['1-1'] ? `<button class="btn-conf" style="margin-left:8px; border-color:var(--muted); color:var(--muted);" onclick="unlock('1-1')">✏️ Editar</button>` : ''}
+        <div class="fb" id="fb-1-1" style="${confirmed['1-1']?'display:block':''}"></div>
       </div>
 
       <div class="q-item">
         <div class="q-row"><span class="q-num-badge">1.2</span><span class="q-type-badge">Cálculo</span><div class="q-text">Calculá la ganancia neta del mes sabiendo que se vendieron 850 platos y el PE es 600.</div></div>
         <div class="q-hint">📐 Ganancia = (Platos vendidos − PE) × CMu</div>
         <div class="num-row"><input class="num-in" id="n-1-2" type="number" placeholder="0" oninput="pickN('1-2')" onkeydown="if(event.key==='Enter')confN('1-2',875000,0,'$')"><span class="num-unit">$</span></div>
-        <button class="btn-conf" id="bc-1-2" onclick="confN('1-2',875000,0,'$')" disabled>Confirmar</button>
-        <div class="fb" id="fb-1-2"></div>
+        <button class="btn-conf" id="bc-1-2" onclick="confN('1-2',875000,0,'$')" ${answers['1-2']!==undefined && !confirmed['1-2'] ? '' : 'disabled'}>${confirmed['1-2']?'✓ Confirmado':'Confirmar'}</button>
+        ${confirmed['1-2'] ? `<button class="btn-conf" style="margin-left:8px; border-color:var(--muted); color:var(--muted);" onclick="unlock('1-2')">✏️ Editar</button>` : ''}
+        <div class="fb" id="fb-1-2" style="${confirmed['1-2']?'display:block':''}"></div>
       </div>
 
       <div class="q-item">
@@ -344,8 +346,9 @@ td.zona-roja{color:var(--red);font-weight:700;font-family:var(--mono);font-size:
           <div class="opt" onclick="pickO('1-3',2)"><span class="opt-k">C</span>400 platos — los CF suben entonces el PE baja</div>
           <div class="opt" onclick="pickO('1-3',3)"><span class="opt-k">D</span>1.200 platos — el PE siempre es el doble de los CF</div>
         </div>
-        <button class="btn-conf" id="bc-1-3" onclick="confO('1-3',1)" disabled>Confirmar</button>
-        <div class="fb" id="fb-1-3"></div>
+        <button class="btn-conf" id="bc-1-3" onclick="confO('1-3',1)" ${answers['1-3']!==undefined && !confirmed['1-3'] ? '' : 'disabled'}>${confirmed['1-3']?'✓ Confirmado':'Confirmar'}</button>
+        ${confirmed['1-3'] ? `<button class="btn-conf" style="margin-left:8px; border-color:var(--muted); color:var(--muted);" onclick="unlock('1-3')">✏️ Editar</button>` : ''}
+        <div class="fb" id="fb-1-3" style="${confirmed['1-3']?'display:block':''}"></div>
       </div>
 
       <div class="q-item">
@@ -411,23 +414,26 @@ td.zona-roja{color:var(--red);font-weight:700;font-family:var(--mono);font-size:
         <div class="q-row"><span class="q-num-badge">2.1</span><span class="q-type-badge">Lectura</span><div class="q-text">Identificá el Punto de Equilibrio del Food Truck observando el gráfico.</div></div>
         <div class="q-hint">📐 PE = CF ÷ CMu = $480.000 ÷ $2.000</div>
         <div class="num-row"><input class="num-in" id="n-2-1" type="number" placeholder="0" oninput="pickN('2-1')" onkeydown="if(event.key==='Enter')confN('2-1',240,0,'unidades')"><span class="num-unit">unidades</span></div>
-        <button class="btn-conf" id="bc-2-1" onclick="confN('2-1',240,0,'unidades')" disabled>Confirmar</button>
-        <div class="fb" id="fb-2-1"></div>
+        <button class="btn-conf" id="bc-2-1" onclick="confN('2-1',240,0,'unidades')" ${answers['2-1']!==undefined && !confirmed['2-1'] ? '' : 'disabled'}>${confirmed['2-1']?'✓ Confirmado':'Confirmar'}</button>
+        ${confirmed['2-1'] ? `<button class="btn-conf" style="margin-left:8px; border-color:var(--muted); color:var(--muted);" onclick="unlock('2-1')">✏️ Editar</button>` : ''}
+        <div class="fb" id="fb-2-1" style="${confirmed['2-1']?'display:block':''}"></div>
       </div>
 
       <div class="q-item">
         <div class="q-row"><span class="q-num-badge">2.2</span><span class="q-type-badge">Cálculo</span><div class="q-text">¿Cuánto dinero está perdiendo "La Rueda" este mes con 140 unidades vendidas?</div></div>
         <div class="q-hint">📐 Pérdida = (Unidades vendidas − PE) × CMu → resultado negativo</div>
         <div class="num-row"><input class="num-in" id="n-2-2" type="number" placeholder="0" oninput="pickN('2-2')" onkeydown="if(event.key==='Enter')confN('2-2',200000,0,'$')"><span class="num-unit">$ (pérdida)</span></div>
-        <button class="btn-conf" id="bc-2-2" onclick="confN('2-2',200000,0,'$')" disabled>Confirmar</button>
-        <div class="fb" id="fb-2-2"></div>
+        <button class="btn-conf" id="bc-2-2" onclick="confN('2-2',-200000,0,'$')" ${answers['2-2']!==undefined && !confirmed['2-2'] ? '' : 'disabled'}>${confirmed['2-2']?'✓ Confirmado':'Confirmar'}</button>
+        ${confirmed['2-2'] ? `<button class="btn-conf" style="margin-left:8px; border-color:var(--muted); color:var(--muted);" onclick="unlock('2-2')">✏️ Editar</button>` : ''}
+        <div class="fb" id="fb-2-2" style="${confirmed['2-2']?'display:block':''}"></div>
       </div>
 
       <div class="q-item">
         <div class="q-row"><span class="q-num-badge">2.3</span><span class="q-type-badge">Cálculo</span><div class="q-text">¿Cuántas unidades adicionales debe vender "La Rueda" para llegar exactamente al Punto de Equilibrio?</div></div>
         <div class="num-row"><input class="num-in" id="n-2-3" type="number" placeholder="0" oninput="pickN('2-3')" onkeydown="if(event.key==='Enter')confN('2-3',100,0,'unidades')"><span class="num-unit">unidades más</span></div>
-        <button class="btn-conf" id="bc-2-3" onclick="confN('2-3',100,0,'unidades')" disabled>Confirmar</button>
-        <div class="fb" id="fb-2-3"></div>
+        <button class="btn-conf" id="bc-2-3" onclick="confN('2-3',100,0,'unidades')" ${answers['2-3']!==undefined && !confirmed['2-3'] ? '' : 'disabled'}>${confirmed['2-3']?'✓ Confirmado':'Confirmar'}</button>
+        ${confirmed['2-3'] ? `<button class="btn-conf" style="margin-left:8px; border-color:var(--muted); color:var(--muted);" onclick="unlock('2-3')">✏️ Editar</button>` : ''}
+        <div class="fb" id="fb-2-3" style="${confirmed['2-3']?'display:block':''}"></div>
       </div>
 
       <div class="q-item">
@@ -438,8 +444,9 @@ td.zona-roja{color:var(--red);font-weight:700;font-family:var(--mono);font-size:
           <div class="opt" onclick="pickO('2-4',2)"><span class="opt-k">C</span>Contratar más personal eventual (sube CF → sube PE)</div>
           <div class="opt" onclick="pickO('2-4',3)"><span class="opt-k">D</span>Bajar el precio de venta para atraer más clientes</div>
         </div>
-        <button class="btn-conf" id="bc-2-4" onclick="confO('2-4',1)" disabled>Confirmar</button>
-        <div class="fb" id="fb-2-4"></div>
+        <button class="btn-conf" id="bc-2-4" onclick="confO('2-4',1)" ${answers['2-4']!==undefined && !confirmed['2-4'] ? '' : 'disabled'}>${confirmed['2-4']?'✓ Confirmado':'Confirmar'}</button>
+        ${confirmed['2-4'] ? `<button class="btn-conf" style="margin-left:8px; border-color:var(--muted); color:var(--muted);" onclick="unlock('2-4')">✏️ Editar</button>` : ''}
+        <div class="fb" id="fb-2-4" style="${confirmed['2-4']?'display:block':''}"></div>
       </div>
 
       <div class="q-item">
@@ -501,15 +508,17 @@ td.zona-roja{color:var(--red);font-weight:700;font-family:var(--mono);font-size:
         <div class="q-row"><span class="q-num-badge">3.1</span><span class="q-type-badge">Lectura</span><div class="q-text">¿En cuántos kg se encuentra el Punto de Equilibrio de "El Horno Mayor"? Leelo del gráfico.</div></div>
         <div class="q-hint">📐 PE = $3.500.000 ÷ $1.400</div>
         <div class="num-row"><input class="num-in" id="n-3-1" type="number" placeholder="0" oninput="pickN('3-1')" onkeydown="if(event.key==='Enter')confN('3-1',2500,0,'kg')"><span class="num-unit">kg</span></div>
-        <button class="btn-conf" id="bc-3-1" onclick="confN('3-1',2500,0,'kg')" disabled>Confirmar</button>
-        <div class="fb" id="fb-3-1"></div>
+        <button class="btn-conf" id="bc-3-1" onclick="confN('3-1',2500,0,'kg')" ${answers['3-1']!==undefined && !confirmed['3-1'] ? '' : 'disabled'}>${confirmed['3-1']?'✓ Confirmado':'Confirmar'}</button>
+        ${confirmed['3-1'] ? `<button class="btn-conf" style="margin-left:8px; border-color:var(--muted); color:var(--muted);" onclick="unlock('3-1')">✏️ Editar</button>` : ''}
+        <div class="fb" id="fb-3-1" style="${confirmed['3-1']?'display:block':''}"></div>
       </div>
 
       <div class="q-item">
         <div class="q-row"><span class="q-num-badge">3.2</span><span class="q-type-badge">Cálculo</span><div class="q-text">La panadería produjo 4.200 kg este mes. ¿Cuál es su ganancia neta?</div></div>
         <div class="num-row"><input class="num-in" id="n-3-2" type="number" placeholder="0" oninput="pickN('3-2')" onkeydown="if(event.key==='Enter')confN('3-2',2380000,0,'$')"><span class="num-unit">$</span></div>
-        <button class="btn-conf" id="bc-3-2" onclick="confN('3-2',2380000,0,'$')" disabled>Confirmar</button>
-        <div class="fb" id="fb-3-2"></div>
+        <button class="btn-conf" id="bc-3-2" onclick="confN('3-2',2380000,0,'$')" ${answers['3-2']!==undefined && !confirmed['3-2'] ? '' : 'disabled'}>${confirmed['3-2']?'✓ Confirmado':'Confirmar'}</button>
+        ${confirmed['3-2'] ? `<button class="btn-conf" style="margin-left:8px; border-color:var(--muted); color:var(--muted);" onclick="unlock('3-2')">✏️ Editar</button>` : ''}
+        <div class="fb" id="fb-3-2" style="${confirmed['3-2']?'display:block':''}"></div>
       </div>
 
       <div class="q-item">
@@ -520,8 +529,9 @@ td.zona-roja{color:var(--red);font-weight:700;font-family:var(--mono);font-size:
           <div class="opt" onclick="pickO('3-3',2)"><span class="opt-k">C</span>Los CF dejan de existir cuando se supera el PE</div>
           <div class="opt" onclick="pickO('3-3',3)"><span class="opt-k">D</span>La CMu sube automáticamente al vender más</div>
         </div>
-        <button class="btn-conf" id="bc-3-3" onclick="confO('3-3',0)" disabled>Confirmar</button>
-        <div class="fb" id="fb-3-3"></div>
+        <button class="btn-conf" id="bc-3-3" onclick="confO('3-3',0)" ${answers['3-3']!==undefined && !confirmed['3-3'] ? '' : 'disabled'}>${confirmed['3-3']?'✓ Confirmado':'Confirmar'}</button>
+        ${confirmed['3-3'] ? `<button class="btn-conf" style="margin-left:8px; border-color:var(--muted); color:var(--muted);" onclick="unlock('3-3')">✏️ Editar</button>` : ''}
+        <div class="fb" id="fb-3-3" style="${confirmed['3-3']?'display:block':''}"></div>
       </div>
 
       <div class="q-item">
@@ -590,23 +600,26 @@ td.zona-roja{color:var(--red);font-weight:700;font-family:var(--mono);font-size:
         <div class="q-row"><span class="q-num-badge">4.1</span><span class="q-type-badge">Lectura</span><div class="q-text">¿Cuál es el PE de "La Gran Mesa"? Identificalo en el gráfico donde se cruzan Ingresos y CT.</div></div>
         <div class="q-hint">📐 PE = $2.800.000 ÷ $8.000</div>
         <div class="num-row"><input class="num-in" id="n-4-1" type="number" placeholder="0" oninput="pickN('4-1')" onkeydown="if(event.key==='Enter')confN('4-1',350,0,'cubiertos')"><span class="num-unit">cubiertos</span></div>
-        <button class="btn-conf" id="bc-4-1" onclick="confN('4-1',350,0,'cubiertos')" disabled>Confirmar</button>
-        <div class="fb" id="fb-4-1"></div>
+        <button class="btn-conf" id="bc-4-1" onclick="confN('4-1',350,0,'cubiertos')" ${answers['4-1']!==undefined && !confirmed['4-1'] ? '' : 'disabled'}>${confirmed['4-1']?'✓ Confirmado':'Confirmar'}</button>
+        ${confirmed['4-1'] ? `<button class="btn-conf" style="margin-left:8px; border-color:var(--muted); color:var(--muted);" onclick="unlock('4-1')">✏️ Editar</button>` : ''}
+        <div class="fb" id="fb-4-1" style="${confirmed['4-1']?'display:block':''}"></div>
       </div>
 
       <div class="q-item">
         <div class="q-row"><span class="q-num-badge">4.2</span><span class="q-type-badge">Cálculo</span><div class="q-text">Calculá el resultado económico en TEMPORADA BAJA (200 cubiertos). ¿Pierde o gana? ¿Cuánto?</div></div>
         <div class="q-hint">📐 Resultado = (200 − PE) × CMu → negativo = pérdida</div>
         <div class="num-row"><input class="num-in" id="n-4-2" type="number" placeholder="0" oninput="pickN('4-2')" onkeydown="if(event.key==='Enter')confN('4-2',1200000,0,'$')"><span class="num-unit">$ (pérdida)</span></div>
-        <button class="btn-conf" id="bc-4-2" onclick="confN('4-2',1200000,0,'$')" disabled>Confirmar</button>
-        <div class="fb" id="fb-4-2"></div>
+        <button class="btn-conf" id="bc-4-2" onclick="confN('4-2',-1200000,0,'$')" ${answers['4-2']!==undefined && !confirmed['4-2'] ? '' : 'disabled'}>${confirmed['4-2']?'✓ Confirmado':'Confirmar'}</button>
+        ${confirmed['4-2'] ? `<button class="btn-conf" style="margin-left:8px; border-color:var(--muted); color:var(--muted);" onclick="unlock('4-2')">✏️ Editar</button>` : ''}
+        <div class="fb" id="fb-4-2" style="${confirmed['4-2']?'display:block':''}"></div>
       </div>
 
       <div class="q-item">
         <div class="q-row"><span class="q-num-badge">4.3</span><span class="q-type-badge">Cálculo</span><div class="q-text">Calculá la ganancia en TEMPORADA ALTA (580 cubiertos).</div></div>
         <div class="num-row"><input class="num-in" id="n-4-3" type="number" placeholder="0" oninput="pickN('4-3')" onkeydown="if(event.key==='Enter')confN('4-3',1840000,0,'$')"><span class="num-unit">$</span></div>
-        <button class="btn-conf" id="bc-4-3" onclick="confN('4-3',1840000,0,'$')" disabled>Confirmar</button>
-        <div class="fb" id="fb-4-3"></div>
+        <button class="btn-conf" id="bc-4-3" onclick="confN('4-3',1840000,0,'$')" ${answers['4-3']!==undefined && !confirmed['4-3'] ? '' : 'disabled'}>${confirmed['4-3']?'✓ Confirmado':'Confirmar'}</button>
+        ${confirmed['4-3'] ? `<button class="btn-conf" style="margin-left:8px; border-color:var(--muted); color:var(--muted);" onclick="unlock('4-3')">✏️ Editar</button>` : ''}
+        <div class="fb" id="fb-4-3" style="${confirmed['4-3']?'display:block':''}"></div>
       </div>
 
       <div class="q-item">
@@ -755,7 +768,28 @@ function start(){
 }
 
 /* ═══════════ INTERACTION ═══════════ */
+function unlock(id){
+  confirmed[id]=false;
+  if(correct[id]){score--; correct[id]=false;}
+  // Recargamos el estado de los inputs
+  const inp=document.getElementById(`n-${id}`);
+  if(inp){inp.disabled=false; inp.classList.remove('ok','err');}
+  const opts=document.getElementById(`opts-${id}`);
+  if(opts){opts.querySelectorAll('.opt').forEach(o=>o.classList.remove('disabled','selected','correct-opt','wrong-opt'));}
+  updateScore();
+  // Re-renderizar para mostrar botones correctos (podemos llamar a una mini función o simplemente cambiar display)
+  document.getElementById(`bc-${id}`).disabled=false;
+  const oldFb=document.getElementById(`fb-${id}`);
+  if(oldFb){oldFb.style.display='none'; oldFb.className='fb';}
+  // En este TP el render es estático pero los botones son dinámicos, 
+  // simplemente ocultamos y mostramos el botón Editar vía JS o re-ejecutando lógica
+  location.hash = "tmp"; location.hash = `bc-${id}`; // Truco para forzar scroll/refresco visual si fuera necesario, pero aquí solo cambiaremos el botón.
+  // Pero mejor: simplemente refrescamos el contenedor de la pregunta o cambiamos el innerHTML del botón
+  document.getElementById(`bc-${id}`).textContent = 'Confirmar';
+}
+
 function pickN(id){
+  if(confirmed[id]) return;
   const v=document.getElementById(`n-${id}`).value;
   if(v!==''){answers[id]=parseFloat(v);document.getElementById(`bc-${id}`).disabled=false;}
 }
@@ -769,21 +803,30 @@ function pickO(gid,oi){
 function confN(id, ans, tol, unit){
   if(confirmed[id])return;
   confirmed[id]=true;
-  document.getElementById(`bc-${id}`).disabled=true;
-  const v=answers[id]??-999;
+  const v=answers[id]??-9999999;
   const ok=Math.abs(v-ans)<=(tol||1);
   correct[id]=ok; if(ok)score++;
   const inp=document.getElementById(`n-${id}`);
   inp.classList.add(ok?'ok':'err'); inp.disabled=true;
   const fb=document.getElementById(`fb-${id}`);
   fb.className=`fb ${ok?'ok-fb':'err-fb'}`;
+  fb.style.display='block';
   fb.innerHTML=ok?`✓ Correcto — <strong>${fmt(ans)} ${unit}</strong>`:`✗ La respuesta correcta es <strong>${fmt(ans)} ${unit}</strong>`;
+  document.getElementById(`bc-${id}`).disabled=true;
+  document.getElementById(`bc-${id}`).textContent = '✓ Confirmado';
+  // Agregar botón editar si no existe
+  if(!document.getElementById(`be-${id}`)){
+    const btn=document.createElement('button');
+    btn.id=`be-${id}`; btn.className='btn-conf'; btn.style.marginLeft='8px';
+    btn.style.borderColor='var(--muted)'; btn.style.color='var(--muted)';
+    btn.textContent='✏️ Editar'; btn.onclick=()=>unlock(id);
+    document.getElementById(`bc-${id}`).parentNode.insertBefore(btn, fb);
+  }
   updateScore();
 }
 function confO(gid,ans){
   if(confirmed[gid])return;
   confirmed[gid]=true;
-  document.getElementById(`bc-${gid}`).disabled=true;
   const v=answers[gid];
   const ok=v===ans;
   correct[gid]=ok; if(ok)score++;
@@ -794,7 +837,18 @@ function confO(gid,ans){
   });
   const fb=document.getElementById(`fb-${gid}`);
   fb.className=`fb ${ok?'ok-fb':'err-fb'}`;
+  fb.style.display='block';
   fb.innerHTML=ok?'✓ Correcto.':'✗ Revisá la explicación en el feedback.';
+  document.getElementById(`bc-${gid}`).disabled=true;
+  document.getElementById(`bc-${gid}`).textContent = '✓ Confirmado';
+  // Agregar botón editar
+  if(!document.getElementById(`be-${gid}`)){
+    const btn=document.createElement('button');
+    btn.id=`be-${gid}`; btn.className='btn-conf'; btn.style.marginLeft='8px';
+    btn.style.borderColor='var(--muted)'; btn.style.color='var(--muted)';
+    btn.textContent='✏️ Editar'; btn.onclick=()=>unlock(gid);
+    document.getElementById(`bc-${gid}`).parentNode.insertBefore(btn, fb);
+  }
   updateScore();
 }
 function checkTable(){
@@ -865,7 +919,12 @@ async function submitTP(){
 }
 
 /* ═══════════ CHART ENGINE ═══════════ */
-function fmt(n){if(n===undefined||n===null)return'0';return Math.round(Math.abs(n)).toLocaleString('es-AR');}
+function fmt(n){
+  if(n===undefined||n===null)return '0';
+  const s = n < 0 ? '-' : '';
+  return s + Math.round(Math.abs(n)).toLocaleString('es-AR');
+}
+
 
 function drawBE(canvasId, cfg){
   const canvas=document.getElementById(canvasId);

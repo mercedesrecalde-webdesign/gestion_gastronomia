@@ -8,13 +8,19 @@ const CampusQuiz = {
     this.currentIdx = 0;
     this.score = 0;
 
-    // Filter questions by section if provided
+    // Fill-down logic to capture all questions in a block
+    let currentSec = "";
+    const allQs = GLOBAL_QS.map(q => {
+      if (q.sec) currentSec = q.sec;
+      return { ...q, _assignedSec: currentSec };
+    });
+
     if (sectionTitle) {
-      this.questions = GLOBAL_QS.filter(q => 
-        q.sec && q.sec.toUpperCase().includes(sectionTitle.toUpperCase())
+      this.questions = allQs.filter(q => 
+        q._assignedSec && q._assignedSec.toUpperCase().includes(sectionTitle.toUpperCase())
       );
     } else {
-      this.questions = GLOBAL_QS;
+      this.questions = allQs;
     }
     
     if (this.questions.length === 0) {

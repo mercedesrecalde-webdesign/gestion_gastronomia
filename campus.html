@@ -169,8 +169,8 @@
     <!-- VISTA EXÁMENES -->
     <div id="view-exams" class="main-view" style="display: none;">
       <header class="content-header">
-        <span class="tag">Evaluación</span>
-        <h2 class="title">Exámenes Finales</h2>
+        <span class="tag">Evaluación Integral</span>
+        <h2 class="title">Exámenes y Simulacros</h2>
       </header>
       <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
         <div class="calc-card" onclick="window.open('simulacro1.html')" style="cursor: pointer;">
@@ -181,16 +181,24 @@
           <h3 style="color: var(--gold);">Simulacro 02</h3>
           <p style="color: var(--muted); font-size: 13px; margin-top: 10px;">PE y Rentabilidad.</p>
         </div>
+        <div class="calc-card" onclick="window.open('tp_graficos_pe.html')" style="cursor: pointer;">
+          <h3 style="color: var(--blue);">TP Gráficos PE</h3>
+          <p style="color: var(--muted); font-size: 13px; margin-top: 10px;">Análisis visual de Punto de Equilibrio.</p>
+        </div>
+        <div class="calc-card" onclick="window.open('examen_cm_pe.html')" style="cursor: pointer;">
+          <h3 style="color: var(--green);">Examen CM & PE</h3>
+          <p style="color: var(--muted); font-size: 13px; margin-top: 10px;">Evaluación específica de márgenes.</p>
+        </div>
       </div>
     </div>
 
     <!-- VISTA DASHBOARD -->
     <div id="view-dashboard" class="main-view" style="display: none;">
       <header class="content-header">
-        <span class="tag">Analytics</span>
-        <h2 class="title">Panel de Alumnos</h2>
+        <span class="tag">Seguimiento Real</span>
+        <h2 class="title">Panel de Control de Alumnos</h2>
       </header>
-      <iframe src="dashboard.html" style="width: 100%; height: 75vh; border: none; border-radius: 12px;"></iframe>
+      <iframe src="dashboard.html" id="dashIframe" style="width: 100%; height: 80vh; border: none; border-radius: 12px; background: var(--surface);"></iframe>
     </div>
   </main>
 

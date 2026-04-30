@@ -1,0 +1,369 @@
+const GLOBAL_QS = [
+
+/* ──────── BLOQUE I: CLASIFICACIÓN DE COSTOS ──────── */
+{
+  sec: "BLOQUE I · Clasificación de Costos",
+  type: "mc",
+  text: "El alquiler del salón de un restaurante es $1.250.000 por mes, lo pago aunque tenga clientes o no. ¿Cómo se clasifica según su variabilidad?",
+  opts: [
+    "Costo Variable, porque cambia con las ventas.",
+    "Costo Fijo, porque permanece constante independientemente del nivel de actividad.",
+    "Costo Mixto, porque tiene parte fija y parte variable.",
+    "Gasto de Comercialización."
+  ],
+  ans: 1,
+  fb: "Exacto. El alquiler es el ejemplo más clásico de Costo Fijo: la empresa debe pagarlo atienda 10 o 200 cubiertos. No depende del volumen de ventas."
+},
+{
+  sec: null, type: "mc",
+  text: "Los insumos de cocina (ingredientes) cuestan $1.465.000 por día según el nivel de producción. ¿Cuál es su clasificación por variabilidad?",
+  opts: [
+    "Costo Fijo, porque siempre se compran ingredientes.",
+    "Costo Variable, porque fluctúan en proporción directa a la cantidad de producción.",
+    "Costo Mixto, porque incluyen diferentes ingredientes.",
+    "Costo Indirecto Fijo."
+  ],
+  ans: 1,
+  fb: "Correcto. Los insumos son el ejemplo más claro de Costo Variable: a mayor producción, mayor costo total de ingredientes. Si no se produce, este costo es cero."
+},
+{
+  sec: null, type: "mc",
+  text: "La factura de gas tiene un cargo fijo mensual obligatorio MÁS un componente que aumenta en temporada alta porque la cocina trabaja más horas. ¿Cómo se clasifica?",
+  opts: [
+    "Costo Fijo Puro, porque es un servicio mensual.",
+    "Costo Variable Puro, porque depende del consumo.",
+    "Costo Mixto o Semifijo, porque tiene una parte fija (obligación contractual) y una parte variable (consumo real).",
+    "Gasto Administrativo."
+  ],
+  ans: 2,
+  fb: "Muy bien. Luz, Gas y Agua son costos Mixtos o Semifijos: tienen un cargo fijo inamovible (la obligación mensual del servicio) más un componente variable que sube con el consumo. Esto los diferencia del internet, que es puramente fijo."
+},
+{
+  sec: null, type: "mc",
+  text: "Los honorarios del contador externo del restaurante ($300.000/mes) son:",
+  opts: [
+    "Costo de Materia Prima, porque el contador produce informes.",
+    "Gasto Administrativo, porque es una erogación destinada a la administración del negocio y no puede asignarse directamente a un plato.",
+    "Costo Fijo de Producción (CIF), porque beneficia a toda la operación.",
+    "Costo Variable Indirecto."
+  ],
+  ans: 1,
+  fb: "Correcto. El honorario del contador es un GASTO Administrativo, no un costo de producción. Regla: no se le puede asignar directamente a ningún plato. El gasto se consume en el período y no se recupera con una venta específica."
+},
+{
+  sec: null, type: "mc",
+  text: "La empresa compra una nueva amasadora industrial por $2.000.000 para mejorar la producción de pastas. Esta erogación se clasifica como:",
+  opts: [
+    "Costo Variable de Producción.",
+    "Gasto de Comercialización.",
+    "Inversión, porque se asigna a un activo que generará beneficios futuros y se recupera mediante amortizaciones mensuales.",
+    "Costo Fijo mensual completo."
+  ],
+  ans: 2,
+  fb: "Exactamente. La compra de equipamiento es una INVERSIÓN. El desembolso se activa como un activo y su costo se recupera gradualmente vía amortización mensual (ej. $2.000.000 ÷ 60 meses = $33.333/mes de amortización)."
+},
+{
+  sec: null, type: "tf",
+  text: "El salario de los cocineros que trabajan directamente en la línea de producción se clasifica como Mano de Obra Directa (MOD). Es un costo, no un gasto.",
+  ans: true,
+  fb: "Verdadero. La MOD incluye el trabajo humano aplicado exclusivamente a la producción. Los cocineros de la línea son MOD. En cambio, el sueldo de un administrativo sería un Gasto, porque no interviene en la producción del plato."
+},
+{
+  sec: null, type: "mc",
+  text: "Las comisiones de aplicaciones de delivery ($200.000/mes promedio) y las comisiones de tarjetas ($226.000/mes promedio) son costos:",
+  opts: [
+    "Fijos, porque se pagan todos los meses.",
+    "Variables, porque aumentan en proporción al volumen de ventas realizadas.",
+    "Mixtos, porque tienen una cuota fija y una variable.",
+    "De Materia Prima."
+  ],
+  ans: 1,
+  fb: "Correcto. Estas comisiones son Variables y de Comercialización: si no hay ventas, no hay comisión. Cuantas más ventas, mayor el total a pagar. Son proporcionales al nivel de actividad."
+},
+{
+  sec: null, type: "mc",
+  text: "Al hacer el inventario semanal, el sistema indica 20 kg de salmón en stock (stock teórico), pero la cámara física tiene solo 15 kg. ¿Cómo se denomina la diferencia de 5 kg?",
+  opts: [
+    "Costo Fijo de Almacenamiento.",
+    "Costo Oculto: surge de la brecha entre el stock teórico y el stock físico real. Erosiona directamente la ganancia.",
+    "Gasto de Comercialización.",
+    "Costo Variable de Producción esperado."
+  ],
+  ans: 1,
+  fb: "Exacto. El Costo Oculto es la brecha entre lo que debería haber (teórico del sistema) y lo que realmente hay (físico en cámara). Sus causas: mermas no reportadas, mala manipulación, vencimientos por no aplicar PEPS y robos. Se descubre en la auditoría de inventarios."
+},
+
+/* ──────── BLOQUE II: COMPORTAMIENTO DE COSTOS ──────── */
+{
+  sec: "BLOQUE II · Comportamiento de Costos — La Pizzería de la Esquina",
+  scen: {
+    title: "DATOS DE LA EMPRESA",
+    body: "La pizzería tiene <strong>Costos Fijos Totales de $20.000</strong> sin importar cuántas pizzas produzca. Cada pizza producida genera un <strong>Costo Variable Unitario de $200.000</strong>.",
+    note: "Usá estos datos para resolver las preguntas P09 a P13."
+  },
+  type: "numeric",
+  text: "Si se producen 3 pizzas en el turno, ¿cuál es el Costo Total?",
+  hint: "CT = Costos Fijos Totales + Costos Variables Totales",
+  ans: 620000, tol: 0,
+  unit: "$",
+  fb: "CT = $20.000 (CF) + ($200.000 × 3) = $20.000 + $600.000 = <strong>$620.000</strong>. Los costos fijos no cambian; los variables se multiplican por la cantidad producida."
+},
+{
+  sec: null, type: "numeric",
+  text: "Si se producen 5 pizzas, ¿cuál es el Costo Fijo Unitario (CFU)?",
+  hint: "CFU = Costos Fijos Totales ÷ Cantidad de Unidades Producidas",
+  ans: 4000, tol: 0,
+  unit: "$",
+  fb: "CFU = $20.000 ÷ 5 = <strong>$4.000 por pizza</strong>. A medida que producís más unidades, el mismo costo fijo se reparte entre más pizzas y por eso el CFU baja."
+},
+{
+  sec: null, type: "numeric",
+  text: "Si se producen 8 pizzas, ¿cuál es el Costo Variable Unitario (CVU)?",
+  hint: "El CVU es constante. No depende de la cantidad producida.",
+  ans: 200000, tol: 0,
+  unit: "$",
+  fb: "CVU = <strong>$200.000 siempre</strong>, sin importar si producís 1 o 10 pizzas. El costo variable unitario no cambia. Lo que cambia es el Costo Variable TOTAL (CVT = CVU × cantidad)."
+},
+{
+  sec: null, type: "mc",
+  text: "A medida que aumenta la cantidad producida, el Costo Fijo Unitario (CFU = CF ÷ Q):",
+  opts: [
+    "Aumenta, porque hay más producción que administrar.",
+    "Se mantiene constante, como el CVU.",
+    "Disminuye y tiende a cero, porque un valor fijo se divide entre cada vez más unidades.",
+    "Se vuelve igual al costo variable unitario."
+  ],
+  ans: 2,
+  fb: "Correcto. CFU = CF ÷ Q. El numerador (CF) es fijo; el denominador (Q) crece. Resultado: el CFU se achica cada vez más. Ejemplo: CF $20.000 con Q=1 → CFU $20.000; con Q=10 → CFU $2.000; con Q=100 → CFU $200. Tiende a cero pero nunca llega."
+},
+{
+  sec: null, type: "mc",
+  text: "Cuando la producción es muy alta, el Costo Total Unitario (CTU = CFU + CVU) tiende a:",
+  opts: [
+    "Cero, porque se reparte entre muchas unidades.",
+    "El Costo Fijo Unitario, porque domina la producción.",
+    "El Costo Variable Unitario, porque el CFU se diluye hasta casi desaparecer.",
+    "El doble del costo variable."
+  ],
+  ans: 2,
+  fb: "Exacto. CTU = CFU + CVU. A mayor producción, CFU → 0. Entonces: CTU = (algo → 0) + CVU constante. Por eso el CTU se acerca cada vez más al CVU. Como dice el apunte: 'el costo fijo deja de influir por unidad; el único que realmente queda es el variable'."
+},
+
+/* ──────── BLOQUE III: CÁLCULOS PRÁCTICOS ──────── */
+{
+  sec: "BLOQUE III · Cálculos Prácticos — La Pasta del Puerto",
+  scen: {
+    title: "CONTEXTO DEL EJERCICIO",
+    body: "Un restaurante de pastas llamado <strong>La Pasta del Puerto</strong> te contrata como gestor de costos. Estos son sus datos del mes:",
+    rows: [
+      ["Alquiler del salón", "$400.000 / mes"],
+      ["Sueldo del cocinero", "$300.000 / mes"],
+      ["Internet y teléfono", "$20.000 / mes"],
+      ["Ingredientes por porción", "$900 (costo directo)"],
+      ["Envase take-away por porción", "$100"],
+      ["Producción del mes", "800 porciones vendidas"],
+      ["Food Cost objetivo", "30%"],
+    ],
+    note: "Usá estos datos para resolver las preguntas P14 a P21."
+  },
+  type: "numeric",
+  text: "¿Cuál es el Costo Variable Unitario (CVu) por porción?",
+  hint: "CVu = suma de todos los costos variables que aplican a UNA unidad",
+  ans: 1000, tol: 0,
+  unit: "$",
+  fb: "CVu = Ingredientes + Envase = $900 + $100 = <strong>$1.000 por porción</strong>. Este es el costo que 'sale' de la cocina con cada plato vendido."
+},
+{
+  sec: null, type: "numeric",
+  text: "¿Cuál es el Costo Variable Total (CVT) del mes con 800 porciones?",
+  hint: "CVT = CVu × Cantidad de unidades producidas",
+  ans: 800000, tol: 0,
+  unit: "$",
+  fb: "CVT = $1.000 × 800 porciones = <strong>$800.000</strong>. El costo variable total escala en proporción directa con las ventas. Si vendieran 1.600 porciones, el CVT sería $1.600.000."
+},
+{
+  sec: null, type: "numeric",
+  text: "¿Cuál es el Costo Fijo Total (CFT) del mes?",
+  hint: "CFT = suma de todos los costos que se pagan sin importar la producción",
+  ans: 720000, tol: 0,
+  unit: "$",
+  fb: "CFT = Alquiler + Sueldo cocinero + Internet = $400.000 + $300.000 + $20.000 = <strong>$720.000</strong>. Estos costos se pagan igual si se venden 0 o 800 porciones."
+},
+{
+  sec: null, type: "numeric",
+  text: "¿Cuál es el Costo Total (CT) del mes?",
+  hint: "CT = CVT + CFT",
+  ans: 1520000, tol: 0,
+  unit: "$",
+  fb: "CT = CVT + CFT = $800.000 + $720.000 = <strong>$1.520.000</strong>. Este es el total de dinero que \"sale\" del negocio en el mes para producir las 800 porciones."
+},
+{
+  sec: null, type: "numeric",
+  text: "Usando el método del Food Cost al 30%, ¿cuál debe ser el Precio de Venta (PV) por porción? (Solo el costo de ingredientes aplica como base)",
+  hint: "PV = Costo Ingredientes ÷ Food Cost deseado  →  PV = $900 ÷ 0,30",
+  ans: 3000, tol: 0,
+  unit: "$",
+  fb: "PV = $900 ÷ 0,30 = <strong>$3.000 por porción</strong>. Esto garantiza que los ingredientes representen exactamente el 30% del precio final. El 70% restante cubre mano de obra, costos fijos y genera ganancia."
+},
+{
+  sec: null, type: "numeric",
+  text: "Con ese Precio de Venta, ¿cuál es la Contribución Marginal Unitaria (CMu)?",
+  hint: "CMu = Precio de Venta − Costo Variable Unitario",
+  ans: 2000, tol: 0,
+  unit: "$",
+  fb: "CMu = $3.000 − $1.000 = <strong>$2.000 por porción</strong>. Esta es la cantidad que \"queda limpia\" de cada venta para ir pagando los costos fijos. Cada porción vendida aporta $2.000 a la \"bolsa\" que cubre el alquiler, sueldos y servicios."
+},
+{
+  sec: null, type: "numeric",
+  text: "¿Cuántas porciones debe vender el restaurante para alcanzar el Punto de Equilibrio (PE)?",
+  hint: "PE (unidades) = Costos Fijos Totales ÷ Contribución Marginal Unitaria",
+  ans: 360, tol: 0,
+  unit: "porciones",
+  fb: "PE = $720.000 ÷ $2.000 = <strong>360 porciones</strong>. Hasta la porción 360, cada venta solo cubre costos. Desde la porción 361 en adelante, el negocio empieza a generar ganancia real."
+},
+{
+  sec: null, type: "mc",
+  text: "El restaurante vendió 800 porciones este mes. Su Punto de Equilibrio es 360 porciones. ¿Qué significa esto económicamente?",
+  opts: [
+    "El negocio perdió dinero porque superó el punto de equilibrio.",
+    "El negocio sobrevivió pero sin ganancia, ya que llegó exactamente al PE.",
+    "Las primeras 360 porciones cubrieron todos los costos fijos. Las 440 porciones restantes (800 − 360) generaron ganancia pura de $880.000.",
+    "El precio de venta debe bajarse porque se vendió de más."
+  ],
+  ans: 2,
+  fb: "Exacto. Ganancia = (800 − 360) × CMu = 440 × $2.000 = <strong>$880.000 de ganancia real</strong>. Esta es la lógica del PE: una vez que la CMu acumulada 'completó la pared' de costos fijos, cada venta adicional es rentabilidad pura para el propietario."
+},
+{
+  sec: null, type: "mc",
+  text: "Siguiendo con La Pasta del Puerto: Si por un problema el local cierra unos días y solo logra vender 300 porciones en el mes (recordá que su PE es 360 porciones y su CMu es $2.000). ¿Cuál fue el resultado económico?",
+  opts: [
+    "Ganaron $600.000, porque 300 x $2.000 = $600.000.",
+    "Perdieron dinero. Exactamente $120.000 de pérdida.",
+    "Salieron 'hechos' (ni ganaron ni perdieron)."
+  ],
+  ans: 1,
+  fb: "Exacto. Al faltar 60 porciones para llegar al Punto de Equilibrio (360 − 300 = 60), esas 60 porciones a $2.000 de CMu cada una representan el dinero faltante: $120.000 de pérdida."
+},
+{
+  sec: null, type: "tf",
+  text: "Opciones para mejorar: Para AUMENTAR nuestra Contribución Marginal Unitaria, una excelente estrategia sería buscar un proveedor de materia prima más barato sin perder calidad, bajando así el Costo Variable Unitario.",
+  ans: true,
+  fb: "Verdadero. Si bajás el Costo Variable Unitario (ingredientes) y mantenés el Precio de Venta, la Contribución Marginal (lo que te queda limpio por plato) crece automáticamente."
+},
+{
+  sec: null, type: "tf",
+  text: "Opciones para mejorar: Bajar el sueldo del cocinero o mudarnos a un local con alquiler más barato hace que nuestra Contribución Marginal UNITARIA aumente.",
+  ans: false,
+  fb: "Falso. Bajar alquileres o sueldos achica los COSTOS FIJOS, lo cual baja tu Punto de Equilibrio, pero NO cambia tu Contribución Marginal por plato."
+},
+{
+  sec: null, type: "tf",
+  text: "Opciones para mejorar: Aumentar el Precio de Venta del plato al cliente es otra forma directa de mejorar la Contribución Marginal Unitaria.",
+  ans: true,
+  fb: "Verdadero. Si el cliente te paga más caro (y tus costos son los mismos), te queda una porción de dinero más grande 'limpia' por cada plato."
+},
+/* ──────── BLOQUE IV: ANÁLISIS RÁPIDO ──────── */
+{
+  sec: "BLOQUE IV · Análisis Rápido",
+  scen: {
+    title: "DATOS DEL CASO",
+    body: "Una cafetería tiene <strong>Costos Fijos Totales de $50.000</strong> por día. El costo de los ingredientes y el vaso (<strong>Costo Variable Unitario</strong>) es de <strong>$500</strong> por cada café preparado.",
+    note: "Completá los valores solicitados pensando en el comportamiento de los costos fijos y variables."
+  },
+  type: "numeric",
+  text: "Si hoy preparan 10 cafés, ¿cuál es el Costo Variable Total?",
+  hint: "Multiplicá la cantidad por el costo variable de cada café.",
+  ans: 5000, tol: 0,
+  unit: "$",
+  fb: "Correcto. 10 cafés × $500 = <strong>$5.000</strong>."
+},
+{
+  sec: null, type: "numeric",
+  text: "Si preparan 10 cafés, ¿a cuánto ascienden los Costos Fijos Totales del día?",
+  hint: "Recordá la definición de Costo Fijo.",
+  ans: 50000, tol: 0,
+  unit: "$",
+  fb: "Exacto. Los Costos Fijos Totales son siempre <strong>$50.000</strong>, sin importar si preparan 10 o 100 cafés."
+},
+{
+  sec: null, type: "numeric",
+  text: "Si en un día excelente preparan 100 cafés, ¿cuál es el Costo Fijo Unitario (CFU)?",
+  hint: "Repartí el costo fijo total entre la cantidad de cafés.",
+  ans: 500, tol: 0,
+  unit: "$",
+  fb: "Muy bien. $50.000 ÷ 100 cafés = <strong>$500</strong>. Al vender más, el peso del costo fijo en cada café es mucho menor."
+},
+{
+  sec: null, type: "mc",
+  text: "¿Qué pasaría si la cafetería no abre un día por feriado y vende 0 cafés?",
+  opts: [
+    "No tiene ningún costo ese día.",
+    "El Costo Variable Total es $0, pero igual debe asumir los $50.000 de Costos Fijos.",
+    "Tendrá que pagar el doble de costos al día siguiente."
+  ],
+  ans: 1,
+  fb: "Exactamente. Si la producción es cero, el Costo Variable es $0 (no gastás café ni vasos). Pero los Costos Fijos ($50.000 de alquiler y sueldos) se siguen devengando."
+},
+{
+  sec: null, type: "tf",
+  text: "El Costo Variable Unitario ($500 por café) se mantiene constante sin importar cuántos cafés se vendan en el día.",
+  ans: true,
+  fb: "Verdadero. El costo por unidad no cambia (cada café siempre gasta $500 en insumos). Lo que aumenta en total es el Costo Variable TOTAL a medida que hacés más cafés."
+},
+/* ──────── BLOQUE V: CLASIFICACIÓN GUIADA ──────── */
+{
+  sec: "BLOQUE V · Clasificación Guiada",
+  scen: {
+    title: "CASO: LA HAMBURGUESERÍA",
+    body: "Clasificá los siguientes conceptos del local de hamburguesas en <strong>Costo Fijo</strong>, <strong>Costo Variable</strong> o <strong>Gasto</strong>.",
+    note: "Leé atentamente la guía que acompaña a cada pregunta para deducir la respuesta."
+  },
+  type: "mc",
+  text: "El <strong>Pan de papa</strong> cuesta $300 por unidad. ¿Cómo se clasifica?",
+  hint: "Guía: Pensá en la palabra 'producción'. Si producís más hamburguesas, consumís más panes.",
+  opts: ["Costo Fijo", "Costo Variable", "Gasto"],
+  ans: 1,
+  fb: "Correcto. Como depende directamente de la cantidad de hamburguesas producidas, es un Costo Variable."
+},
+{
+  sec: null, type: "mc",
+  text: "El <strong>Alquiler del local</strong> sale $400.000 por mes.",
+  hint: "Guía: Pensá en la palabra 'tiempo'. Se paga por mes, sin importar si vendés mucho o poco.",
+  opts: ["Costo Fijo", "Costo Variable", "Gasto"],
+  ans: 0,
+  fb: "Exacto. Es un Costo Fijo porque permanece constante frente a los cambios en el nivel de actividad."
+},
+{
+  sec: null, type: "mc",
+  text: "El <strong>Queso cheddar</strong> cuesta $200 por unidad (feta).",
+  hint: "Guía: Pensá en los 'ingredientes'. Todo ingrediente del plato varía con las ventas.",
+  opts: ["Costo Fijo", "Costo Variable", "Gasto"],
+  ans: 1,
+  fb: "Muy bien. El queso es materia prima directa, por ende es un Costo Variable."
+},
+{
+  sec: null, type: "mc",
+  text: "El <strong>Sueldo del cocinero</strong> es de $350.000 por mes.",
+  hint: "Guía: Pensá en 'fijo mensual'. Es mano de obra de producción, pero cobra un sueldo estable todos los meses.",
+  opts: ["Costo Fijo", "Costo Variable", "Gasto"],
+  ans: 0,
+  fb: "Correcto. El cocinero es Mano de Obra Directa (Costo), y como cobra un salario mensual fijo independientemente de los platos que saque, su comportamiento es de Costo Fijo."
+},
+{
+  sec: null, type: "mc",
+  text: "El pago de <strong>Internet y Teléfono</strong> por $25.000 al mes.",
+  hint: "Guía: Pensá en 'administración'. No se usa directamente para cocinar la hamburguesa.",
+  opts: ["Costo Fijo de Producción", "Costo Variable", "Gasto (Administrativo)"],
+  ans: 2,
+  fb: "Perfecto. Es un Gasto porque es una erogación necesaria para administrar el local, pero no se incorpora al producto final."
+},
+{
+  sec: null, type: "mc",
+  text: "La <strong>Publicidad en Instagram</strong> por $15.000 al mes.",
+  hint: "Guía: Pensá en 'comercialización'. Ayuda a vender, pero no es parte de la receta.",
+  opts: ["Costo Fijo", "Costo Variable", "Gasto (Comercial)"],
+  ans: 2,
+  fb: "Exactamente. La publicidad es un Gasto de Comercialización. No es un costo de producción porque no interviene en la cocina."
+}
+
+];

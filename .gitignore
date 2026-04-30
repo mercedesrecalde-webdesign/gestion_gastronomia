@@ -1,0 +1,14 @@
+# Ignorar archivos del sistema
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Ignorar carpetas de configuración de editores
+.vscode/
+.idea/
+.gemini/
+.antigravity/
+
+# Ignorar archivos temporales
+*.tmp
+*.log

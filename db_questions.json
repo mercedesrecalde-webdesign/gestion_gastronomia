@@ -1,0 +1,406 @@
+{
+  "SIMULACRO": {
+    "P01": {
+      "id": "P01",
+      "text": "El alquiler del salón de un restaurante es $1.250.000 por mes, lo pago aunque tenga clientes o no. ¿Cómo se clasifica según su variabilidad?",
+      "hint": "",
+      "correct": "B) Costo Fijo, porque permanece constante independientemente del nivel de actividad.",
+      "feedback": "Exacto. El alquiler es el ejemplo más clásico de Costo Fijo: la empresa debe pagarlo atienda 10 o 200 cubiertos. No depende del volumen de ventas."
+    },
+    "P02": {
+      "id": "P02",
+      "text": "Los insumos de cocina (ingredientes) cuestan $1.465.000 por día según el nivel de producción. ¿Cuál es su clasificación por variabilidad?",
+      "hint": "",
+      "correct": "B) Costo Variable, porque fluctúan en proporción directa a la cantidad de producción.",
+      "feedback": "Correcto. Los insumos son el ejemplo más claro de Costo Variable: a mayor producción, mayor costo total de ingredientes. Si no se produce, este costo es cero."
+    },
+    "P03": {
+      "id": "P03",
+      "text": "La factura de gas tiene un cargo fijo mensual obligatorio MÁS un componente que aumenta en temporada alta porque la cocina trabaja más horas. ¿Cómo se clasifica?",
+      "hint": "",
+      "correct": "C) Costo Mixto o Semifijo, porque tiene una parte fija (obligación contractual) y una parte variable (consumo real).",
+      "feedback": "Muy bien. Luz, Gas y Agua son costos Mixtos o Semifijos: tienen un cargo fijo inamovible (la obligación mensual del servicio) más un componente variable que sube con el consumo. Esto los diferencia del internet, que es puramente fijo."
+    },
+    "P04": {
+      "id": "P04",
+      "text": "Los honorarios del contador externo del restaurante ($300.000/mes) son:",
+      "hint": "",
+      "correct": "B) Gasto Administrativo, porque es una erogación destinada a la administración del negocio y no puede asignarse directamente a un plato.",
+      "feedback": "Correcto. El honorario del contador es un GASTO Administrativo, no un costo de producción. Regla: no se le puede asignar directamente a ningún plato. El gasto se consume en el período y no se recupera con una venta específica."
+    },
+    "P05": {
+      "id": "P05",
+      "text": "La empresa compra una nueva amasadora industrial por $2.000.000 para mejorar la producción de pastas. Esta erogación se clasifica como:",
+      "hint": "",
+      "correct": "C) Inversión, porque se asigna a un activo que generará beneficios futuros y se recupera mediante amortizaciones mensuales.",
+      "feedback": "Exactamente. La compra de equipamiento es una INVERSIÓN. El desembolso se activa como un activo y su costo se recupera gradualmente vía amortización mensual (ej. $2.000.000 ÷ 60 meses = $33.333/mes de amortización)."
+    },
+    "P06": {
+      "id": "P06",
+      "text": "El salario de los cocineros que trabajan directamente en la línea de producción se clasifica como Mano de Obra Directa (MOD). Es un costo, no un gasto.",
+      "hint": "",
+      "correct": "Verdadero",
+      "feedback": "Verdadero. La MOD incluye el trabajo humano aplicado exclusivamente a la producción. Los cocineros de la línea son MOD. En cambio, el sueldo de un administrativo sería un Gasto, porque no interviene en la producción del plato."
+    },
+    "P07": {
+      "id": "P07",
+      "text": "Las comisiones de aplicaciones de delivery ($200.000/mes promedio) y las comisiones de tarjetas ($226.000/mes promedio) son costos:",
+      "hint": "",
+      "correct": "B) Variables, porque aumentan en proporción al volumen de ventas realizadas.",
+      "feedback": "Correcto. Estas comisiones son Variables y de Comercialización: si no hay ventas, no hay comisión. Cuantas más ventas, mayor el total a pagar. Son proporcionales al nivel de actividad."
+    },
+    "P08": {
+      "id": "P08",
+      "text": "Al hacer el inventario semanal, el sistema indica 20 kg de salmón en stock (stock teórico), pero la cámara física tiene solo 15 kg. ¿Cómo se denomina la diferencia de 5 kg?",
+      "hint": "",
+      "correct": "B) Costo Oculto: surge de la brecha entre el stock teórico y el stock físico real. Erosiona directamente la ganancia.",
+      "feedback": "Exacto. El Costo Oculto es la brecha entre lo que debería haber (teórico del sistema) y lo que realmente hay (físico en cámara). Sus causas: mermas no reportadas, mala manipulación, vencimientos por no aplicar PEPS y robos. Se descubre en la auditoría de inventarios."
+    },
+    "P09": {
+      "id": "P09",
+      "text": "Si se producen 3 pizzas en el turno, ¿cuál es el Costo Total?",
+      "hint": "CT = Costos Fijos Totales + Costos Variables Totales",
+      "correct": "620000 $",
+      "feedback": "CT = $20.000 (CF) + ($200.000 × 3) = $20.000 + $600.000 = <strong>$620.000</strong>. Los costos fijos no cambian; los variables se multiplican por la cantidad producida."
+    },
+    "P10": {
+      "id": "P10",
+      "text": "Si se producen 5 pizzas, ¿cuál es el Costo Fijo Unitario (CFU)?",
+      "hint": "CFU = Costos Fijos Totales ÷ Cantidad de Unidades Producidas",
+      "correct": "4000 $",
+      "feedback": "CFU = $20.000 ÷ 5 = <strong>$4.000 por pizza</strong>. A medida que producís más unidades, el mismo costo fijo se reparte entre más pizzas y por eso el CFU baja."
+    },
+    "P11": {
+      "id": "P11",
+      "text": "Si se producen 8 pizzas, ¿cuál es el Costo Variable Unitario (CVU)?",
+      "hint": "El CVU es constante. No depende de la cantidad producida.",
+      "correct": "200000 $",
+      "feedback": "CVU = <strong>$200.000 siempre</strong>, sin importar si producís 1 o 10 pizzas. El costo variable unitario no cambia. Lo que cambia es el Costo Variable TOTAL (CVT = CVU × cantidad)."
+    },
+    "P12": {
+      "id": "P12",
+      "text": "A medida que aumenta la cantidad producida, el Costo Fijo Unitario (CFU = CF ÷ Q):",
+      "hint": "",
+      "correct": "C) Disminuye y tiende a cero, porque un valor fijo se divide entre cada vez más unidades.",
+      "feedback": "Correcto. CFU = CF ÷ Q. El numerador (CF) es fijo; el denominador (Q) crece. Resultado: el CFU se achica cada vez más. Ejemplo: CF $20.000 con Q=1 → CFU $20.000; con Q=10 → CFU $2.000; con Q=100 → CFU $200. Tiende a cero pero nunca llega."
+    },
+    "P13": {
+      "id": "P13",
+      "text": "Cuando la producción es muy alta, el Costo Total Unitario (CTU = CFU + CVU) tiende a:",
+      "hint": "",
+      "correct": "C) El Costo Variable Unitario, porque el CFU se diluye hasta casi desaparecer.",
+      "feedback": "Exacto. CTU = CFU + CVU. A mayor producción, CFU → 0. Entonces: CTU = (algo → 0) + CVU constante. Por eso el CTU se acerca cada vez más al CVU. Como dice el apunte: 'el costo fijo deja de influir por unidad; el único que realmente queda es el variable'."
+    },
+    "P14": {
+      "id": "P14",
+      "text": "¿Cuál es el Costo Variable Unitario (CVu) por porción?",
+      "hint": "CVu = suma de todos los costos variables que aplican a UNA unidad",
+      "correct": "1000 $",
+      "feedback": "CVu = Ingredientes + Envase = $900 + $100 = <strong>$1.000 por porción</strong>. Este es el costo que 'sale' de la cocina con cada plato vendido."
+    },
+    "P15": {
+      "id": "P15",
+      "text": "¿Cuál es el Costo Variable Total (CVT) del mes con 800 porciones?",
+      "hint": "CVT = CVu × Cantidad de unidades producidas",
+      "correct": "800000 $",
+      "feedback": "CVT = $1.000 × 800 porciones = <strong>$800.000</strong>. El costo variable total escala en proporción directa con las ventas. Si vendieran 1.600 porciones, el CVT sería $1.600.000."
+    },
+    "P16": {
+      "id": "P16",
+      "text": "¿Cuál es el Costo Fijo Total (CFT) del mes?",
+      "hint": "CFT = suma de todos los costos que se pagan sin importar la producción",
+      "correct": "720000 $",
+      "feedback": "CFT = Alquiler + Sueldo cocinero + Internet = $400.000 + $300.000 + $20.000 = <strong>$720.000</strong>. Estos costos se pagan igual si se venden 0 o 800 porciones."
+    },
+    "P17": {
+      "id": "P17",
+      "text": "¿Cuál es el Costo Total (CT) del mes?",
+      "hint": "CT = CVT + CFT",
+      "correct": "1520000 $",
+      "feedback": "CT = CVT + CFT = $800.000 + $720.000 = <strong>$1.520.000</strong>. Este es el total de dinero que \"sale\" del negocio en el mes para producir las 800 porciones."
+    },
+    "P18": {
+      "id": "P18",
+      "text": "Usando el método del Food Cost al 30%, ¿cuál debe ser el Precio de Venta (PV) por porción? (Solo el costo de ingredientes aplica como base)",
+      "hint": "PV = Costo Ingredientes ÷ Food Cost deseado  →  PV = $900 ÷ 0,30",
+      "correct": "3000 $",
+      "feedback": "PV = $900 ÷ 0,30 = <strong>$3.000 por porción</strong>. Esto garantiza que los ingredientes representen exactamente el 30% del precio final. El 70% restante cubre mano de obra, costos fijos y genera ganancia."
+    },
+    "P19": {
+      "id": "P19",
+      "text": "Con ese Precio de Venta, ¿cuál es la Contribución Marginal Unitaria (CMu)?",
+      "hint": "CMu = Precio de Venta − Costo Variable Unitario",
+      "correct": "2000 $",
+      "feedback": "CMu = $3.000 − $1.000 = <strong>$2.000 por porción</strong>. Esta es la cantidad que \"queda limpia\" de cada venta para ir pagando los costos fijos. Cada porción vendida aporta $2.000 a la \"bolsa\" que cubre el alquiler, sueldos y servicios."
+    },
+    "P20": {
+      "id": "P20",
+      "text": "¿Cuántas porciones debe vender el restaurante para alcanzar el Punto de Equilibrio (PE)?",
+      "hint": "PE (unidades) = Costos Fijos Totales ÷ Contribución Marginal Unitaria",
+      "correct": "360 porciones",
+      "feedback": "PE = $720.000 ÷ $2.000 = <strong>360 porciones</strong>. Hasta la porción 360, cada venta solo cubre costos. Desde la porción 361 en adelante, el negocio empieza a generar ganancia real."
+    },
+    "P21": {
+      "id": "P21",
+      "text": "El restaurante vendió 800 porciones este mes. Su Punto de Equilibrio es 360 porciones. ¿Qué significa esto económicamente?",
+      "hint": "",
+      "correct": "C) Las primeras 360 porciones cubrieron todos los costos fijos. Las 440 porciones restantes (800 − 360) generaron ganancia pura de $880.000.",
+      "feedback": "Exacto. Ganancia = (800 − 360) × CMu = 440 × $2.000 = <strong>$880.000 de ganancia real</strong>. Esta es la lógica del PE: una vez que la CMu acumulada 'completó la pared' de costos fijos, cada venta adicional es rentabilidad pura para el propietario."
+    },
+    "P22": {
+      "id": "P22",
+      "text": "Siguiendo con La Pasta del Puerto: Si por un problema el local cierra unos días y solo logra vender 300 porciones en el mes (recordá que su PE es 360 porciones y su CMu es $2.000). ¿Cuál fue el resultado económico?",
+      "hint": "",
+      "correct": "B) Perdieron dinero. Exactamente $120.000 de pérdida.",
+      "feedback": "Exacto. Al faltar 60 porciones para llegar al Punto de Equilibrio (360 − 300 = 60), esas 60 porciones a $2.000 de CMu cada una representan el dinero faltante: $120.000 de pérdida."
+    },
+    "P23": {
+      "id": "P23",
+      "text": "Opciones para mejorar: Para AUMENTAR nuestra Contribución Marginal Unitaria, una excelente estrategia sería buscar un proveedor de materia prima más barato sin perder calidad, bajando así el Costo Variable Unitario.",
+      "hint": "",
+      "correct": "Verdadero",
+      "feedback": "Verdadero. Si bajás el Costo Variable Unitario (ingredientes) y mantenés el Precio de Venta, la Contribución Marginal (lo que te queda limpio por plato) crece automáticamente."
+    },
+    "P24": {
+      "id": "P24",
+      "text": "Opciones para mejorar: Bajar el sueldo del cocinero o mudarnos a un local con alquiler más barato hace que nuestra Contribución Marginal UNITARIA aumente.",
+      "hint": "",
+      "correct": "Falso",
+      "feedback": "Falso. Bajar alquileres o sueldos achica los COSTOS FIJOS, lo cual baja tu Punto de Equilibrio, pero NO cambia tu Contribución Marginal por plato."
+    },
+    "P25": {
+      "id": "P25",
+      "text": "Opciones para mejorar: Aumentar el Precio de Venta del plato al cliente es otra forma directa de mejorar la Contribución Marginal Unitaria.",
+      "hint": "",
+      "correct": "Verdadero",
+      "feedback": "Verdadero. Si el cliente te paga más caro (y tus costos son los mismos), te queda una porción de dinero más grande 'limpia' por cada plato."
+    },
+    "P26": {
+      "id": "P26",
+      "text": "Si hoy preparan 10 cafés, ¿cuál es el Costo Variable Total?",
+      "hint": "Multiplicá la cantidad por el costo variable de cada café.",
+      "correct": "5000 $",
+      "feedback": "Correcto. 10 cafés × $500 = <strong>$5.000</strong>."
+    },
+    "P27": {
+      "id": "P27",
+      "text": "Si preparan 10 cafés, ¿a cuánto ascienden los Costos Fijos Totales del día?",
+      "hint": "Recordá la definición de Costo Fijo.",
+      "correct": "50000 $",
+      "feedback": "Exacto. Los Costos Fijos Totales son siempre <strong>$50.000</strong>, sin importar si preparan 10 o 100 cafés."
+    },
+    "P28": {
+      "id": "P28",
+      "text": "Si en un día excelente preparan 100 cafés, ¿cuál es el Costo Fijo Unitario (CFU)?",
+      "hint": "Repartí el costo fijo total entre la cantidad de cafés.",
+      "correct": "500 $",
+      "feedback": "Muy bien. $50.000 ÷ 100 cafés = <strong>$500</strong>. Al vender más, el peso del costo fijo en cada café es mucho menor."
+    },
+    "P29": {
+      "id": "P29",
+      "text": "¿Qué pasaría si la cafetería no abre un día por feriado y vende 0 cafés?",
+      "hint": "",
+      "correct": "B) El Costo Variable Total es $0, pero igual debe asumir los $50.000 de Costos Fijos.",
+      "feedback": "Exactamente. Si la producción es cero, el Costo Variable es $0 (no gastás café ni vasos). Pero los Costos Fijos ($50.000 de alquiler y sueldos) se siguen devengando."
+    },
+    "P30": {
+      "id": "P30",
+      "text": "El Costo Variable Unitario ($500 por café) se mantiene constante sin importar cuántos cafés se vendan en el día.",
+      "hint": "",
+      "correct": "Verdadero",
+      "feedback": "Verdadero. El costo por unidad no cambia (cada café siempre gasta $500 en insumos). Lo que aumenta en total es el Costo Variable TOTAL a medida que hacés más cafés."
+    },
+    "P31": {
+      "id": "P31",
+      "text": "El <strong>Pan de papa</strong> cuesta $300 por unidad. ¿Cómo se clasifica?",
+      "hint": "Guía: Pensá en la palabra 'producción'. Si producís más hamburguesas, consumís más panes.",
+      "correct": "B) Costo Variable",
+      "feedback": "Correcto. Como depende directamente de la cantidad de hamburguesas producidas, es un Costo Variable."
+    },
+    "P32": {
+      "id": "P32",
+      "text": "El <strong>Alquiler del local</strong> sale $400.000 por mes.",
+      "hint": "Guía: Pensá en la palabra 'tiempo'. Se paga por mes, sin importar si vendés mucho o poco.",
+      "correct": "A) Costo Fijo",
+      "feedback": "Exacto. Es un Costo Fijo porque permanece constante frente a los cambios en el nivel de actividad."
+    },
+    "P33": {
+      "id": "P33",
+      "text": "El <strong>Queso cheddar</strong> cuesta $200 por unidad (feta).",
+      "hint": "Guía: Pensá en los 'ingredientes'. Todo ingrediente del plato varía con las ventas.",
+      "correct": "B) Costo Variable",
+      "feedback": "Muy bien. El queso es materia prima directa, por ende es un Costo Variable."
+    },
+    "P34": {
+      "id": "P34",
+      "text": "El <strong>Sueldo del cocinero</strong> es de $350.000 por mes.",
+      "hint": "Guía: Pensá en 'fijo mensual'. Es mano de obra de producción, pero cobra un sueldo estable todos los meses.",
+      "correct": "A) Costo Fijo",
+      "feedback": "Correcto. El cocinero es Mano de Obra Directa (Costo), y como cobra un salario mensual fijo independientemente de los platos que saque, su comportamiento es de Costo Fijo."
+    },
+    "P35": {
+      "id": "P35",
+      "text": "El pago de <strong>Internet y Teléfono</strong> por $25.000 al mes.",
+      "hint": "Guía: Pensá en 'administración'. No se usa directamente para cocinar la hamburguesa.",
+      "correct": "C) Gasto (Administrativo)",
+      "feedback": "Perfecto. Es un Gasto porque es una erogación necesaria para administrar el local, pero no se incorpora al producto final."
+    },
+    "P36": {
+      "id": "P36",
+      "text": "La <strong>Publicidad en Instagram</strong> por $15.000 al mes.",
+      "hint": "Guía: Pensá en 'comercialización'. Ayuda a vender, pero no es parte de la receta.",
+      "correct": "C) Gasto (Comercial)",
+      "feedback": "Exactamente. La publicidad es un Gasto de Comercialización. No es un costo de producción porque no interviene en la cocina."
+    }
+  },
+  "CM_PE": {
+    "Q1": {
+      "id": "Q1",
+      "text": "¿Qué mide la Contribución Marginal Unitaria (CMu)?",
+      "hint": "",
+      "correct": "C) Lo que queda \"limpio\" de cada venta para cubrir los costos fijos. Es el motor del negocio.",
+      "feedback": "CMu = PV − CVu. Es el \"ladrillito\" que cada venta aporta para construir el muro de los costos fijos. Una vez cubiertos los fijos, cada CMu adicional es ganancia pura."
+    },
+    "Q2": {
+      "id": "Q2",
+      "text": "Los Costos Fijos (CF) se pagan incluso si el restaurante no vende ni un solo plato en el mes.",
+      "hint": "",
+      "correct": "Verdadero",
+      "feedback": "Verdadero. Los CF son el \"muro\" que existe desde el día 0 del mes: alquiler, seguros, sueldos base. No dependen del nivel de actividad. Son independientes de la producción."
+    },
+    "Q3": {
+      "id": "Q3",
+      "text": "La fórmula del Punto de Equilibrio en unidades es:",
+      "hint": "",
+      "correct": "B) PE = Costos Fijos Totales ÷ Contribución Marginal Unitaria",
+      "feedback": "PE = CF ÷ CMu. El PE responde a: ¿cuántos ladrillitos (CMu) necesito para llenar el muro (CF)? El resultado es la cantidad mínima de unidades a vender para no perder dinero."
+    },
+    "Q4": {
+      "id": "Q4",
+      "text": "En el gráfico del PE, la línea de INGRESOS y la línea de COSTOS TOTALES se comportan así:",
+      "hint": "",
+      "correct": "C) La de Ingresos parte del cero; la de Costos Totales parte de la altura de los CF. Se cruzan en el PE.",
+      "feedback": "Exacto. Los Ingresos = PV × Q (parten del 0,0). Los Costos Totales = CF + CVu × Q (parten desde CF en el eje Y). El cruce de ambas líneas es el Punto de Equilibrio: el umbral de supervivencia."
+    },
+    "Q5": {
+      "id": "Q5",
+      "text": "Un restaurante superó su PE este mes. ¿Qué sucede económicamente a partir del plato siguiente al PE?",
+      "hint": "",
+      "correct": "B) Cada venta adicional genera ganancia pura equivalente a la CMu de ese plato.",
+      "feedback": "¡Correcto! Una vez superado el PE, los CF ya están 100% cubiertos. Por eso cada nueva CMu ya no va al muro sino directamente al bolsillo: es ganancia neta. Esa es la \"Zona de Ganancia Pura\" del gráfico."
+    },
+    "EX1S1": {
+      "id": "EX1S1",
+      "text": "Calculá el Costo Fijo Total (CFT) del mes.",
+      "hint": "CFT = Alquiler + Sueldos básicos",
+      "correct": "1000000 $",
+      "feedback": "CFT = $600.000 + $400.000 = <strong>$1.000.000</strong>. Este es el \"muro\" que el negocio tiene que escalar cada mes antes de generar ganancia."
+    },
+    "EX1S2": {
+      "id": "EX1S2",
+      "text": "Calculá la Contribución Marginal Unitaria (CMu).",
+      "hint": "CMu = Precio de Venta − Costo Variable Unitario",
+      "correct": "5000 $",
+      "feedback": "CMu = $8.000 − $3.000 = <strong>$5.000 por pizza</strong>. Cada pizza vendida aporta $5.000 al muro de los costos fijos."
+    },
+    "EX1S3": {
+      "id": "EX1S3",
+      "text": "Calculá el Punto de Equilibrio en unidades de pizza.",
+      "hint": "PE = Costos Fijos Totales ÷ CMu",
+      "correct": "200 pizzas",
+      "feedback": "PE = $1.000.000 ÷ $5.000 = <strong>200 pizzas/mes</strong>. Necesitás vender exactamente 200 pizzas para no ganar ni perder dinero."
+    },
+    "EX1S4": {
+      "id": "EX1S4",
+      "text": "¿Cuánto debe facturar el negocio para alcanzar el PE? (PE en pesos)",
+      "hint": "PE$ = PE en unidades × Precio de Venta",
+      "correct": "1600000 $",
+      "feedback": "PE$ = 200 × $8.000 = <strong>$1.600.000</strong>. Esta es la facturación mínima del mes para no perder dinero."
+    },
+    "EX1S5": {
+      "id": "EX1S5",
+      "text": "El mes cerró con 300 pizzas vendidas. ¿Cuál es la ganancia neta?",
+      "hint": "Ganancia = (Unidades vendidas − PE) × CMu",
+      "correct": "500000 $",
+      "feedback": "Ganancia = (300 − 200) × $5.000 = 100 × $5.000 = <strong>$500.000</strong>. Las primeras 200 cubrieron el muro; las 100 extras son ganancia pura. ¡Mirá el gráfico! 👇"
+    },
+    "EX2S1": {
+      "id": "EX2S1",
+      "text": "Calculá el Costo Variable Unitario (CVu) total por combo.",
+      "hint": "CVu = Ingredientes + Comisión delivery",
+      "correct": "2000 $",
+      "feedback": "CVu = $1.500 + $500 = <strong>$2.000 por combo</strong>. La comisión de la app es un costo variable directo: si no hay venta, no hay comisión."
+    },
+    "EX2S2": {
+      "id": "EX2S2",
+      "text": "Calculá la Contribución Marginal Unitaria (CMu) del combo.",
+      "hint": "CMu = PV − CVu",
+      "correct": "3000 $",
+      "feedback": "CMu = $5.000 − $2.000 = <strong>$3.000 por combo</strong>. Cada combo vendido aporta $3.000 para cubrir los $1.200.000 de costos fijos."
+    },
+    "EX2S3": {
+      "id": "EX2S3",
+      "text": "Calculá el Punto de Equilibrio mensual de la cafetería.",
+      "hint": "PE = CF ÷ CMu",
+      "correct": "400 combos",
+      "feedback": "PE = $1.200.000 ÷ $3.000 = <strong>400 combos/mes</strong>. La cafetería necesita vender 400 combos al mes para sobrevivir."
+    },
+    "EX2S4": {
+      "id": "EX2S4",
+      "text": "Si la app sube su comisión a $800 por pedido (todo lo demás igual), ¿cuál es el nuevo PE?",
+      "hint": "Recalculá: nuevo CVu → nueva CMu → nuevo PE",
+      "correct": "480 combos",
+      "feedback": "Nuevo CVu = $1.500 + $800 = $2.300 → Nueva CMu = $5.000 − $2.300 = $2.700 → Nuevo PE = $1.200.000 ÷ $2.700 ≈ <strong>444 combos</strong>. ¡El PE subió 44 combos por subir la comisión! Revisá el gráfico para ver el impacto visual. (Tolerancia: ±5)"
+    },
+    "EX3S1": {
+      "id": "EX3S1",
+      "text": "Calculá las Ventas Totales del mes.",
+      "hint": "Ventas Totales = Precio de Venta × Unidades Vendidas",
+      "correct": "6000000 $",
+      "feedback": "Ventas Totales = $6.000 × 1.000 = <strong>$6.000.000</strong>. Este es el punto de partida del tablero financiero."
+    },
+    "EX3S2": {
+      "id": "EX3S2",
+      "text": "Calculá los Costos Variables Totales del mes.",
+      "hint": "CVT = CVu × Unidades Vendidas",
+      "correct": "2600000 $",
+      "feedback": "CVT = $2.600 × 1.000 = <strong>$2.600.000</strong>. Este es el costo que escaló con las ventas. Si vendían 2.000 platos, el CVT sería $5.200.000."
+    },
+    "EX3S3": {
+      "id": "EX3S3",
+      "text": "Calculá el Margen de Contribución Total del mes.",
+      "hint": "MC Total = Ventas Totales − Costos Variables Totales",
+      "correct": "3400000 $",
+      "feedback": "MC = $6.000.000 − $2.600.000 = <strong>$3.400.000</strong>. Este es el dinero real disponible para pagar la estructura fija del negocio."
+    },
+    "EX3S4": {
+      "id": "EX3S4",
+      "text": "¿Cuál es la Ganancia (o Pérdida) Neta del mes?",
+      "hint": "Resultado = Margen de Contribución Total − Costos Fijos",
+      "correct": "1000000 $",
+      "feedback": "Resultado = $3.400.000 − $2.400.000 = <strong>$1.000.000 de Ganancia Neta</strong>. El presupuesto en 5 pasos: Ventas → Costos Variables → MC → Costos Fijos → Resultado. ¡Mirá el tablero! 👇"
+    },
+    "Q6": {
+      "id": "Q6",
+      "text": "Un restaurant tiene CF = $2.000.000 y CMu = $4.000/plato. Su PE actual es 500 platos. Si los CF suben un 50%, ¿cuál es el nuevo PE?",
+      "hint": "",
+      "correct": "B) 750 platos, porque PE = $3.000.000 ÷ $4.000",
+      "feedback": "Nuevo CF = $2.000.000 × 1,5 = $3.000.000 → Nuevo PE = $3.000.000 ÷ $4.000 = 750 platos. Conclusión clave: cuando los CF suben, el PE sube y el negocio queda más expuesto al riesgo. El objetivo de la gerencia es siempre reducir el PE."
+    },
+    "Q7": {
+      "id": "Q7",
+      "text": "Tenés dos productos: Producto A con CMu = $3.000 y Producto B con CMu = $8.000. ¿Cuál conviene priorizar en ventas para alcanzar el PE más rápido?",
+      "hint": "",
+      "correct": "B) El Producto B, porque aporta $8.000 por unidad al muro de costos fijos — necesitás vender menos unidades.",
+      "feedback": "Correcto. Con CMu $8.000 (B), cada unidad \"pone 8 ladrillos\" al muro. Con CMu $3.000 (A), solo \"pone 3 ladrillos\". Para alcanzar el mismo muro de CF más rápido, necesitás vender menos unidades del B. Maximizar la CMu del mix de ventas es estrategia pura de rentabilidad."
+    },
+    "Q8": {
+      "id": "Q8",
+      "text": "Un restaurante tiene CF = $1.800.000/mes y CMu = $6.000/plato. Lograron reducir los CF en $600.000 aplicando eficiencias. ¿Cuál es el nuevo Punto de Equilibrio?",
+      "hint": "Nuevo CF = $1.800.000 − $600.000 = $1.200.000 → Nuevo PE = Nuevo CF ÷ CMu",
+      "correct": "200 platos",
+      "feedback": "Nuevo CF = $1.800.000 − $600.000 = $1.200.000 → Nuevo PE = $1.200.000 ÷ $6.000 = <strong>200 platos</strong>. Antes necesitaban vender 300 platos para equilibrar; ahora solo 200. Reducir CF es la forma más directa de \"empujar el PE hacia el día 1 del mes\"."
+    }
+  },
+  "TP": {}
+}

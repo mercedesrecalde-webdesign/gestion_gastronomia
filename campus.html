@@ -192,48 +192,20 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    @media (max-width: 900px) {
-      aside { position: fixed; left: -280px; }
-      main { padding: 24px; }
-      .practice-grid { grid-template-columns: 1fr; }
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--muted);
     }
-  </style>
-</head>
-<body>
-
-  <aside id="sidebar">
-    <div class="brand">
-      <h1>Campus Culinario</h1>
-      <p>COSTOS & GESTIÓN</p>
-    </div>
-    <nav class="nav-links" id="moduleNav"></nav>
-  </aside>
-
-  <main>
-    <div id="content">
-      <div class="content-header">
-        <div class="mod-tag" id="currentModTag">Módulo 01</div>
-        <h1 class="mod-title" id="currentModTitle">Cargando...</h1>
-      </div>
-
-      <nav class="tabs-nav">
-        <button class="tab-btn active" onclick="switchTab('theory', this)">Teoría</button>
-        <button class="tab-btn" onclick="switchTab('practice', this)">Práctica</button>
-        <button class="tab-btn" onclick="switchTab('exercises', this)">Ejercicios</button>
-      </nav>
-
-      <div id="moduleView" class="view-container"></div>
-    </div>
-  </main>
-
-  <script>
-    const SUPABASE_URL = 'https://dukgjrhyhyxvdqzhthje.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1a2dqcmh5aHl4dmRxemh0aGplIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc5MTQzNjIsImV4cCI6MjA4MzQ5MDM2Mn0.JYZWv2vYwMbTopyL-T8_kjbX2py5IL7Ap6ASZc2B4dM';
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-    let campusModules = [];
-    let currentModuleIndex = 0;
-    let currentTab = 'theory';
+    .nav-btn:hover { background: rgba(255,255,255,0.05); color: var(--text); }
+    .nav-btn.active { background: var(--gold-low); color: var(--gold); }
+    .nav-btn .nav-icon { font-size: 18px; }
+    .nav-btn .nav-label { font-weight: 500; font-size: 14px; }
 
     async function init() {
       try {
@@ -253,7 +225,6 @@
         }
       } catch (err) {
         console.error("Error cargando módulos:", err);
-        // Fallback a datos locales si la DB falla o no está creada
         campusModules = CAMPUS_DATA.modules;
         renderNav();
         loadModule(0);
@@ -279,6 +250,129 @@
       renderTab();
     }
 
+    @media (max-width: 900px) {
+      aside { position: fixed; left: -280px; }
+      main { padding: 24px; }
+      .sidebar { position: fixed; left: -280px; }
+      .main-content { padding: 24px; }
+      .practice-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h1 class="logo">Campus Culinario</h1>
+      <p style="font-size: 10px; color: var(--gold); font-family: var(--mono); letter-spacing: 1px;">SISTEMA DE GESTIÓN</p>
+    </div>
+
+    <div class="main-nav" style="margin-bottom: 30px; display: flex; flex-direction: column; gap: 8px;">
+      <div class="nav-btn active" onclick="switchMainView('campus')" id="btn-campus">
+        <span class="nav-icon">📚</span>
+        <span class="nav-label">Campus & Teoría</span>
+      </div>
+      <div class="nav-btn" onclick="switchMainView('exams')" id="btn-exams">
+        <span class="nav-icon">📝</span>
+        <span class="nav-label">Exámenes Finales</span>
+      </div>
+      <div class="nav-btn" onclick="switchMainView('dashboard')" id="btn-dashboard">
+        <span class="nav-icon">📊</span>
+        <span class="nav-label">Panel de Alumnos</span>
+      </div>
+    </div>
+
+    <div id="moduleNavContainer">
+      <p style="font-size: 10px; color: var(--muted); font-family: var(--mono); margin-bottom: 12px; padding-left: 12px;">MÓDULOS DE APRENDIZAJE</p>
+      <nav id="moduleNav" class="module-list"></nav>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <!-- VISTA CAMPUS (MÓDULOS) -->
+    <div id="view-campus" class="main-view">
+      <header class="content-header">
+        <div class="header-info">
+          <span class="tag" id="currentModTag">Módulo 01</span>
+          <h2 class="title" id="currentModTitle">Cargando...</h2>
+        </div>
+        <div class="tabs">
+          <button class="tab active" onclick="setTab('theory', this)">Teoría</button>
+          <button class="tab" onclick="setTab('practice', this)">Práctica</button>
+          <button class="tab" onclick="setTab('exercises', this)">Ejercicios</button>
+        </div>
+      </header>
+      <div id="moduleView" class="module-content"></div>
+    </div>
+
+    <!-- VISTA EXÁMENES -->
+    <div id="view-exams" class="main-view" style="display: none;">
+      <header class="content-header">
+        <div class="header-info">
+          <span class="tag">Evaluación</span>
+          <h2 class="title">Exámenes y Simulacros</h2>
+        </div>
+      </header>
+      <div class="exam-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; padding: 40px;">
+        <div class="exam-card" onclick="window.open('simulacro1.html')" style="background: var(--card); border: 1px solid var(--border); padding: 32px; border-radius: 12px; cursor: pointer; transition: transform 0.2s;">
+          <div style="font-size: 32px; margin-bottom: 16px;">📄</div>
+          <h3 style="color: var(--gold); margin-bottom: 8px;">Simulacro 01</h3>
+          <p style="color: var(--muted); font-size: 14px;">Evaluación integral de Clasificación y Comportamiento.</p>
+        </div>
+        <div class="exam-card" onclick="window.open('simulacro2.html')" style="background: var(--card); border: 1px solid var(--border); padding: 32px; border-radius: 12px; cursor: pointer; transition: transform 0.2s;">
+          <div style="font-size: 32px; margin-bottom: 16px;">📄</div>
+          <h3 style="color: var(--gold); margin-bottom: 8px;">Simulacro 02</h3>
+          <p style="color: var(--muted); font-size: 14px;">Evaluación avanzada: Punto de Equilibrio y Rentabilidad.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- VISTA DASHBOARD -->
+    <div id="view-dashboard" class="main-view" style="display: none;">
+      <header class="content-header">
+        <div class="header-info">
+          <span class="tag">Seguimiento</span>
+          <h2 class="title">Panel de Control de Alumnos</h2>
+        </div>
+      </header>
+      <iframe src="dashboard.html" style="width: 100%; height: calc(100vh - 150px); border: none; background: transparent;"></iframe>
+    </div>
+  </main>
+
+  <script>
+    const SUPABASE_URL = 'https://dukgjrhyhyxvdqzhthje.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1a2dqcmh5aHl4dmRxemh0aGplIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc5MTQzNjIsImV4cCI6MjA4MzQ5MDM2Mn0.JYZWv2vYwMbTopyL-T8_kjbX2py5IL7Ap6ASZc2B4dM';
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let campusModules = [];
+    let currentModuleIndex = 0;
+    let currentTab = 'theory';
+
+    async function init() {
+      // ... (Supabase load logic)
+    }
+
+    function switchMainView(viewId) {
+      // Hide all views
+      document.querySelectorAll('.main-view').forEach(v => v.style.display = 'none');
+      // Show selected view
+      document.getElementById(`view-${viewId}`).style.display = 'block';
+      
+      // Update nav buttons
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(`btn-${viewId}`).classList.add('active');
+
+      // Hide/Show module navigation
+      const modNav = document.getElementById('moduleNavContainer');
+      modNav.style.display = viewId === 'campus' ? 'block' : 'none';
+    }
+
+    function setTab(tab, btn) {
+      currentTab = tab;
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      renderTab();
+    }
+
     function switchTab(tab, btn) {
       currentTab = tab;
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -290,19 +384,39 @@
       const container = document.getElementById('moduleView');
       const mod = CAMPUS_DATA.modules[currentModuleIndex];
 
-      if (currentTab === 'theory') {
+      function renderTheory(container, mod) {
+        if (mod.pdf_url) {
+          container.innerHTML = `
+            <div style="height: 800px; background: var(--card2); border-radius: 8px; overflow: hidden;">
+              <iframe src="${mod.pdf_url}" width="100%" height="100%" style="border: none;"></iframe>
+            </div>
+            <div style="margin-top: 20px; text-align: center;">
+              <a href="${mod.pdf_url}" target="_blank" style="color: var(--gold); text-decoration: none; font-size: 14px;">
+                📥 ¿No puedes ver el PDF? Haz clic aquí para descargarlo.
+              </a>
+            </div>
+          `;
+          return;
+        }
+
         container.innerHTML = `
-          <div class="theory-wrap">
-            <p style="font-size: 18px; margin-bottom: 40px; color: var(--muted)">${mod.theory.intro}</p>
-            ${mod.theory.sections.map(sec => `
-              <div class="theory-section">
-                <h3>${sec.title}</h3>
-                <div class="theory-text">${sec.content}</div>
-                ${sec.proTip ? `<div class="pro-tip"><strong>PRO TIP</strong>${sec.proTip}</div>` : ''}
+          <p style="color: var(--muted); font-size: 18px; line-height: 1.6; margin-bottom: 40px; border-left: 3px solid var(--gold); padding-left: 24px;">
+            ${mod.intro || mod.theory.intro}
+          </p>
+          <div class="theory-grid">
+            ${(mod.sections || mod.theory.sections).map(sec => `
+              <div class="theory-card" style="background: var(--card2); padding: 32px; border-radius: 12px; border: 1px solid var(--border);">
+                <h3 style="color: var(--gold); margin-bottom: 16px; font-family: var(--display);">${sec.title}</h3>
+                <p style="line-height: 1.6; color: var(--text);">${sec.content}</p>
+                ${sec.proTip ? `<div style="margin-top: 24px; padding: 16px; background: rgba(212, 168, 83, 0.1); border-radius: 8px; font-size: 14px; color: var(--gold);"><strong>💡 PRO-TIP:</strong> ${sec.proTip}</div>` : ''}
               </div>
             `).join('')}
           </div>
         `;
+      }
+
+      if (currentTab === 'theory') {
+        renderTheory(container, mod);
       } else if (currentTab === 'practice') {
         renderPractice(container, mod);
       } else {

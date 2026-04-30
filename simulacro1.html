@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Simulacro 1 · Evaluación Parcial 12/5</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&family=Unbounded:wght@700;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ── CONFIG: reemplazá estos valores ── */
+:root{
+  --SUPA_URL:'';--SUPA_KEY:'';
+  --bg:#0b0d09;--s1:#111309;--s2:#161910;--s3:#1c2014;
+  --border:#2a2f1c;--border2:#363d25;
+  --gold:#d4a853;--gold2:#f0c96a;--goldf:rgba(212,168,83,.1);
+  --red:#e05252;--redf:rgba(224,82,82,.09);
+  --green:#6bbf6a;--greenf:rgba(107,191,106,.08);
+  --blue:#5ab4d4;--bluef:rgba(90,180,212,.07);
+  --text:#dde0c8;--muted:#6a7058;--muted2:#8a9072;
+  --mono:'IBM Plex Mono',monospace;--display:'Unbounded',sans-serif;--body:'DM Sans',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 900px 500px at 15% 5%,rgba(212,168,83,.04),transparent 60%),radial-gradient(ellipse 700px 600px at 85% 90%,rgba(107,191,106,.03),transparent 60%);pointer-events:none;z-index:0}
+
+/* COVER */
+#cover{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px;text-align:center;gap:0}
+.sim-badge{font-family:var(--mono);font-size:9px;letter-spacing:4px;color:var(--red);border:1px solid var(--red);padding:4px 16px;margin-bottom:32px;opacity:0;animation:fu .4s .1s forwards}
+.cv-h{font-family:var(--display);font-size:clamp(36px,7vw,76px);font-weight:900;line-height:.92;letter-spacing:-2px;margin-bottom:12px;opacity:0;animation:fu .5s .3s forwards}
+.cv-h em{color:var(--gold);font-style:normal}
+.cv-sub{font-size:14px;color:var(--muted2);max-width:480px;line-height:1.7;margin-bottom:36px;opacity:0;animation:fu .5s .5s forwards}
+.cv-warn{background:rgba(224,82,82,.08);border:1px solid rgba(224,82,82,.25);border-radius:4px;padding:12px 18px;font-family:var(--mono);font-size:10px;color:var(--red);max-width:480px;margin-bottom:32px;line-height:1.6;opacity:0;animation:fu .5s .6s forwards}
+.meta-row{display:flex;gap:24px;justify-content:center;margin-bottom:36px;opacity:0;animation:fu .5s .7s forwards}
+.meta{text-align:center}.meta-n{font-family:var(--display);font-size:28px;font-weight:900;color:var(--gold)}.meta-l{font-family:var(--mono);font-size:9px;color:var(--muted);letter-spacing:1px}
+.name-w{width:100%;max-width:400px;margin-bottom:20px;opacity:0;animation:fu .5s .85s forwards}
+.n-l{display:block;font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;text-align:left}
+.n-i{width:100%;background:var(--s2);border:1px solid var(--border2);color:var(--text);font-family:var(--body);font-size:15px;padding:12px 15px;border-radius:4px;outline:none;transition:border-color .2s}
+.n-i:focus{border-color:var(--gold)}
+.btn-go{background:var(--gold);color:#0b0d09;font-family:var(--display);font-weight:900;font-size:11px;padding:15px 46px;border:none;border-radius:4px;cursor:pointer;transition:all .15s;opacity:0;animation:fu .5s 1s forwards}
+.btn-go:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 8px 28px rgba(212,168,83,.3)}
+
+/* TOPBAR */
+#exam{display:none;position:relative;z-index:1;max-width:880px;margin:0 auto;padding:32px 20px 80px}
+.topbar{display:flex;align-items:center;gap:12px;padding-bottom:16px;border-bottom:1px solid var(--border);margin-bottom:40px;flex-wrap:wrap}
+.tb-sim{font-family:var(--mono);font-size:9px;color:var(--red);letter-spacing:3px;border:1px solid rgba(224,82,82,.3);padding:3px 10px;border-radius:2px}
+.tb-brand{font-family:var(--mono);font-size:9px;color:var(--gold);letter-spacing:2px}
+.tb-pb{flex:1;min-width:140px}.pb-t{height:2px;background:var(--border);border-radius:1px;overflow:hidden;margin-bottom:4px}.pb-f{height:100%;background:var(--gold);width:0%;transition:width .4s}
+.pb-txt{font-family:var(--mono);font-size:9px;color:var(--muted);text-align:right}
+.score-pill{font-family:var(--mono);font-size:11px;color:var(--gold);border:1px solid rgba(212,168,83,.25);padding:3px 12px;border-radius:2px;white-space:nowrap}
+
+/* SECTIONS */
+.sec-hdr{display:flex;align-items:flex-end;gap:14px;margin:44px 0 20px}
+.sn{font-family:var(--display);font-size:52px;font-weight:900;color:rgba(212,168,83,.1);line-height:1;flex-shrink:0}
+.si-tag{font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:4px}
+.si-title{font-family:var(--display);font-size:19px;font-weight:700}
+
+/* SCENARIO */
+.sc-box{background:var(--s2);border:1px solid var(--border2);border-left:3px solid var(--gold);border-radius:4px;padding:18px 20px;margin-bottom:18px;font-size:13px;line-height:1.7}
+.sc-tag{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:10px}
+.sc-t{width:100%;border-collapse:collapse;margin-top:8px;font-size:12px}
+.sc-t td{padding:6px 8px;border-bottom:1px solid var(--border)}
+.sc-t td:first-child{color:var(--muted2)}.sc-t td:last-child{font-family:var(--mono);color:var(--gold2);text-align:right}
+.sc-t tr.hl td{background:rgba(212,168,83,.05);color:var(--text)}
+
+/* GRAPH */
+.graph-card{background:var(--s2);border:1px solid var(--border2);border-radius:5px;padding:18px;margin-bottom:20px}
+.graph-title{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:10px}
+.graph-alert{font-family:var(--mono);font-size:10px;color:var(--red);background:rgba(224,82,82,.08);border:1px solid rgba(224,82,82,.2);padding:8px 12px;border-radius:3px;margin-bottom:10px}
+.chart-wrap{position:relative;width:100%;height:290px}
+canvas.ch{width:100%!important;height:290px!important;display:block}
+.graph-leg{display:flex;flex-wrap:wrap;gap:14px;margin-top:10px}
+.gl{display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:9px;color:var(--muted2)}
+.gl-dot{width:12px;height:2.5px;border-radius:1px}
+
+/* QCARD */
+.qcard{background:var(--s2);border:1px solid var(--border);border-radius:5px;padding:22px 24px;margin-bottom:12px;animation:fu .35s ease}
+.qmeta{display:flex;gap:7px;align-items:center;margin-bottom:12px}
+.qbadge{font-family:var(--mono);font-size:9px;color:var(--gold);background:var(--goldf);border:1px solid rgba(212,168,83,.2);padding:2px 8px;border-radius:2px}
+.qtype{font-family:var(--mono);font-size:9px;color:var(--muted);border:1px solid var(--border2);padding:2px 8px;border-radius:2px}
+.qtext{font-size:15px;font-weight:500;line-height:1.55}
+
+/* OPTIONS */
+.opts{display:flex;flex-direction:column;gap:7px;margin-top:14px}
+.opt{background:var(--s1);border:1px solid var(--border);border-radius:4px;padding:10px 12px;cursor:pointer;font-size:13px;display:flex;align-items:flex-start;gap:10px;transition:all .1s;user-select:none}
+.opt:hover:not(.disabled){border-color:var(--gold);background:var(--goldf);transform:translateX(2px)}
+.ok{font-family:var(--mono);font-size:9px;color:var(--muted);min-width:16px;height:16px;border:1px solid var(--border);border-radius:2px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .1s;margin-top:1px}
+.opt.sel .ok{background:var(--gold);border-color:var(--gold);color:#000}
+.opt.c-ok{border-color:var(--green)}.opt.c-ok .ok{background:var(--green);border-color:var(--green);color:#000}
+.opt.c-err{border-color:var(--red)}.opt.c-err .ok{background:var(--red);border-color:var(--red);color:#fff}
+.opt.disabled{cursor:default;pointer-events:none}
+
+/* TF */
+.tf-row{display:flex;gap:10px;margin-top:14px}
+.tf-btn{flex:1;background:var(--s1);border:1px solid var(--border);color:var(--text);font-family:var(--body);font-weight:600;font-size:14px;padding:14px;border-radius:4px;cursor:pointer;transition:all .12s}
+.tf-btn:hover:not(.disabled){border-color:var(--gold)}
+.tf-btn.sel{border-color:var(--gold);background:var(--goldf);color:var(--gold)}
+.tf-btn.tf-ok{border-color:var(--green);background:var(--greenf);color:var(--green)}
+.tf-btn.tf-err{border-color:var(--red);background:var(--redf);color:var(--red)}
+
+/* NUMERIC */
+.num-row{display:flex;align-items:center;gap:10px;margin-top:14px;flex-wrap:wrap}
+.num-in{background:var(--s1);border:1px solid var(--border2);color:var(--text);font-family:var(--mono);font-size:19px;padding:9px 14px;border-radius:4px;outline:none;width:180px;transition:border-color .2s}
+.num-in:focus{border-color:var(--gold)}
+.num-in.ok2{border-color:var(--green);background:var(--greenf)}
+.num-in.err2{border-color:var(--red);background:var(--redf)}
+.num-u{font-family:var(--mono);font-size:11px;color:var(--muted)}
+
+/* FEEDBACK */
+.fb{margin-top:10px;padding:9px 12px;border-radius:3px;font-size:12px;line-height:1.65;display:none}
+.fb.ok-fb{display:block;background:var(--greenf);border-left:2px solid var(--green);color:#9de09b}
+.fb.err-fb{display:block;background:var(--redf);border-left:2px solid var(--red);color:#e89090}
+.fb strong{color:var(--gold2)}
+
+/* CONFIRM BTN */
+.btn-c{margin-top:12px;background:transparent;border:1px solid rgba(212,168,83,.3);color:var(--gold);font-family:var(--body);font-weight:600;font-size:11px;padding:7px 20px;border-radius:4px;cursor:pointer;transition:all .12s}
+.btn-c:hover{background:var(--goldf);border-color:var(--gold)}
+.btn-c:disabled{opacity:.2;cursor:default;pointer-events:none}
+
+/* FOOT */
+.exam-foot{display:flex;justify-content:flex-end;margin-top:32px}
+.btn-fin{display:none;background:var(--gold);color:#0b0d09;font-family:var(--display);font-weight:900;font-size:12px;padding:14px 44px;border:none;border-radius:4px;cursor:pointer;transition:all .15s}
+.btn-fin:hover{background:var(--gold2);transform:translateY(-2px)}
+
+/* RESULTS */
+#res{display:none;position:relative;z-index:1;max-width:880px;margin:0 auto;padding:60px 20px 80px;animation:fu .5s ease}
+.res-top{text-align:center;margin-bottom:52px}
+.rgrade{font-family:var(--display);font-size:110px;font-weight:900;line-height:1;margin-bottom:8px}
+.g10{color:var(--gold)}.g8{color:var(--green)}.g6{color:var(--blue)}.g4{color:var(--red)}
+.rlbl{font-family:var(--mono);font-size:9px;letter-spacing:4px;color:var(--muted);text-transform:uppercase;margin-bottom:14px}
+.rname{font-family:var(--display);font-size:26px;font-weight:700;margin-bottom:7px}
+.rmsg{font-size:14px;color:var(--muted2)}
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:40px}
+.stat{background:var(--s2);border:1px solid var(--border);border-radius:5px;padding:20px;text-align:center}
+.stat-n{font-family:var(--mono);font-size:34px;font-weight:700;margin-bottom:4px}
+.stat-l{font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
+.rev-hdr{font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;padding-bottom:10px;border-bottom:1px solid var(--border);margin-bottom:16px}
+.ri{background:var(--s2);border:1px solid var(--border);border-left:3px solid;border-radius:4px;padding:14px 18px;margin-bottom:8px}
+.ri.rok{border-left-color:var(--green)}.ri.rerr{border-left-color:var(--red)}
+.ri-q{font-size:12px;font-weight:500;margin-bottom:6px;line-height:1.5}
+.ri-d{font-family:var(--mono);font-size:10px;color:var(--muted)}
+.ri-d .ok3{color:var(--green)}.ri-d .bad{color:var(--red)}.ri-d .ans{color:var(--gold2)}
+.res-actions{display:flex;gap:12px;justify-content:center;margin-top:32px;flex-wrap:wrap}
+.btn-ra{background:transparent;border:1px solid var(--gold);color:var(--gold);font-family:var(--body);font-weight:600;font-size:14px;padding:11px 36px;border-radius:4px;cursor:pointer;transition:all .15s}
+.btn-ra:hover{background:var(--goldf)}
+
+@keyframes fu{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:600px){.stats-row{grid-template-columns:1fr 1fr}.rgrade{font-size:80px}.chart-wrap{height:230px}canvas.ch{height:230px!important}}
+@media print{body{background:#fff;color:#111}#cover,#res .res-actions,.exam-foot{display:none!important}#exam{display:block!important}}
+</style>
+</head>
+<body>
+
+<!-- SUPABASE CONFIG — reemplazá con tus valores -->
+<script>
+const SUPABASE_URL = 'https://dukgjrhyhyxvdqzhthje.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1a2dqcmh5aHl4dmRxemh0aGplIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc5MTQzNjIsImV4cCI6MjA4MzQ5MDM2Mn0.JYZWv2vYwMbTopyL-T8_kjbX2py5IL7Ap6ASZc2B4dM';
+const SB = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const SIMULACRO_NUM = 1;
+</script>
+
+<section id="cover">
+  <div class="sim-badge">SIMULACRO 1 / 3 · EXAMEN 12 DE MAYO</div>
+  <h1 class="cv-h">Evaluación<br><em>Parcial</em></h1>
+  <p class="cv-sub">Costos y Presupuestos · IFTS N° 23 · Tecnicatura Superior en Gastronomía</p>
+  <div class="cv-warn">⚠️ Este simulacro no incluye fórmulas de ayuda. Debés recordar y aplicar los conceptos vistos en clase.</div>
+  <div class="meta-row">
+    <div class="meta"><div class="meta-n">20</div><div class="meta-l">Preguntas</div></div>
+    <div class="meta"><div class="meta-n">4</div><div class="meta-l">Bloques</div></div>
+    <div class="meta"><div class="meta-n">35'</div><div class="meta-l">Estimado</div></div>
+  </div>
+  <div class="name-w"><span class="n-l">Nombre y Apellido</span><input class="n-i" id="ni" type="text" placeholder="Ej: Valentina García" autocomplete="off"></div>
+  <button class="btn-go" onclick="start()">Comenzar simulacro →</button>
+</section>
+
+<section id="exam">
+  <div class="topbar">
+    <span class="tb-sim">SIMULACRO 1</span>
+    <span class="tb-brand">// DON BURGER · COSTOS Y PRESUPUESTOS</span>
+    <div class="tb-pb"><div class="pb-t"><div class="pb-f" id="pbf"></div></div><div class="pb-txt" id="pbt">0 / 20</div></div>
+    <div class="score-pill" id="sp">Puntaje: 0</div>
+  </div>
+  <div id="qc"></div>
+  <div class="exam-foot"><button class="btn-fin" id="bfin" onclick="showRes()">Ver resultados →</button></div>
+</section>
+
+<section id="res">
+  <div class="res-top">
+    <div class="rgrade" id="rg"></div><div class="rlbl">Calificación Final</div>
+    <div class="rname" id="rn"></div><div class="rmsg" id="rm"></div>
+  </div>
+  <div class="stats-row">
+    <div class="stat"><div class="stat-n" id="sc" style="color:var(--green)"></div><div class="stat-l">Correctas</div></div>
+    <div class="stat"><div class="stat-n" id="sw" style="color:var(--red)"></div><div class="stat-l">Incorrectas</div></div>
+    <div class="stat"><div class="stat-n" id="sp2" style="color:var(--gold)"></div><div class="stat-l">Porcentaje</div></div>
+  </div>
+  <div class="rev-hdr">// Revisión completa</div>
+  <div id="rc"></div>
+  <div class="res-actions">
+    <button class="btn-ra" onclick="window.print()">🖨 Imprimir</button>
+    <button class="btn-ra" onclick="retry()">↺ Reintentar</button>
+  </div>
+</section>
+
+<script>
+/* ════════════════════════════
+   PREGUNTAS · SIMULACRO 1
+   Caso: "Don Burger" — hamburguesería gourmet
+════════════════════════════ */
+const SCENARIO = {
+  titulo: '🍔 "Don Burger" — Hamburguesería Gourmet',
+  datos: [
+    ['Alquiler del local','$420.000/mes'],
+    ['Sueldos base (cocinero + cajero)','$420.000/mes'],
+    ['Seguro del local','$60.000/mes'],
+    ['Sistema de gestión','$40.000/mes (fijo)'],
+    ['Total Costos Fijos','$940.000/mes'],
+    ['Ingredientes por hamburguesa','$1.200'],
+    ['Descartables y packaging','$300'],
+    ['Comisión app delivery (15% PV)','$450'],
+    ['Total CVu','$1.950/unidad'],
+    ['Precio de venta','$3.000 c/u'],
+  ]
+};
+
+const QS = [
+/* ── BLOQUE I: CLASIFICACIÓN ── */
+{ sec:'BLOQUE I · Clasificación de Costos', secN:'I',
+  id:'q1',type:'mc',
+  text:'El alquiler del local ($420.000/mes) que se paga sin importar cuántas hamburguesas se vendan, se clasifica como:',
+  opts:['Costo Variable Directo','Costo Fijo Indirecto','Gasto Administrativo Variable','Costo Mixto de Producción'],
+  ans:1, fb:'El alquiler es Costo Fijo (no varía con la producción) e Indirecto (no asignable a una hamburguesa específica). Se paga igual con 0 o 1.000 ventas.'
+},
+{ sec:null,id:'q2',type:'mc',
+  text:'La comisión de la app de delivery (15% sobre cada venta) es un costo:',
+  opts:['Fijo de Comercialización','Variable de Comercialización — sube con cada venta','Indirecto de Fabricación','Gasto Administrativo Fijo'],
+  ans:1, fb:'La comisión de delivery es Variable (depende del volumen vendido) y de Comercialización (vinculada al canal de venta, no a la producción del plato).'
+},
+{ sec:null,id:'q3',type:'mc',
+  text:'"Don Burger" compra una freidora industrial por $2.000.000. Esta erogación se clasifica como:',
+  opts:['Costo Variable de Producción del mes','Gasto de Administración','Inversión — activo que genera beneficios futuros y se amortiza','Costo Fijo mensual completo'],
+  ans:2, fb:'La compra de equipamiento es una Inversión. El desembolso se activa como activo y su costo se recupera mediante amortización mensual a lo largo de su vida útil.'
+},
+{ sec:null,id:'q4',type:'tf',
+  text:'Los ingredientes de cada hamburguesa (harina, carne, queso, vegetales) son un Costo Variable Directo porque se pueden asignar exactamente a cada unidad producida y varían con el volumen.',
+  ans:true, fb:'Verdadero. Son directos (cuantificables por porción en la receta) y variables (si no producís, no consumís ingredientes). Son el núcleo de la Materia Prima.'
+},
+{ sec:null,id:'q5',type:'mc',
+  text:'¿Cuál de los siguientes conceptos corresponde a un GASTO y NO a un costo de producción?',
+  opts:['Harina para los panes de hamburguesa','Sueldo del cocinero de línea','Campaña publicitaria en Instagram','Gas de las parrillas'],
+  ans:2, fb:'La publicidad es un GASTO de Comercialización: no interviene en la transformación de la materia prima y no se recupera directamente con la venta de un plato específico.'
+},
+
+/* ── BLOQUE II: TABLA CF/CV ── */
+{ sec:'BLOQUE II · Comportamiento de Costos — La Tabla',
+  scen:true, secN:'II',
+  id:'q6',type:'numeric',
+  text:'Con 0 hamburguesas vendidas, ¿cuál es el Costo Total del mes?',
+  ans:940000,tol:0,unit:'$',
+  fb:'CT(0) = CF + CV = $940.000 + $0 = $940.000. Los costos fijos existen aunque no haya producción. El negocio ya está perdiendo dinero desde el día 1.'
+},
+{ sec:null,id:'q7',type:'numeric',
+  text:'Si se producen 200 hamburguesas en el mes, ¿cuál es el Costo Variable Total?',
+  ans:390000,tol:0,unit:'$',
+  fb:'CVT = CVu × Q = $1.950 × 200 = $390.000. El costo variable total escala en proporción directa con las unidades producidas.'
+},
+{ sec:null,id:'q8',type:'numeric',
+  text:'Con 200 hamburguesas, ¿cuál es el Costo Fijo Unitario (CFU)?',
+  ans:4700,tol:0,unit:'$',
+  fb:'CFU = CF ÷ Q = $940.000 ÷ 200 = $4.700. Como los CF se reparten entre más unidades, el CFU disminuye a medida que aumenta la producción.'
+},
+{ sec:null,id:'q9',type:'mc',
+  text:'Cuando la producción aumenta de 200 a 400 hamburguesas, el Costo Variable Unitario (CVu = $1.950):',
+  opts:['Sube porque hay más producción','Baja porque se diluye entre más unidades','Permanece constante en $1.950 por hamburguesa','Desaparece al superar las 300 unidades'],
+  ans:2, fb:'El CVu siempre es constante. Es el costo de UNA unidad, y ese valor no cambia con el volumen. Lo que cambia es el CVT (total): $1.950 × 200 = $390k vs $1.950 × 400 = $780k.'
+},
+{ sec:null,id:'q10',type:'tf',
+  text:'A medida que la producción crece, el Costo Total Unitario (CTU) se acerca progresivamente al Costo Variable Unitario porque el componente fijo por unidad tiende a cero.',
+  ans:true, fb:'Verdadero. CTU = CFU + CVu. Como CFU → 0 al crecer Q, CTU → CVu. Ejemplo: con Q=10, CTU = $94.000+$1.950 = $95.950; con Q=1.000, CTU ≈ $940+$1.950 = $2.890 ≈ CVu.'
+},
+
+/* ── BLOQUE III: GRÁFICO PE ── */
+{ sec:'BLOQUE III · Análisis del Gráfico de Punto de Equilibrio',
+  secN:'III', graph:true,
+  id:'q11',type:'numeric',
+  text:'Observá el gráfico de "Don Burger". ¿En cuántas unidades se cruzan las líneas de Ingresos y Costos Totales? Ese es el Punto de Equilibrio.',
+  ans:900,tol:0,unit:'hamburguesas',
+  fb:'PE = CF ÷ CMu = $940.000 ÷ ($3.000 − $1.950) = $940.000 ÷ $1.050 ≈ 895 ≈ 900 hamburguesas/mes.'
+},
+{ sec:null,id:'q12',type:'numeric',
+  text:'Si Don Burger vendió 1.300 hamburguesas este mes (sobre el PE), ¿cuál es la ganancia neta?',
+  ans:420000,tol:2000,unit:'$',
+  fb:'Ganancia = (Q − PE) × CMu = (1.300 − 900) × $1.050 = 400 × $1.050 = $420.000. Las primeras 900 cubrieron el muro de CF; las 400 extras son ganancia pura.'
+},
+{ sec:null,id:'q13',type:'mc',
+  text:'En el gráfico, la línea de Costos Totales NO parte del origen (0,0). ¿Por qué?',
+  opts:['Porque el eje Y está mal configurado','Porque los Costos Variables también existen con producción cero','Porque los Costos Fijos ya existen aunque no se produzca nada — parten desde CF en el eje Y','Porque el gráfico incluye las amortizaciones'],
+  ans:2, fb:'La línea de CT parte desde el nivel de los Costos Fijos en el eje Y, porque CF = $940.000 existe aunque Q = 0. Fórmula: CT = CF + CVu × Q → cuando Q=0, CT = CF.'
+},
+{ sec:null,id:'q14',type:'mc',
+  text:'¿Qué representa la zona sombreada en ROJO en el gráfico de PE?',
+  opts:['Las ganancias netas del negocio','La zona donde los Ingresos son menores a los Costos Totales — el negocio pierde dinero','La zona donde los CF superan los CV','El rango óptimo de producción'],
+  ans:1, fb:'La zona roja (pérdida) muestra el tramo donde CT > Ingresos. El negocio no cubre todos sus costos. El PE es el límite exacto donde esa situación cambia.'
+},
+{ sec:null,id:'q15',type:'numeric',
+  text:'Si "Don Burger" sólo vende 500 hamburguesas en un mes de baja, ¿cuánto dinero pierde?',
+  ans:420000,tol:2000,unit:'$',
+  fb:'Pérdida = (500 − 900) × $1.050 = −400 × $1.050 = −$420.000. El negocio está en zona roja, a 400 hamburguesas de su PE. Ese es el "hueco" que está perdiendo.'
+},
+
+/* ── BLOQUE IV: CM Y ANÁLISIS ── */
+{ sec:'BLOQUE IV · Contribución Marginal y Análisis Final', secN:'IV',
+  id:'q16',type:'numeric',
+  text:'¿Cuál es la Contribución Marginal Unitaria (CMu) de cada hamburguesa?',
+  ans:1050,tol:0,unit:'$',
+  fb:'CMu = PV − CVu = $3.000 − $1.950 = $1.050. Cada hamburguesa vendida aporta $1.050 al "muro" de los Costos Fijos. Una vez cubiertos $940.000, cada CMu es ganancia pura.'
+},
+{ sec:null,id:'q17',type:'numeric',
+  text:'Don Burger evalúa bajar el precio a $2.500 para atraer más clientes. Con el nuevo precio y el mismo CVu, ¿cuántas hamburguesas necesitaría vender para alcanzar el PE?',
+  ans:1711,tol:20,unit:'hamburguesas',
+  fb:'Nueva CMu = $2.500 − $1.950 = $550 → Nuevo PE = $940.000 ÷ $550 ≈ 1.709 hamburguesas. Bajar el precio casi duplica el PE. La CMu es la palanca más sensible.'
+},
+{ sec:null,id:'q18',type:'mc',
+  text:'¿Cuál de estas acciones reduciría el Punto de Equilibrio de "Don Burger"?',
+  opts:['Bajar el precio de venta a $2.500','Aumentar el sueldo del personal en $200.000/mes','Negociar con el proveedor de carne para bajar el CVu a $1.600','Agregar un cocinero extra al turno nocturno'],
+  ans:2, fb:'Bajar el CVu de $1.950 a $1.600 sube la CMu a $1.400 → PE = $940.000 ÷ $1.400 = 671 hamburguesas (vs 900 actual). Reducir el CVu es la acción más eficiente: baja el PE sin tocar el precio.'
+},
+{ sec:null,id:'q19',type:'tf',
+  text:'El Food Cost % se calcula como: (Costo de Ingredientes ÷ Precio de Venta) × 100. Si los ingredientes de la hamburguesa cuestan $1.200 y el PV es $3.000, el Food Cost es 40%.',
+  ans:true, fb:'Verdadero. FC% = ($1.200 ÷ $3.000) × 100 = 40%. El rango ideal es 25%-35%. Un FC de 40% indica que los ingredientes consumen demasiado del precio — hay que revisar el PV o los insumos.'
+},
+{ sec:null,id:'q20',type:'mc',
+  text:'"Don Burger" tiene CF=$940.000 y CMu=$1.050. Un mes vendió exactamente 895 hamburguesas. ¿Cuál es el resultado más cercano al real?',
+  opts:['Ganancia de $420.000','Pérdida de $52.500','El negocio está en el Punto de Equilibrio exacto — ni gana ni pierde','Ganancia de $1.050.000'],
+  ans:2, fb:'PE = $940.000 ÷ $1.050 ≈ 895 unidades. Si vende exactamente 895, los ingresos cubren exactamente los costos totales. Resultado = $0. Ni gana ni pierde. Del cubierto 896 en adelante, todo es ganancia.'
+},
+];
+
+/* ════════════════════ ENGINE ════════════════════ */
+let nombre='',ans={},conf={},corr={},score=0;
+const TOTAL=QS.length;
+
+function start(){
+  const n=document.getElementById('ni').value.trim();
+  if(!n){document.getElementById('ni').style.borderColor='var(--red)';return;}
+  nombre=n;
+  document.getElementById('cover').style.display='none';
+  document.getElementById('exam').style.display='block';
+  render();upd();
+}
+
+function render(){
+  const c=document.getElementById('qc');c.innerHTML='';
+  let lastSec=null;
+  QS.forEach((q,i)=>{
+    if(q.sec&&q.sec!==lastSec){
+      lastSec=q.sec;
+      const sh=document.createElement('div');sh.className='sec-hdr';
+      sh.innerHTML=`<div class="sn">${q.secN||'I'}</div><div><div class="si-tag">${q.sec.split(' · ')[0]}</div><div class="si-title">${q.sec.split(' · ').slice(1).join(' · ')}</div></div>`;
+      c.appendChild(sh);
+    }
+    if(q.scen){
+      const sb=document.createElement('div');sb.className='sc-box';
+      let h=`<div class="sc-tag">📋 ${SCENARIO.titulo}</div><table class="sc-t">`;
+      SCENARIO.datos.forEach(([k,v],ri)=>{
+        const hl=[4,8,9].includes(ri)?' class="hl"':'';
+        h+=`<tr${hl}><td>${k}</td><td>${v}</td></tr>`;
+      });
+      h+=`</table>`;sb.innerHTML=h;c.appendChild(sb);
+    }
+    if(q.graph){
+      const gc=document.createElement('div');gc.className='graph-card';
+      gc.innerHTML=`<div class="graph-title">// Gráfico de Punto de Equilibrio · Don Burger</div>
+        <div class="graph-alert">⚠️ El PE no está marcado en este gráfico. Analizalo y respondé las preguntas.</div>
+        <div class="chart-wrap"><canvas id="bec" class="ch"></canvas></div>
+        <div class="graph-leg">
+          <div class="gl"><div class="gl-dot" style="background:#6bbf6a"></div>Ingresos</div>
+          <div class="gl"><div class="gl-dot" style="background:#e05252"></div>Costos Totales</div>
+          <div class="gl"><div class="gl-dot" style="background:#5ab4d4"></div>Costos Fijos</div>
+        </div>`;
+      c.appendChild(gc);
+      setTimeout(()=>drawPE('bec',{CF:940000,CVu:1950,PV:3000,PE:900,maxQ:1800,unit:'burg.'}),300);
+    }
+    const card=document.createElement('div');card.className='qcard';card.id=`cd-${q.id}`;
+    const typeLabel={mc:'Opción múltiple',tf:'Verdadero / Falso',numeric:'Cálculo numérico'};
+    let h=`<div class="qmeta"><span class="qbadge">P${String(i+1).padStart(2,'0')}</span><span class="qtype">${typeLabel[q.type]}</span></div><div class="qtext">${q.text}</div>`;
+    if(q.type==='mc'){
+      h+=`<div class="opts">`+q.opts.map((o,j)=>`<div class="opt" id="o-${q.id}-${j}" onclick="pickO('${q.id}',${j})"><span class="ok">${String.fromCharCode(65+j)}</span><span>${o}</span></div>`).join('')+`</div>`;
+    }else if(q.type==='tf'){
+      h+=`<div class="tf-row"><button class="tf-btn" id="tf-${q.id}-t" onclick="pickTF('${q.id}',true)">✓ Verdadero</button><button class="tf-btn" id="tf-${q.id}-f" onclick="pickTF('${q.id}',false)">✗ Falso</button></div>`;
+    }else{
+      h+=`<div class="num-row"><input class="num-in" id="ni-${q.id}" type="number" step="any" placeholder="0" oninput="pickN('${q.id}')" onkeydown="if(event.key==='Enter')cfm('${q.id}')"><span class="num-u">${q.unit}</span></div>`;
+    }
+    h+=`<button class="btn-c" id="bc-${q.id}" onclick="cfm('${q.id}')" disabled>Confirmar</button>`;
+    h+=`<div class="fb" id="fb-${q.id}"></div>`;
+    card.innerHTML=h;c.appendChild(card);
+  });
+}
+
+function pickO(id,oi){if(conf[id])return;ans[id]=oi;document.querySelectorAll(`[id^="o-${id}-"]`).forEach((el,j)=>el.classList.toggle('sel',j===oi));document.getElementById(`bc-${id}`).disabled=false;}
+function pickTF(id,v){if(conf[id])return;ans[id]=v;document.getElementById(`tf-${id}-t`).classList.toggle('sel',v===true);document.getElementById(`tf-${id}-f`).classList.toggle('sel',v===false);document.getElementById(`bc-${id}`).disabled=false;}
+function pickN(id){const v=document.getElementById(`ni-${id}`).value;if(v!==''){ans[id]=parseFloat(v);document.getElementById(`bc-${id}`).disabled=false;}}
+
+function cfm(id){
+  if(conf[id]||ans[id]===undefined)return;
+  conf[id]=true;document.getElementById(`bc-${id}`).disabled=true;
+  const q=QS.find(x=>x.id===id);let ok=false;
+  if(q.type==='mc'){
+    ok=ans[id]===q.ans;
+    document.querySelectorAll(`[id^="o-${id}-"]`).forEach((el,j)=>{el.classList.add('disabled');if(j===q.ans)el.classList.add('c-ok');else if(j===ans[id]&&!ok)el.classList.add('c-err');});
+  }else if(q.type==='tf'){
+    ok=ans[id]===q.ans;
+    const bt=document.getElementById(`tf-${id}-t`),bf=document.getElementById(`tf-${id}-f`);
+    bt.classList.add('disabled');bf.classList.add('disabled');
+    (q.ans?bt:bf).classList.add('tf-ok');if(!ok)(ans[id]?bt:bf).classList.add('tf-err');
+  }else{
+    ok=Math.abs(ans[id]-q.ans)<=(q.tol||0);
+    const inp=document.getElementById(`ni-${id}`);inp.classList.add(ok?'ok2':'err2');inp.disabled=true;
+  }
+  corr[id]=ok;if(ok)score++;
+  const fb=document.getElementById(`fb-${id}`);
+  fb.className=`fb ${ok?'ok-fb':'err-fb'}`;
+  fb.innerHTML=(ok?'✓ ':' ✗ ')+q.fb+(!ok&&q.type==='numeric'?` <strong>→ Correcto: ${fmt(q.ans)} ${q.unit}</strong>`:'');
+  upd();if(Object.keys(conf).length===TOTAL){const b=document.getElementById('bfin');b.style.display='block';setTimeout(()=>b.scrollIntoView({behavior:'smooth',block:'center'}),300);}
+}
+
+function upd(){const d=Object.keys(conf).length;document.getElementById('pbf').style.width=`${d/TOTAL*100}%`;document.getElementById('pbt').textContent=`${d} / ${TOTAL}`;document.getElementById('sp').textContent=`Puntaje: ${score}`;}
+function fmt(n){return Math.round(Math.abs(n)).toLocaleString('es-AR');}
+
+async function showRes(){
+  document.getElementById('exam').style.display='none';
+  document.getElementById('res').style.display='block';
+  window.scrollTo(0,0);
+  const pct=Math.round(score/TOTAL*100);
+  let grade,cls;
+  if(pct>=90){grade='10';cls='g10';}else if(pct>=75){grade='8';cls='g8';}else if(pct>=60){grade='6';cls='g6';}else{grade='4';cls='g4';}
+  document.getElementById('rg').textContent=grade;document.getElementById('rg').className=`rgrade ${cls}`;
+  document.getElementById('rn').textContent=nombre;
+  document.getElementById('rm').textContent=pct>=75?'¡Bien! Estás listo/a para el parcial.':'Repasá los temas donde cometiste errores.';
+  document.getElementById('sc').textContent=score;document.getElementById('sw').textContent=TOTAL-score;document.getElementById('sp2').textContent=pct+'%';
+  const rc=document.getElementById('rc');rc.innerHTML='';
+  const failedQs = [];
+  QS.forEach((q,i)=>{
+    const ok=corr[q.id]||false;const a=ans[q.id];
+    if(!ok) {
+       let ansStr = 'Sin responder';
+       if (a !== undefined) {
+         if (q.type==='mc') ansStr = String.fromCharCode(65+a);
+         else if(q.type==='tf') ansStr= a ? 'Verdadero' : 'Falso';
+         else ansStr = a + (q.unit ? ' ' + q.unit : '');
+       }
+       failedQs.push(q.id.toUpperCase() + '||' + ansStr);
+    }
+  });
+  QS.forEach((q,i)=>{
+    const ok=corr[q.id]||false;const a=ans[q.id];
+    let det;
+    if(q.type==='mc')det=ok?`<span class="ok3">✓ Opción ${String.fromCharCode(65+q.ans)}</span>`:`<span class="bad">✗ ${a!==undefined?String.fromCharCode(65+a):'—'}</span> · <span class="ans">Correcta: ${String.fromCharCode(65+q.ans)}</span>`;
+    else if(q.type==='tf')det=ok?`<span class="ok3">✓ ${q.ans?'Verdadero':'Falso'}</span>`:`<span class="bad">✗ ${a?'Verdadero':'Falso'}</span> · <span class="ans">Correcta: ${q.ans?'Verdadero':'Falso'}</span>`;
+    else det=ok?`<span class="ok3">✓ ${fmt(a)} ${q.unit}</span>`:`<span class="bad">✗ ${a!==undefined?fmt(a):'—'} ${q.unit}</span> · <span class="ans">Correcta: ${fmt(q.ans)} ${q.unit}</span>`;
+    const d=document.createElement('div');d.className=`ri ${ok?'rok':'rerr'}`;
+    d.innerHTML=`<div class="ri-q">P${String(i+1).padStart(2,'0')} — ${q.text}</div><div class="ri-d">${det}</div>`;rc.appendChild(d);
+  });
+  // Save to Supabase
+  try{await SB.from('exam_resultados').insert({nombre: nombre, puntaje: score, total: TOTAL, porcentaje: pct, errores: failedQs.length ? 'S1: ' + failedQs.join(', ') : 'S1: OK' });}catch(e){console.warn('Supabase error:',e);}
+}
+
+function retry(){ans={};conf={};corr={};score=0;document.getElementById('res').style.display='none';document.getElementById('exam').style.display='block';document.getElementById('bfin').style.display='none';window.scrollTo(0,0);render();upd();}
+
+/* ═══════ PE CHART ═══════ */
+function drawPE(id,{CF,CVu,PV,PE,maxQ,unit}){
+  const canvas=document.getElementById(id);if(!canvas)return;
+  const dpr=window.devicePixelRatio||1;
+  const dW=canvas.clientWidth||canvas.offsetWidth||700;
+  const dH=290;canvas.width=dW*dpr;canvas.height=dH*dpr;
+  const ctx=canvas.getContext('2d');ctx.scale(dpr,dpr);
+  const maxY=Math.ceil(PV*maxQ/1000000)*1000000;
+  const P={t:28,r:dW<500?70:86,b:46,l:dW<500?68:84};
+  const gW=dW-P.l-P.r,gH=dH-P.t-P.b;
+  const xO=q=>P.l+(q/maxQ)*gW,yO=y=>P.t+gH-(y/maxY)*gH;
+  ctx.fillStyle='#161910';ctx.fillRect(0,0,dW,dH);
+  ctx.fillStyle='rgba(224,82,82,.07)';ctx.fillRect(xO(0),P.t,xO(PE)-xO(0),gH);
+  ctx.fillStyle='rgba(107,191,106,.055)';ctx.fillRect(xO(PE),P.t,gW-(xO(PE)-P.l),gH);
+  for(let i=0;i<=5;i++){const y=(maxY/5)*i;ctx.strokeStyle='#222818';ctx.lineWidth=1;ctx.setLineDash([]);ctx.beginPath();ctx.moveTo(xO(0),yO(y));ctx.lineTo(xO(maxQ),yO(y));ctx.stroke();}
+  const ln=(pts,col,dash=[],lw=2.5)=>{ctx.save();ctx.strokeStyle=col;ctx.lineWidth=lw;ctx.setLineDash(dash);ctx.beginPath();pts.forEach(([q,y],i)=>i?ctx.lineTo(xO(q),yO(y)):ctx.moveTo(xO(q),yO(y)));ctx.stroke();ctx.restore();};
+  ln([[0,CF],[maxQ,CF]],'#5ab4d4',[8,5],1.8);
+  ln([[0,CF],[maxQ,CF+CVu*maxQ]],'#e05252',[],2.5);
+  ln([[0,0],[maxQ,PV*maxQ]],'#6bbf6a',[],2.5);
+  // NO PE marker — students must find it
+  ctx.fillStyle='#4a5038';ctx.font=`${dW<500?8:9}px IBM Plex Mono`;ctx.textAlign='center';
+  ctx.fillText('↑ Las líneas se cruzan en algún punto. ¿En cuántas unidades?',xO(maxQ/2),P.t+20);
+  ctx.fillStyle='rgba(224,82,82,.45)';ctx.fillText('ZONA PÉRDIDA',xO(PE*0.35),P.t+36);
+  ctx.fillStyle='rgba(107,191,106,.45)';ctx.fillText('ZONA GANANCIA',xO(PE+(maxQ-PE)*0.55),P.t+36);
+  ctx.fillStyle='#5ab4d4';ctx.textAlign='left';ctx.fillText('CF $'+fmt(CF/1000)+'k',xO(0)+6,yO(CF)-7);
+  ctx.fillStyle='#6bbf6a';ctx.fillText('Ingresos',xO(maxQ)+4,yO(PV*maxQ)+3);
+  ctx.fillStyle='#e05252';ctx.fillText('CT',xO(maxQ)+4,yO(CF+CVu*maxQ)+3);
+  ctx.fillStyle='#5a6048';ctx.textAlign='right';ctx.font=`${dW<500?8:9}px IBM Plex Mono`;
+  for(let i=0;i<=5;i++){const y=(maxY/5)*i;const lbl=y>=1000000?`$${(y/1000000).toFixed(1)}M`:`$${(y/1000).toFixed(0)}k`;ctx.fillText(lbl,xO(0)-6,yO(y)+3);}
+  ctx.textAlign='center';const xs=Math.ceil(maxQ/5/100)*100;
+  for(let q=0;q<=maxQ;q+=xs)ctx.fillText(fmt(q)+' '+unit,xO(q),yO(0)+14);
+  ctx.strokeStyle='#3a4028';ctx.lineWidth=1;ctx.setLineDash([]);
+  ctx.beginPath();ctx.moveTo(xO(0),yO(0));ctx.lineTo(xO(0),yO(maxY));ctx.stroke();
+  ctx.beginPath();ctx.moveTo(xO(0),yO(0));ctx.lineTo(xO(maxQ),yO(0));ctx.stroke();
+}
+
+window.addEventListener('resize',()=>{if(document.getElementById('exam').style.display!=='none'){const c=document.getElementById('bec');if(c)drawPE('bec',{CF:940000,CVu:1950,PV:3000,PE:900,maxQ:1800,unit:'burg.'});}});
+</script>
+</body>
+</html>

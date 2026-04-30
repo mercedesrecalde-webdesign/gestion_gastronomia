@@ -1,0 +1,47 @@
+[
+  {
+    "id": 7,
+    "created_at": "2026-04-22T00:33:45.510938+00:00",
+    "nombre": "PRUEBA_SISTEMA",
+    "puntaje": 10,
+    "total": 10,
+    "porcentaje": 100,
+    "errores": ""
+  },
+  {
+    "id": 8,
+    "created_at": "2026-04-22T00:41:04.212871+00:00",
+    "nombre": "Mercedes Recalde",
+    "puntaje": 35,
+    "total": 36,
+    "porcentaje": 97,
+    "errores": "P24"
+  },
+  {
+    "id": 9,
+    "created_at": "2026-04-22T01:51:21.156725+00:00",
+    "nombre": "PRUEBA_EXAMEN_2",
+    "puntaje": 20,
+    "total": 21,
+    "porcentaje": 95,
+    "errores": "Q1, EX1S1"
+  },
+  {
+    "id": 10,
+    "created_at": "2026-04-27T00:47:40.85347+00:00",
+    "nombre": "Marta Punzzoni",
+    "puntaje": 34,
+    "total": 36,
+    "porcentaje": 94,
+    "errores": "P13, P29"
+  },
+  {
+    "id": 11,
+    "created_at": "2026-04-27T02:00:13.066766+00:00",
+    "nombre": "Marta Punzzoni",
+    "puntaje": 18,
+    "total": 21,
+    "porcentaje": 86,
+    "errores": "EX2S3, EX2S4, EX3S4"
+  }
+]

@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TP · Análisis de Gráficos de Punto de Equilibrio</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+  --bg:#0c0d0a; --s1:#111309; --s2:#171a10; --s3:#1c2014; --s4:#222618;
+  --border:#2a2e1c; --border2:#363b26;
+  --gold:#d4a853; --gold-grad:linear-gradient(135deg, #d4a853 0%, #b8860b 100%);
+  --goldf:rgba(212,168,83,.12);
+  --red:#e05252; --redf:rgba(224,82,82,.1);
+  --green:#6bbf6a; --greenf:rgba(107,191,106,.08);
+  --blue:#5ab4d4; --bluef:rgba(90,180,212,.08);
+  --text:#dde0c8; --muted:#6a7058; --muted2:#8a9070;
+  --mono:'Space Grotesk',monospace;
+  --display:'Plus Jakarta Sans',sans-serif;
+  --body:'Inter',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 1000px 600px at 10% 0%,rgba(212,168,83,.035) 0%,transparent 55%),radial-gradient(ellipse 800px 700px at 90% 100%,rgba(107,191,106,.025) 0%,transparent 55%);pointer-events:none;z-index:0}
+
+/* ─── COVER ─── */
+#cover{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px;text-align:center}
+.inst{font-family:var(--mono);font-size:9px;letter-spacing:4px;color:var(--muted);border:1px solid var(--border2);padding:5px 18px;margin-bottom:44px;opacity:0;animation:fu .5s .1s forwards}
+.cv-kicker{font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:18px;opacity:0;animation:fu .5s .3s forwards}
+.cv-h1{font-family:var(--display);font-size:clamp(32px,7vw,78px);font-weight:900;line-height:.95;letter-spacing:-2px;margin-bottom:14px;opacity:0;animation:fu .6s .45s forwards}
+.cv-h1 em{color:var(--gold);font-style:normal}
+.cv-sub{font-size:14px;color:var(--muted2);max-width:560px;line-height:1.75;margin-bottom:44px;opacity:0;animation:fu .5s .6s forwards}
+
+/* Case preview pills */
+.cases-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:760px;width:100%;margin-bottom:44px;opacity:0;animation:fu .5s .75s forwards}
+.case-pill{background:var(--s2);border:2px solid var(--border2);border-radius:8px;padding:16px 12px;text-align:left;border-top:5px solid;box-shadow:0 10px 25px -5px rgba(0,0,0,0.1)}
+.cp-ico{font-size:22px;margin-bottom:6px}
+.cp-name{font-family:var(--display);font-size:10px;font-weight:700;margin-bottom:4px;line-height:1.3}
+.cp-tag{font-family:var(--mono);font-size:8px;color:var(--muted);letter-spacing:.5px;text-transform:uppercase}
+
+.name-wrap{width:100%;max-width:420px;opacity:0;animation:fu .5s .9s forwards;margin-bottom:22px}
+.n-lbl{display:block;font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;text-align:left}
+.n-inp{width:100%;background:var(--s2);border:1px solid var(--border2);color:var(--text);font-family:var(--body);font-size:15px;padding:12px 16px;border-radius:4px;outline:none;transition:border-color .2s}
+.n-inp:focus{border-color:var(--gold)}
+.btn-go{background:var(--gold-grad);color:#0c0d0a;font-family:var(--display);font-weight:700;font-size:13px;letter-spacing:.5px;padding:16px 52px;border:none;border-radius:6px;cursor:pointer;transition:all .2s;opacity:0;animation:fu .5s 1.05s forwards;box-shadow:0 4px 12px rgba(212,168,83,.2)}
+.btn-go:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(212,168,83,.3)}
+
+/* ─── GUIA DE LECTURA ─── */
+#tp{display:none;position:relative;z-index:1;max-width:960px;margin:0 auto;padding:36px 20px 90px}
+
+.topbar{display:flex;align-items:center;justify-content:space-between;padding-bottom:16px;border-bottom:1px solid var(--border);margin-bottom:40px;flex-wrap:wrap;gap:12px}
+.tb-brand{font-family:var(--mono);font-size:10px;color:var(--gold);letter-spacing:2px}
+.tb-name{font-family:var(--mono);font-size:10px;color:var(--muted2);padding:4px 12px;border:1px solid var(--border2);border-radius:2px}
+.tb-btns{display:flex;gap:8px}
+.tb-btn{background:transparent;border:1px solid var(--border2);color:var(--muted2);font-family:var(--mono);font-size:9px;padding:5px 14px;border-radius:2px;cursor:pointer;transition:all .12s;letter-spacing:1px}
+.tb-btn:hover{border-color:var(--gold);color:var(--gold)}
+.tb-btn.primary{background:var(--gold-grad);color:#0c0d0a;border:none;font-weight:700;box-shadow:0 2px 8px rgba(212,168,83,.15)}
+.tb-btn.primary:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(212,168,83,.25);color:#0c0d0a}
+
+/* Guide card */
+.guide{background:var(--s2);border:2px solid var(--border2);border-radius:8px;padding:24px 28px;margin-bottom:48px;box-shadow:0 15px 30px -10px rgba(0,0,0,0.15)}
+.guide-title{font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:18px}
+.guide-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px}
+.gg{background:var(--bg);border:2px solid var(--border);border-radius:6px;padding:14px}
+.gg-dot{width:28px;height:3px;border-radius:2px;margin-bottom:10px}
+.gg-label{font-family:var(--mono);font-size:10px;font-weight:700;color:var(--text);margin-bottom:5px}
+.gg-desc{font-size:12px;color:var(--muted2);line-height:1.6}
+.guide-zones{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.gz{border-radius:4px;padding:12px 14px;font-size:12px;line-height:1.6}
+.gz strong{display:block;font-family:var(--mono);font-size:10px;font-weight:700;margin-bottom:4px}
+.gz.red{background:rgba(224,82,82,.08);border:1px solid rgba(224,82,82,.2)}
+.gz.green{background:rgba(107,191,106,.08);border:1px solid rgba(107,191,106,.2)}
+.gz.red strong{color:var(--red)}
+.gz.green strong{color:var(--green)}
+
+/* ─── CASE SECTION ─── */
+.case-section{margin-bottom:64px}
+.case-hdr{display:flex;align-items:flex-end;gap:16px;margin-bottom:22px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.case-num{font-family:var(--display);font-size:48px;font-weight:900;line-height:1;opacity:.15}
+.case-info{}
+.case-tag{font-family:var(--mono);font-size:9px;letter-spacing:3px;text-transform:uppercase;margin-bottom:5px}
+.case-title{font-family:var(--display);font-size:22px;font-weight:700;line-height:1.2}
+
+/* Two-column layout: chart + data */
+.case-body{display:grid;grid-template-columns:1.8fr 1fr;gap:20px;margin-bottom:22px}
+.chart-panel{background:var(--s2);border:2px solid var(--border2);border-radius:8px;padding:18px;min-width:0;box-shadow:0 10px 25px -5px rgba(0,0,0,0.1)}
+.chart-label{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:12px}
+.chart-leg{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:12px}
+.leg{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:8px;color:var(--muted2)}
+.leg-line{width:14px;height:2.5px;border-radius:1px}
+.chart-wrap{position:relative;width:100%;height:280px}
+canvas.graph{width:100%!important;height:280px!important;display:block;border-radius:3px}
+
+/* Data panel */
+.data-panel{display:flex;flex-direction:column;gap:14px}
+.data-card{background:var(--s2);border:2px solid var(--border2);border-radius:8px;padding:16px;box-shadow:0 4px 15px rgba(0,0,0,0.05)}
+.dc-title{font-family:var(--mono);font-size:8px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:12px}
+.dc-table{width:100%;border-collapse:collapse}
+.dc-table tr{border-bottom:1px solid var(--border)}
+.dc-table tr:last-child{border-bottom:none}
+.dc-table td{padding:7px 0;font-size:12px;vertical-align:middle}
+.dc-table td:first-child{color:var(--muted2)}
+.dc-table td:last-child{font-family:var(--mono);font-size:11px;color:var(--gold2);text-align:right}
+.dc-table tr.dc-hl td{color:var(--text);background:rgba(212,168,83,.04)}
+.dc-table .dc-red td:last-child{color:var(--red)}
+.dc-table .dc-green td:last-child{color:var(--green)}
+.dc-table .dc-blue td:last-child{color:var(--blue)}
+
+.alert-box{border-radius:4px;padding:10px 12px;font-size:11px;line-height:1.6;margin-top:6px}
+.alert-box.red{background:var(--redf);border:1px solid rgba(224,82,82,.3);color:#e89090}
+.alert-box.green{background:var(--greenf);border:1px solid rgba(107,191,106,.3);color:#9de09b}
+.alert-box strong{font-weight:700}
+
+/* ─── QUESTIONS ─── */
+.questions{background:var(--s1);border:2px solid var(--border2);border-radius:8px;padding:22px 24px;box-shadow:0 10px 30px -10px rgba(0,0,0,0.3)}
+.q-section-title{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:18px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.q-item{margin-bottom:22px}
+.q-item:last-child{margin-bottom:0}
+.q-row{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px}
+.q-num-badge{font-family:var(--mono);font-size:9px;color:var(--gold);background:rgba(212,168,83,.1);border:1px solid rgba(212,168,83,.2);padding:2px 8px;border-radius:2px;white-space:nowrap;flex-shrink:0;margin-top:3px}
+.q-type-badge{font-family:var(--mono);font-size:9px;color:var(--muted);border:1px solid var(--border);padding:2px 8px;border-radius:2px;white-space:nowrap;flex-shrink:0;margin-top:3px}
+.q-text{font-size:14px;font-weight:500;line-height:1.55}
+.q-hint{font-family:var(--mono);font-size:10px;color:var(--blue);background:var(--bluef);border-left:2px solid var(--blue);padding:7px 10px;border-radius:0 3px 3px 0;margin-bottom:10px}
+
+/* Numeric input */
+.num-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.num-in{background:var(--s2);border:2px solid var(--border2);color:var(--text);font-family:var(--mono);font-size:18px;padding:9px 14px;border-radius:6px;outline:none;width:180px;transition:all .2s;font-weight:700}
+.num-in:focus{border-color:var(--gold)}
+.num-in.ok{border-color:var(--green);background:var(--greenf);color:var(--green)}
+.num-in.err{border-color:var(--red);background:var(--redf)}
+.num-unit{font-family:var(--mono);font-size:11px;color:var(--muted)}
+
+/* MC */
+.opts{display:flex;flex-direction:column;gap:7px}
+.opt{background:var(--s2);border:2px solid var(--border);border-radius:6px;padding:10px 14px;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:10px;transition:all .12s;user-select:none;font-weight:500}
+.opt:hover:not(.disabled){border-color:var(--gold);background:var(--goldf)}
+.opt-k{font-family:var(--mono);font-size:9px;color:var(--muted);min-width:17px;height:17px;border:1px solid var(--border);border-radius:2px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .12s}
+.opt.selected .opt-k{background:var(--gold);border-color:var(--gold);color:#000}
+.opt.correct-opt{border-color:var(--green)}
+.opt.correct-opt .opt-k{background:var(--green);border-color:var(--green);color:#000}
+.opt.wrong-opt{border-color:var(--red)}
+.opt.wrong-opt .opt-k{background:var(--red);border-color:var(--red);color:#fff}
+.opt.disabled{cursor:default;pointer-events:none}
+
+/* Textarea */
+.q-textarea{width:100%;background:var(--s2);border:1px solid var(--border2);color:var(--text);font-family:var(--body);font-size:13px;padding:12px 14px;border-radius:4px;outline:none;resize:vertical;min-height:72px;line-height:1.6;transition:border-color .2s}
+.q-textarea:focus{border-color:var(--gold)}
+.q-textarea::placeholder{color:var(--muted)}
+
+/* Confirm btn */
+.btn-conf{background:transparent;border:1px solid rgba(212,168,83,.3);color:var(--gold);font-family:var(--body);font-weight:600;font-size:11px;padding:7px 20px;border-radius:4px;cursor:pointer;transition:all .12s;margin-top:8px}
+.btn-conf:hover{background:var(--goldf);border-color:var(--gold);color:var(--gold)}
+.btn-conf:disabled{opacity:.25;cursor:default;pointer-events:none}
+
+/* Feedback */
+.fb{margin-top:9px;padding:9px 12px;border-radius:4px;font-size:11px;line-height:1.7;display:none}
+.fb.ok-fb{display:block;background:var(--greenf);border-left:3px solid var(--green);color:#9de09b;font-weight:500}
+.fb.err-fb{display:block;background:var(--redf);border-left:3px solid var(--red);color:#e89090;font-weight:500}
+.fb strong{color:var(--gold);font-weight:700}
+
+/* ─── COMPARATIVE TABLE ─── */
+.comp-section{margin-bottom:56px}
+.comp-hdr{margin-bottom:18px}
+.comp-tag{font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:6px}
+.comp-title{font-family:var(--display);font-size:20px;font-weight:700}
+.comp-table-wrap{overflow-x:auto;border-radius:5px;border:1px solid var(--border2)}
+.comp-table{width:100%;border-collapse:collapse;font-size:12px}
+.comp-table th{background:var(--s3);padding:10px 14px;font-family:var(--mono);font-size:9px;letter-spacing:1px;color:var(--muted2);text-transform:uppercase;text-align:left;border-bottom:1px solid var(--border2);white-space:nowrap}
+.comp-table td{padding:10px 14px;border-bottom:1px solid var(--border)}
+.comp-table tr:last-child td{border-bottom:none}
+.comp-table tr:hover td{background:rgba(212,168,83,.03)}
+.comp-table .td-fill{background:var(--s3);padding:4px 8px}
+.ct-in{background:var(--s2);border:1px solid var(--border);color:var(--text);font-family:var(--mono);font-size:11px;padding:5px 8px;border-radius:3px;width:100%;outline:none;min-width:80px}
+.ct-in:focus{border-color:var(--gold)}
+.ct-in.ok{border-color:var(--green);color:var(--green)}
+.ct-in.err{border-color:var(--red)}
+td.caso-name{font-weight:600;color:var(--text);white-space:nowrap}
+td.zona-verde{color:var(--green);font-weight:700;font-family:var(--mono);font-size:10px}
+td.zona-roja{color:var(--red);font-weight:700;font-family:var(--mono);font-size:10px}
+
+/* ─── CONCLUSIONS ─── */
+.concl-section{margin-bottom:56px}
+.concl-item{background:var(--s2);border:1px solid var(--border);border-radius:5px;padding:20px;margin-bottom:12px}
+.ci-num{font-family:var(--mono);font-size:9px;color:var(--gold);margin-bottom:10px}
+.ci-q{font-size:14px;font-weight:500;line-height:1.55;margin-bottom:12px}
+
+/* ─── SCORE BAR ─── */
+.score-bar{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(12,13,10,.92);backdrop-filter:blur(12px);border-top:1px solid var(--border);padding:10px 24px;display:none;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.sb-info{font-family:var(--mono);font-size:11px;color:var(--muted2)}
+.sb-score{font-family:var(--mono);font-size:14px;color:var(--gold);font-weight:700}
+.sb-right{display:flex;gap:10px;align-items:center}
+
+@keyframes fu{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:700px){
+  .case-body{grid-template-columns:1fr}
+  .guide-grid{grid-template-columns:1fr}
+  .cases-row{grid-template-columns:1fr 1fr}
+  .chart-wrap{height:240px}
+  canvas.graph{height:240px!important}
+}
+@media print{
+  body{background:#fff;color:#111}
+  .score-bar,.topbar .tb-btns{display:none!important}
+  #cover{display:none}
+  #tp{display:block!important;padding:0}
+  .q-textarea{border:1px solid #ccc;background:#fafafa;color:#111}
+  .num-in,.ct-in{background:#fafafa;color:#111;border:1px solid #ccc}
+  body::before{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ COVER ═══ -->
+<section id="cover">
+  <div class="inst">IFTS N° 23 · Tecnicatura Superior en Gastronomía · 2026</div>
+  <div class="cv-kicker">Trabajo Práctico · Análisis Visual</div>
+  <h1 class="cv-h1">Gráficos de<br><em>Punto de Equilibrio</em></h1>
+  <p class="cv-sub">Cuatro casos reales con distintas estructuras de costos. Leé cada gráfico, completá las tablas, respondé las preguntas y construí el análisis comparativo.</p>
+  <div class="cases-row">
+    <div class="case-pill" style="border-top-color:#6bbf6a">
+      <div class="cp-ico">🍽️</div>
+      <div class="cp-name">Restaurante El Fogón</div>
+      <div class="cp-tag">Negocio rentable</div>
+    </div>
+    <div class="case-pill" style="border-top-color:#e05252">
+      <div class="cp-ico">🚚</div>
+      <div class="cp-name">Food Truck La Rueda</div>
+      <div class="cp-tag">Bajo el PE</div>
+    </div>
+    <div class="case-pill" style="border-top-color:#d4a853">
+      <div class="cp-ico">🥖</div>
+      <div class="cp-name">Panadería El Horno</div>
+      <div class="cp-tag">Alto volumen</div>
+    </div>
+    <div class="case-pill" style="border-top-color:#5ab4d4">
+      <div class="cp-ico">🎪</div>
+      <div class="cp-name">Catering La Gran Mesa</div>
+      <div class="cp-tag">Estacionalidad</div>
+    </div>
+  </div>
+  <div class="name-wrap">
+    <span class="n-lbl">Nombre y Apellido</span>
+    <input class="n-inp" id="nameIn" type="text" placeholder="Ej: Valentina García" autocomplete="off">
+  </div>
+  <button class="btn-go" onclick="start()">Comenzar TP →</button>
+</section>
+
+<!-- ═══ TP ═══ -->
+<section id="tp">
+  <div class="topbar">
+    <span class="tb-brand">// TP · ANÁLISIS DE PUNTO DE EQUILIBRIO</span>
+    <span class="tb-name" id="tpName"></span>
+    <div class="tb-btns">
+      <button class="tb-btn" onclick="window.print()">🖨 Imprimir</button>
+      <button class="tb-btn primary" onclick="submitTP()">Entregar TP →</button>
+    </div>
+  </div>
+
+  <!-- ─── GUÍA DE LECTURA ─── -->
+  <div class="guide">
+    <div class="guide-title">// Guía de Lectura — ¿Cómo interpretar estos gráficos?</div>
+    <div class="guide-grid">
+      <div class="gg"><div class="gg-dot" style="background:#6bbf6a"></div><div class="gg-label">Línea de Ingresos</div><div class="gg-desc">Parte del origen (0,0). Sube con cada venta: Ingresos = PV × Unidades vendidas.</div></div>
+      <div class="gg"><div class="gg-dot" style="background:#e05252"></div><div class="gg-label">Línea de Costos Totales</div><div class="gg-desc">Parte desde el nivel de los CF (no desde cero). Sube con la producción: CT = CF + CVu × Q.</div></div>
+      <div class="gg"><div class="gg-dot" style="background:#5ab4d4;border-top:1px dashed #5ab4d4"></div><div class="gg-label">Línea de Costos Fijos</div><div class="gg-desc">Horizontal. No cambia sin importar cuánto se produzca. Es el "muro" que siempre existe.</div></div>
+    </div>
+    <div class="guide-zones">
+      <div class="gz red"><strong>🔴 Zona de Pérdida</strong>Cuando los Ingresos < Costos Totales. El negocio no cubre ni sus costos fijos. Cada unidad vendida pierde dinero.</div>
+      <div class="gz green"><strong>🟢 Zona de Ganancia</strong>Cuando los Ingresos > Costos Totales. El PE ya fue superado. Cada unidad adicional genera ganancia pura equivalente a la CMu.</div>
+    </div>
+  </div>
+
+  <!-- ═══════ CASO 1 ═══════ -->
+  <div class="case-section" id="s-caso1">
+    <div class="case-hdr">
+      <div class="case-num" style="color:var(--green)">01</div>
+      <div class="case-info">
+        <div class="case-tag" style="color:var(--green)">Caso 1 · Negocio Rentable</div>
+        <div class="case-title">Restaurante "El Fogón"</div>
+      </div>
+    </div>
+    <div class="case-body">
+      <div class="chart-panel">
+        <div class="chart-label">Gráfico de Punto de Equilibrio</div>
+        <div class="chart-leg">
+          <div class="leg"><div class="leg-line" style="background:#6bbf6a"></div>Ingresos</div>
+          <div class="leg"><div class="leg-line" style="background:#e05252"></div>Costos Totales</div>
+          <div class="leg"><div class="leg-line" style="background:#5ab4d4;border-top:1px dashed #5ab4d4"></div>Costos Fijos</div>
+          <div class="leg"><div class="leg-line" style="background:#f0c96a"></div>Producción actual</div>
+        </div>
+        <div class="chart-wrap"><canvas id="c1" class="graph"></canvas></div>
+      </div>
+      <div class="data-panel">
+        <div class="data-card">
+          <div class="dc-title">Estructura de Costos</div>
+          <table class="dc-table">
+            <tr><td>Alquiler del salón</td><td>$800.000/mes</td></tr>
+            <tr><td>Sueldos base</td><td>$1.000.000/mes</td></tr>
+            <tr><td>Servicios (mixtos)</td><td>$300.000/mes</td></tr>
+            <tr class="dc-hl"><td>CF Total</td><td>$2.100.000</td></tr>
+            <tr><td>Ingredientes + envase</td><td>$3.500/plato</td></tr>
+            <tr class="dc-hl"><td>CVu</td><td>$3.500/plato</td></tr>
+            <tr><td>Precio de venta</td><td>$7.000/plato</td></tr>
+            <tr class="dc-hl dc-blue"><td>CMu (PV − CVu)</td><td>$3.500/plato</td></tr>
+          </table>
+        </div>
+        <div class="data-card">
+          <div class="dc-title">Producción del Mes</div>
+          <table class="dc-table">
+            <tr><td>Platos vendidos</td><td>850</td></tr>
+            <tr class="dc-green"><td>Situación</td><td>↑ Sobre el PE</td></tr>
+          </table>
+          <div class="alert-box green" style="margin-top:10px"><strong>Zona de Ganancia.</strong> El negocio superó su PE este mes. La CMu de cada plato adicional fue ganancia pura.</div>
+        </div>
+      </div>
+    </div>
+    <div class="questions">
+      <div class="q-section-title">// Preguntas de Análisis — Caso 1</div>
+
+      <div class="q-item">
+        <div class="q-row"><span class="q-num-badge">1.1</span><span class="q-type-badge">Lectura</span><div class="q-text">Observá el gráfico. ¿En qué cantidad de platos se cruzan las líneas de Ingresos y Costos Totales? Ese es el Punto de Equilibrio.</div></div>
+        <div class="q-hint">📐 El cruce de ambas líneas = PE. Buscá el punto dorado en el gráfico.</div>
+        <div class="num-row"><input class="num-in" id="n-1-1" type="number" placeholder="0" oninput="pickN('1-1')" onkeydown="if(event.key==='Enter')confN('1-1',600,0,'platos')"><span class="num-unit">platos</span></div>
+        <button class="btn-conf" id="bc-1-1" onclick="confN('1-1',600,0,'platos')" disabled>Confirmar</button>
+        <div class="fb" id="fb-1-1"></div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-row"><span class="q-num-badge">1.2</span><span class="q-type-badge">Cálculo</span><div class="q-text">Calculá la ganancia neta del mes sabiendo que se vendieron 850 platos y el PE es 600.</div></div>
+        <div class="q-hint">📐 Ganancia = (Platos vendidos − PE) × CMu</div>
+        <div class="num-row"><input class="num-in" id="n-1-2" type="number" placeholder="0" oninput="pickN('1-2')" onkeydown="if(event.key==='Enter')confN('1-2',875000,0,'$')"><span class="num-unit">$</span></div>
+        <button class="btn-conf" id="bc-1-2" onclick="confN('1-2',875000,0,'$')" disabled>Confirmar</button>
+        <div class="fb" id="fb-1-2"></div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-row"><span class="q-num-badge">1.3</span><span class="q-type-badge">Opción múltiple</span><div class="q-text">Si los Costos Fijos aumentan a $2.800.000 (todo lo demás igual), ¿cuál sería el nuevo PE?</div></div>
+        <div class="opts" id="opts-1-3">
+          <div class="opt" onclick="pickO('1-3',0)"><span class="opt-k">A</span>600 platos (no cambia porque la CMu es la misma)</div>
+          <div class="opt" onclick="pickO('1-3',1)"><span class="opt-k">B</span>800 platos — porque PE = $2.800.000 ÷ $3.500 = 800</div>
+          <div class="opt" onclick="pickO('1-3',2)"><span class="opt-k">C</span>400 platos — los CF suben entonces el PE baja</div>
+          <div class="opt" onclick="pickO('1-3',3)"><span class="opt-k">D</span>1.200 platos — el PE siempre es el doble de los CF</div>
+        </div>
+        <button class="btn-conf" id="bc-1-3" onclick="confO('1-3',1)" disabled>Confirmar</button>
+        <div class="fb" id="fb-1-3"></div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-row"><span class="q-num-badge">1.4</span><span class="q-type-badge">Análisis</span><div class="q-text">Mirá la línea de Costos Fijos en el gráfico. ¿Por qué es horizontal? ¿Qué riesgo representa para el negocio gastronomómico?</div></div>
+        <textarea class="q-textarea" id="ta-1-4" placeholder="Escribí tu análisis aquí..."></textarea>
+      </div>
+
+      <div class="q-item">
+        <div class="q-row"><span class="q-num-badge">1.5</span><span class="q-type-badge">Análisis</span><div class="q-text">En el gráfico podés ver la zona roja (pérdida) y la zona verde (ganancia). ¿Qué estrategias operativas podría usar "El Fogón" para desplazar el PE hacia la izquierda (reducirlo)?</div></div>
+        <textarea class="q-textarea" id="ta-1-5" placeholder="Mencioná al menos 2 estrategias concretas..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ CASO 2 ═══════ -->
+  <div class="case-section" id="s-caso2">
+    <div class="case-hdr">
+      <div class="case-num" style="color:var(--red)">02</div>
+      <div class="case-info">
+        <div class="case-tag" style="color:var(--red)">Caso 2 · Bajo el PE — Zona de Pérdida</div>
+        <div class="case-title">Food Truck "La Rueda"</div>
+      </div>
+    </div>
+    <div class="case-body">
+      <div class="chart-panel">
+        <div class="chart-label">Gráfico de Punto de Equilibrio</div>
+        <div class="chart-leg">
+          <div class="leg"><div class="leg-line" style="background:#6bbf6a"></div>Ingresos</div>
+          <div class="leg"><div class="leg-line" style="background:#e05252"></div>Costos Totales</div>
+          <div class="leg"><div class="leg-line" style="background:#5ab4d4"></div>Costos Fijos</div>
+          <div class="leg"><div class="leg-line" style="background:#f0c96a"></div>Producción actual</div>
+        </div>
+        <div class="chart-wrap"><canvas id="c2" class="graph"></canvas></div>
+      </div>
+      <div class="data-panel">
+        <div class="data-card">
+          <div class="dc-title">Estructura de Costos</div>
+          <table class="dc-table">
+            <tr><td>Leasing del truck</td><td>$250.000/mes</td></tr>
+            <tr><td>Seguros y permisos</td><td>$230.000/mes</td></tr>
+            <tr class="dc-hl"><td>CF Total</td><td>$480.000</td></tr>
+            <tr><td>Ingredientes</td><td>$1.600/unidad</td></tr>
+            <tr><td>Gas + descartables</td><td>$400/unidad</td></tr>
+            <tr class="dc-hl"><td>CVu</td><td>$2.000/unidad</td></tr>
+            <tr><td>Precio de venta</td><td>$4.000/unidad</td></tr>
+            <tr class="dc-hl dc-blue"><td>CMu</td><td>$2.000/unidad</td></tr>
+          </table>
+        </div>
+        <div class="data-card">
+          <div class="dc-title">Producción del Mes</div>
+          <table class="dc-table">
+            <tr><td>Unidades vendidas</td><td>140</td></tr>
+            <tr class="dc-red"><td>Situación</td><td>↓ Bajo el PE</td></tr>
+          </table>
+          <div class="alert-box red" style="margin-top:10px"><strong>⚠️ Zona de Pérdida.</strong> El negocio no alcanzó su PE este mes. Está perdiendo dinero activamente.</div>
+        </div>
+      </div>
+    </div>
+    <div class="questions">
+      <div class="q-section-title">// Preguntas de Análisis — Caso 2</div>
+
+      <div class="q-item">
+        <div class="q-row"><span class="q-num-badge">2.1</span><span class="q-type-badge">Lectura</span><div class="q-text">Identificá el Punto de Equilibrio del Food Truck observando el gráfico.</div></div>
+        <div class="q-hint">📐 PE = CF ÷ CMu = $480.000 ÷ $2.000</div>
+        <div class="num-row"><input class="num-in" id="n-2-1" type="number" placeholder="0" oninput="pickN('2-1')" onkeydown="if(event.key==='Enter')confN('2-1',240,0,'unidades')"><span class="num-unit">unidades</span></div>
+        <button class="btn-conf" id="bc-2-1" onclick="confN('2-1',240,0,'unidades')" disabled>Confirmar</button>
+        <div class="fb" id="fb-2-1"></div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-row"><span class="q-num-badge">2.2</span><span class="q-type-badge">Cálculo</span><div class="q-text">¿Cuánto dinero está perdiendo "La Rueda" este mes con 140 unidades vendidas?</div></div>
+        <div class="q-hint">📐 Pérdida = (Unidades vendidas − PE) × CMu → resultado negativo</div>
+        <div class="num-row"><input class="num-in" id="n-2-2" type="number" placeholder="0" oninput="pickN('2-2')" onkeydown="if(event.key==='Enter')confN('2-2',200000,0,'$')"><span class="num-unit">$ (pérdida)</span></div>
+        <button class="btn-conf" id="bc-2-2" onclick="confN('2-2',200000,0,'$')" disabled>Confirmar</button>
+        <div class="fb" id="fb-2-2"></div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-row"><span class="q-num-badge">2.3</span><span class="q-type-badge">Cálculo</span><div class="q-text">¿Cuántas unidades adicionales debe vender "La Rueda" para llegar exactamente al Punto de Equilibrio?</div></div>
+        <div class="num-row"><input class="num-in" id="n-2-3" type="number" placeholder="0" oninput="pickN('2-3')" onkeydown="if(event.key==='Enter')confN('2-3',100,0,'unidades')"><span class="num-unit">unidades más</span></div>
+        <button class="btn-conf" id="bc-2-3" onclick="confN('2-3',100,0,'unidades')" disabled>Confirmar</button>
+        <div class="fb" id="fb-2-3"></div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-row"><span class="q-num-badge">2.4</span><span class="q-type-badge">Opción múltiple</span><div class="q-text">El food truck está en la zona de pérdida. ¿Cuál de estas acciones reduciría el PE de manera más efectiva?</div></div>
+        <div class="opts" id="opts-2-4">
+          <div class="opt" onclick="pickO('2-4',0)"><span class="opt-k">A</span>Vender más unidades al mismo precio (no cambia el PE, solo la posición)</div>
+          <div class="opt" onclick="pickO('2-4',1)"><span class="opt-k">B</span>Reducir el leasing cambiando a un truck más económico (baja CF → baja PE)</div>
+          <div class="opt" onclick="pickO('2-4',2)"><span class="opt-k">C</span>Contratar más personal eventual (sube CF → sube PE)</div>
+          <div class="opt" onclick="pickO('2-4',3)"><span class="opt-k">D</span>Bajar el precio de venta para atraer más clientes</div>
+        </div>
+        <button class="btn-conf" id="bc-2-4" onclick="confO('2-4',1)" disabled>Confirmar</button>
+        <div class="fb" id="fb-2-4"></div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-row"><span class="q-num-badge">2.5</span><span class="q-type-badge">Análisis</span><div class="q-text">Comparando el gráfico del Caso 1 y el Caso 2, ¿qué diferencias notás en la posición del punto de producción actual respecto al PE? ¿Qué decisiones debería tomar el dueño de "La Rueda"?</div></div>
+        <textarea class="q-textarea" id="ta-2-5" placeholder="Analizá ambos gráficos y proponé un plan de acción concreto..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ CASO 3 ═══════ -->
+  <div class="case-section" id="s-caso3">
+    <div class="case-hdr">
+      <div class="case-num" style="color:var(--gold)">03</div>
+      <div class="case-info">
+        <div class="case-tag" style="color:var(--gold)">Caso 3 · Alta Inversión en CF — Gran Volumen</div>
+        <div class="case-title">Panadería Industrial "El Horno Mayor"</div>
+      </div>
+    </div>
+    <div class="case-body">
+      <div class="chart-panel">
+        <div class="chart-label">Gráfico de Punto de Equilibrio</div>
+        <div class="chart-leg">
+          <div class="leg"><div class="leg-line" style="background:#6bbf6a"></div>Ingresos</div>
+          <div class="leg"><div class="leg-line" style="background:#e05252"></div>Costos Totales</div>
+          <div class="leg"><div class="leg-line" style="background:#5ab4d4"></div>Costos Fijos</div>
+          <div class="leg"><div class="leg-line" style="background:#f0c96a"></div>Producción actual</div>
+        </div>
+        <div class="chart-wrap"><canvas id="c3" class="graph"></canvas></div>
+      </div>
+      <div class="data-panel">
+        <div class="data-card">
+          <div class="dc-title">Estructura de Costos</div>
+          <table class="dc-table">
+            <tr><td>Amort. hornos industriales</td><td>$1.500.000/mes</td></tr>
+            <tr><td>Personal de producción</td><td>$1.500.000/mes</td></tr>
+            <tr><td>Local y servicios</td><td>$500.000/mes</td></tr>
+            <tr class="dc-hl"><td>CF Total</td><td>$3.500.000</td></tr>
+            <tr><td>Harina, grasa, levadura</td><td>$650/kg</td></tr>
+            <tr><td>Gas de producción</td><td>$150/kg</td></tr>
+            <tr class="dc-hl"><td>CVu</td><td>$800/kg</td></tr>
+            <tr><td>Precio de venta promedio</td><td>$2.200/kg</td></tr>
+            <tr class="dc-hl dc-blue"><td>CMu</td><td>$1.400/kg</td></tr>
+          </table>
+        </div>
+        <div class="data-card">
+          <div class="dc-title">Producción del Mes</div>
+          <table class="dc-table">
+            <tr><td>Kg producidos/vendidos</td><td>4.200</td></tr>
+            <tr class="dc-green"><td>Situación</td><td>↑ Sobre el PE</td></tr>
+          </table>
+          <div class="alert-box green" style="margin-top:10px"><strong>Alta palanca operativa.</strong> Gran CF pero gran CMu por kg. El volumen es la clave de este modelo.</div>
+        </div>
+      </div>
+    </div>
+    <div class="questions">
+      <div class="q-section-title">// Preguntas de Análisis — Caso 3</div>
+
+      <div class="q-item">
+        <div class="q-row"><span class="q-num-badge">3.1</span><span class="q-type-badge">Lectura</span><div class="q-text">¿En cuántos kg se encuentra el Punto de Equilibrio de "El Horno Mayor"? Leelo del gráfico.</div></div>
+        <div class="q-hint">📐 PE = $3.500.000 ÷ $1.400</div>
+        <div class="num-row"><input class="num-in" id="n-3-1" type="number" placeholder="0" oninput="pickN('3-1')" onkeydown="if(event.key==='Enter')confN('3-1',2500,0,'kg')"><span class="num-unit">kg</span></div>
+        <button class="btn-conf" id="bc-3-1" onclick="confN('3-1',2500,0,'kg')" disabled>Confirmar</button>
+        <div class="fb" id="fb-3-1"></div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-row"><span class="q-num-badge">3.2</span><span class="q-type-badge">Cálculo</span><div class="q-text">La panadería produjo 4.200 kg este mes. ¿Cuál es su ganancia neta?</div></div>
+        <div class="num-row"><input class="num-in" id="n-3-2" type="number" placeholder="0" oninput="pickN('3-2')" onkeydown="if(event.key==='Enter')confN('3-2',2380000,0,'$')"><span class="num-unit">$</span></div>
+        <button class="btn-conf" id="bc-3-2" onclick="confN('3-2',2380000,0,'$')" disabled>Confirmar</button>
+        <div class="fb" id="fb-3-2"></div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-row"><span class="q-num-badge">3.3</span><span class="q-type-badge">Opción múltiple</span><div class="q-text">Comparando con el Restaurante (Caso 1), "El Horno" tiene CF mucho más altos pero también produce en volúmenes enormes. ¿Qué concepto explica por qué puede ser igual de rentable?</div></div>
+        <div class="opts" id="opts-3-3">
+          <div class="opt" onclick="pickO('3-3',0)"><span class="opt-k">A</span>El CFU (costo fijo unitario) cae con el volumen: cuantos más kg, menos CF por kg</div>
+          <div class="opt" onclick="pickO('3-3',1)"><span class="opt-k">B</span>El CVu baja cuando se produce más cantidad</div>
+          <div class="opt" onclick="pickO('3-3',2)"><span class="opt-k">C</span>Los CF dejan de existir cuando se supera el PE</div>
+          <div class="opt" onclick="pickO('3-3',3)"><span class="opt-k">D</span>La CMu sube automáticamente al vender más</div>
+        </div>
+        <button class="btn-conf" id="bc-3-3" onclick="confO('3-3',0)" disabled>Confirmar</button>
+        <div class="fb" id="fb-3-3"></div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-row"><span class="q-num-badge">3.4</span><span class="q-type-badge">Análisis</span><div class="q-text">Observá en el gráfico la pendiente de la línea de Ingresos vs la pendiente de la línea de Costos Totales. ¿Por qué la pendiente de Ingresos es mayor? ¿Qué significado tiene esto para la rentabilidad?</div></div>
+        <textarea class="q-textarea" id="ta-3-4" placeholder="Relacioná la diferencia de pendientes con la CMu..."></textarea>
+      </div>
+
+      <div class="q-item">
+        <div class="q-row"><span class="q-num-badge">3.5</span><span class="q-type-badge">Análisis</span><div class="q-text">Si la panadería sólo vendiera 2.000 kg en un mes de baja temporada, ¿cuál sería el resultado? Calculalo y describí qué riesgo implica tener CF tan altos.</div></div>
+        <textarea class="q-textarea" id="ta-3-5" placeholder="Calculá el resultado (puede ser pérdida) y analizá el riesgo del modelo de alta inversión..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ CASO 4 ═══════ -->
+  <div class="case-section" id="s-caso4">
+    <div class="case-hdr">
+      <div class="case-num" style="color:var(--blue)">04</div>
+      <div class="case-info">
+        <div class="case-tag" style="color:var(--blue)">Caso 4 · Estacionalidad — Dos Escenarios en el Mismo Gráfico</div>
+        <div class="case-title">Catering "La Gran Mesa"</div>
+      </div>
+    </div>
+    <div class="case-body">
+      <div class="chart-panel">
+        <div class="chart-label">Gráfico de Punto de Equilibrio · Temporada Baja vs Alta</div>
+        <div class="chart-leg">
+          <div class="leg"><div class="leg-line" style="background:#6bbf6a"></div>Ingresos</div>
+          <div class="leg"><div class="leg-line" style="background:#e05252"></div>Costos Totales</div>
+          <div class="leg"><div class="leg-line" style="background:#5ab4d4"></div>Costos Fijos</div>
+          <div class="leg"><div class="leg-line" style="background:#e08c42"></div>Temp. Baja (200)</div>
+          <div class="leg"><div class="leg-line" style="background:#f0c96a"></div>Temp. Alta (580)</div>
+        </div>
+        <div class="chart-wrap"><canvas id="c4" class="graph"></canvas></div>
+      </div>
+      <div class="data-panel">
+        <div class="data-card">
+          <div class="dc-title">Estructura de Costos</div>
+          <table class="dc-table">
+            <tr><td>Personal base</td><td>$1.500.000/mes</td></tr>
+            <tr><td>Equip. y logística</td><td>$1.300.000/mes</td></tr>
+            <tr class="dc-hl"><td>CF Total</td><td>$2.800.000</td></tr>
+            <tr><td>Comida premium</td><td>$4.000/cubierto</td></tr>
+            <tr><td>Servicio eventual</td><td>$1.000/cubierto</td></tr>
+            <tr class="dc-hl"><td>CVu</td><td>$5.000/cubierto</td></tr>
+            <tr><td>Precio de venta</td><td>$13.000/cubierto</td></tr>
+            <tr class="dc-hl dc-blue"><td>CMu</td><td>$8.000/cubierto</td></tr>
+          </table>
+        </div>
+        <div class="data-card">
+          <div class="dc-title">Los Dos Escenarios</div>
+          <table class="dc-table">
+            <tr><td>🟠 Temp. Baja</td><td>200 cubiertos</td></tr>
+            <tr class="dc-red"><td>Resultado baja</td><td>PÉRDIDA</td></tr>
+            <tr><td style="padding-top:10px">🟡 Temp. Alta</td><td>580 cubiertos</td></tr>
+            <tr class="dc-green"><td>Resultado alta</td><td>GANANCIA</td></tr>
+          </table>
+          <div class="alert-box red" style="margin-top:10px"><strong>Alta exposición estacional.</strong> La CMu alta compensa en temporada alta, pero la baja puede ser devastadora.</div>
+        </div>
+      </div>
+    </div>
+    <div class="questions">
+      <div class="q-section-title">// Preguntas de Análisis — Caso 4</div>
+
+      <div class="q-item">
+        <div class="q-row"><span class="q-num-badge">4.1</span><span class="q-type-badge">Lectura</span><div class="q-text">¿Cuál es el PE de "La Gran Mesa"? Identificalo en el gráfico donde se cruzan Ingresos y CT.</div></div>
+        <div class="q-hint">📐 PE = $2.800.000 ÷ $8.000</div>
+        <div class="num-row"><input class="num-in" id="n-4-1" type="number" placeholder="0" oninput="pickN('4-1')" onkeydown="if(event.key==='Enter')confN('4-1',350,0,'cubiertos')"><span class="num-unit">cubiertos</span></div>
+        <button class="btn-conf" id="bc-4-1" onclick="confN('4-1',350,0,'cubiertos')" disabled>Confirmar</button>
+        <div class="fb" id="fb-4-1"></div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-row"><span class="q-num-badge">4.2</span><span class="q-type-badge">Cálculo</span><div class="q-text">Calculá el resultado económico en TEMPORADA BAJA (200 cubiertos). ¿Pierde o gana? ¿Cuánto?</div></div>
+        <div class="q-hint">📐 Resultado = (200 − PE) × CMu → negativo = pérdida</div>
+        <div class="num-row"><input class="num-in" id="n-4-2" type="number" placeholder="0" oninput="pickN('4-2')" onkeydown="if(event.key==='Enter')confN('4-2',1200000,0,'$')"><span class="num-unit">$ (pérdida)</span></div>
+        <button class="btn-conf" id="bc-4-2" onclick="confN('4-2',1200000,0,'$')" disabled>Confirmar</button>
+        <div class="fb" id="fb-4-2"></div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-row"><span class="q-num-badge">4.3</span><span class="q-type-badge">Cálculo</span><div class="q-text">Calculá la ganancia en TEMPORADA ALTA (580 cubiertos).</div></div>
+        <div class="num-row"><input class="num-in" id="n-4-3" type="number" placeholder="0" oninput="pickN('4-3')" onkeydown="if(event.key==='Enter')confN('4-3',1840000,0,'$')"><span class="num-unit">$</span></div>
+        <button class="btn-conf" id="bc-4-3" onclick="confN('4-3',1840000,0,'$')" disabled>Confirmar</button>
+        <div class="fb" id="fb-4-3"></div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-row"><span class="q-num-badge">4.4</span><span class="q-type-badge">Análisis</span><div class="q-text">Observá en el gráfico la diferencia entre los dos marcadores (temporada baja y alta). ¿Por qué el resultado cambia tanto entre estaciones? Relacioná con la CMu alta.</div></div>
+        <textarea class="q-textarea" id="ta-4-4" placeholder="Analizá cómo la CMu de $8.000 amplifica tanto las ganancias en alta como las pérdidas en baja..."></textarea>
+      </div>
+
+      <div class="q-item">
+        <div class="q-row"><span class="q-num-badge">4.5</span><span class="q-type-badge">Análisis</span><div class="q-text">¿Qué estrategias concretas podría implementar "La Gran Mesa" para reducir su exposición en temporada baja? Pensá en términos de CF, CV, precios y diversificación de servicios.</div></div>
+        <textarea class="q-textarea" id="ta-4-5" placeholder="Proponé al menos 3 estrategias diferenciadas..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ TABLA COMPARATIVA ═══════ -->
+  <div class="comp-section">
+    <div class="comp-hdr">
+      <div class="comp-tag">// Análisis Comparativo</div>
+      <div class="comp-title">Tabla Resumen de los 4 Casos</div>
+      <p style="font-size:13px;color:var(--muted2);margin-top:8px">Completá las celdas marcadas en gris usando los datos de los gráficos y tus cálculos anteriores.</p>
+    </div>
+    <div class="comp-table-wrap">
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th>Negocio</th>
+            <th>CF Total</th>
+            <th>CVu</th>
+            <th>PV</th>
+            <th>CMu</th>
+            <th>PE (unidades)</th>
+            <th>Prod. Actual</th>
+            <th>Zona</th>
+            <th>Resultado ($)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="caso-name">🍽️ El Fogón</td>
+            <td>$2.100.000</td>
+            <td>$3.500</td>
+            <td>$7.000</td>
+            <td class="td-fill"><input class="ct-in" id="ct-1-cmu" type="text" placeholder="..."></td>
+            <td class="td-fill"><input class="ct-in" id="ct-1-pe" type="text" placeholder="..."></td>
+            <td>850</td>
+            <td class="zona-verde">GANANCIA</td>
+            <td class="td-fill"><input class="ct-in" id="ct-1-res" type="text" placeholder="..."></td>
+          </tr>
+          <tr>
+            <td class="caso-name">🚚 La Rueda</td>
+            <td>$480.000</td>
+            <td>$2.000</td>
+            <td>$4.000</td>
+            <td class="td-fill"><input class="ct-in" id="ct-2-cmu" type="text" placeholder="..."></td>
+            <td class="td-fill"><input class="ct-in" id="ct-2-pe" type="text" placeholder="..."></td>
+            <td>140</td>
+            <td class="zona-roja">PÉRDIDA</td>
+            <td class="td-fill"><input class="ct-in" id="ct-2-res" type="text" placeholder="..."></td>
+          </tr>
+          <tr>
+            <td class="caso-name">🥖 El Horno Mayor</td>
+            <td>$3.500.000</td>
+            <td>$800</td>
+            <td>$2.200</td>
+            <td class="td-fill"><input class="ct-in" id="ct-3-cmu" type="text" placeholder="..."></td>
+            <td class="td-fill"><input class="ct-in" id="ct-3-pe" type="text" placeholder="..."></td>
+            <td>4.200 kg</td>
+            <td class="zona-verde">GANANCIA</td>
+            <td class="td-fill"><input class="ct-in" id="ct-3-res" type="text" placeholder="..."></td>
+          </tr>
+          <tr>
+            <td class="caso-name">🎪 La Gran Mesa (alta)</td>
+            <td>$2.800.000</td>
+            <td>$5.000</td>
+            <td>$13.000</td>
+            <td class="td-fill"><input class="ct-in" id="ct-4-cmu" type="text" placeholder="..."></td>
+            <td class="td-fill"><input class="ct-in" id="ct-4-pe" type="text" placeholder="..."></td>
+            <td>580</td>
+            <td class="zona-verde">GANANCIA</td>
+            <td class="td-fill"><input class="ct-in" id="ct-4-res" type="text" placeholder="..."></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="margin-top:14px">
+      <button class="btn-conf" onclick="checkTable()">Verificar tabla →</button>
+      <div class="fb" id="fb-table"></div>
+    </div>
+  </div>
+
+  <!-- ═══════ CONCLUSIONES ═══════ -->
+  <div class="concl-section">
+    <div class="comp-hdr">
+      <div class="comp-tag">// Síntesis Final</div>
+      <div class="comp-title">Conclusiones del TP</div>
+    </div>
+    <div class="concl-item">
+      <div class="ci-num">C.1</div>
+      <div class="ci-q">¿Qué relación encontrás entre el nivel de Costos Fijos y el riesgo financiero del negocio? Usá al menos 2 de los 4 casos para fundamentar tu respuesta.</div>
+      <textarea class="q-textarea" id="concl-1" style="min-height:90px" placeholder="Reflexionás a partir de los 4 casos analizados..."></textarea>
+    </div>
+    <div class="concl-item">
+      <div class="ci-num">C.2</div>
+      <div class="ci-q">De los 4 negocios analizados, ¿cuál tiene el PE más "accesible" en relación a su escala operativa? ¿Por qué? ¿Qué factores lo favorecen?</div>
+      <textarea class="q-textarea" id="concl-2" style="min-height:90px" placeholder="Compará los PEs en función de la escala de cada negocio..."></textarea>
+    </div>
+    <div class="concl-item">
+      <div class="ci-num">C.3</div>
+      <div class="ci-q">Si tuvieras que diseñar un negocio gastronómico nuevo, ¿qué estructura de costos (CF vs CV) elegirías y por qué? Relacioná con la CMu y el PE.</div>
+      <textarea class="q-textarea" id="concl-3" style="min-height:90px" placeholder="Aplicá todo lo aprendido a una decisión de negocio real..."></textarea>
+    </div>
+  </div>
+
+</section>
+
+<!-- Score bar -->
+<div class="score-bar" id="scoreBar">
+  <div><span class="sb-info">Respuestas verificadas: </span><span class="sb-score" id="sbScore">0 / 13</span></div>
+  <div class="sb-right">
+    <span class="sb-info" id="sbPct"></span>
+    <button class="tb-btn primary" onclick="submitTP()">Entregar TP →</button>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://dukgjrhyhyxvdqzhthje.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1a2dqcmh5aHl4dmRxemh0aGplIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc5MTQzNjIsImV4cCI6MjA4MzQ5MDM2Mn0.JYZWv2vYwMbTopyL-T8_kjbX2py5IL7Ap6ASZc2B4dM';
+const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
+
+/* ═══════════ SETUP ═══════════ */
+let nombre='', answers={}, confirmed={}, correct={}, score=0;
+const TOTAL_GRADED=13;
+
+function start(){
+  const n=document.getElementById('nameIn').value.trim();
+  if(!n){document.getElementById('nameIn').style.borderColor='var(--red)';return;}
+  nombre=n;
+  document.getElementById('cover').style.display='none';
+  document.getElementById('tp').style.display='block';
+  document.getElementById('scoreBar').style.display='flex';
+  document.getElementById('tpName').textContent=nombre;
+  window.scrollTo(0,0);
+  setTimeout(()=>{
+    drawChart1(); drawChart2(); drawChart3(); drawChart4();
+  },200);
+}
+
+/* ═══════════ INTERACTION ═══════════ */
+function pickN(id){
+  const v=document.getElementById(`n-${id}`).value;
+  if(v!==''){answers[id]=parseFloat(v);document.getElementById(`bc-${id}`).disabled=false;}
+}
+function pickO(gid,oi){
+  if(confirmed[gid])return;
+  answers[gid]=oi;
+  document.querySelectorAll(`#opts-${gid} .opt`).forEach((el,j)=>el.classList.toggle('selected',j===oi));
+  document.getElementById(`bc-${gid}`).disabled=false;
+}
+
+function confN(id, ans, tol, unit){
+  if(confirmed[id])return;
+  confirmed[id]=true;
+  document.getElementById(`bc-${id}`).disabled=true;
+  const v=answers[id]??-999;
+  const ok=Math.abs(v-ans)<=(tol||1);
+  correct[id]=ok; if(ok)score++;
+  const inp=document.getElementById(`n-${id}`);
+  inp.classList.add(ok?'ok':'err'); inp.disabled=true;
+  const fb=document.getElementById(`fb-${id}`);
+  fb.className=`fb ${ok?'ok-fb':'err-fb'}`;
+  fb.innerHTML=ok?`✓ Correcto — <strong>${fmt(ans)} ${unit}</strong>`:`✗ La respuesta correcta es <strong>${fmt(ans)} ${unit}</strong>`;
+  updateScore();
+}
+function confO(gid,ans){
+  if(confirmed[gid])return;
+  confirmed[gid]=true;
+  document.getElementById(`bc-${gid}`).disabled=true;
+  const v=answers[gid];
+  const ok=v===ans;
+  correct[gid]=ok; if(ok)score++;
+  document.querySelectorAll(`#opts-${gid} .opt`).forEach((el,j)=>{
+    el.classList.add('disabled');
+    if(j===ans)el.classList.add('correct-opt');
+    else if(j===v&&!ok)el.classList.add('wrong-opt');
+  });
+  const fb=document.getElementById(`fb-${gid}`);
+  fb.className=`fb ${ok?'ok-fb':'err-fb'}`;
+  fb.innerHTML=ok?'✓ Correcto.':'✗ Revisá la explicación en el feedback.';
+  updateScore();
+}
+function checkTable(){
+  const expected={
+    'ct-1-cmu':'3500','ct-1-pe':'600','ct-1-res':'875000',
+    'ct-2-cmu':'2000','ct-2-pe':'240','ct-2-res':'-200000',
+    'ct-3-cmu':'1400','ct-3-pe':'2500','ct-3-res':'2380000',
+    'ct-4-cmu':'8000','ct-4-pe':'350','ct-4-res':'1840000'
+  };
+  let ok=0, total=0;
+  Object.entries(expected).forEach(([id,val])=>{
+    total++;
+    const inp=document.getElementById(id);
+    const entered=(inp.value||'').replace(/[$.,\s]/g,'');
+    const expNum=val.replace(/[$.,\s]/g,'');
+    if(entered===expNum){inp.classList.add('ok');ok++;}
+    else{inp.classList.add('err');}
+  });
+  const fb=document.getElementById('fb-table');
+  fb.className=`fb ${ok===total?'ok-fb':'err-fb'}`;
+  fb.innerHTML=ok===total?`✓ ¡Tabla completa! Todos los cálculos correctos.`:`${ok}/${total} correctos. Revisá las celdas marcadas en rojo.`;
+}
+
+function updateScore(){
+  document.getElementById('sbScore').textContent=`${score} / ${TOTAL_GRADED}`;
+  document.getElementById('sbPct').textContent=`${Math.round(score/TOTAL_GRADED*100)}%`;
+}
+
+async function submitTP(){
+  const failedQs = [];
+  // Collect failed questions from individual questions
+  [ '1-1','1-2','1-3','2-1','2-2','2-3','2-4','3-1','3-2','3-3','4-1','4-2','4-3' ].forEach(id => {
+    if (confirmed[id] && !correct[id]) {
+      let a = answers[id];
+      let ansStr = 'Sin responder';
+      if (a !== undefined) {
+        if (document.getElementById(`opts-${id}`)) {
+           ansStr = String.fromCharCode(65 + a);
+        } else {
+           ansStr = String(a);
+        }
+      }
+      failedQs.push(`${id.toUpperCase()}||${ansStr}`);
+    }
+  });
+
+  const data={
+    nombre,score,total:TOTAL_GRADED,
+    pct:Math.round(score/TOTAL_GRADED*100),
+    ts:new Date().toISOString(),
+    errores: failedQs.join(', ')
+  };
+  
+  if (supabaseClient) {
+    supabaseClient.from('exam_resultados').insert([
+      { nombre: data.nombre, puntaje: data.score, total: data.total, porcentaje: data.pct, errores: 'TP GRÁFICOS: ' + data.errores }
+    ]).then(res => {
+      if(!res.error) {
+        alert(`✓ TP entregado correctamente. Puntaje automático: ${score}/${TOTAL_GRADED}`);
+      } else {
+        console.error('Supabase Error:', res.error);
+        alert(`Error al entregar: ${res.error.message}`);
+      }
+    });
+  } else {
+    alert(`TP guardado localmente. Puntaje: ${score}/${TOTAL_GRADED}. Imprimí con Ctrl+P.`);
+  }
+}
+
+/* ═══════════ CHART ENGINE ═══════════ */
+function fmt(n){if(n===undefined||n===null)return'0';return Math.round(Math.abs(n)).toLocaleString('es-AR');}
+
+function drawBE(canvasId, cfg){
+  const canvas=document.getElementById(canvasId);
+  if(!canvas)return;
+  const dpr=window.devicePixelRatio||1;
+  const dW=canvas.clientWidth||canvas.offsetWidth||640;
+  const dH=280;
+  canvas.width=dW*dpr; canvas.height=dH*dpr;
+  const ctx=canvas.getContext('2d');
+  ctx.scale(dpr,dpr);
+
+  const {CF,CVu,PV,PE,current,current2,accentColor,unit}=cfg;
+  const maxQ=Math.ceil(PE*2.2/50)*50;
+  const maxY=Math.ceil((PV*maxQ)/500000)*500000;
+  const PAD={top:28,right:dW<500?72:88,bottom:48,left:dW<500?68:84};
+  const gW=dW-PAD.left-PAD.right;
+  const gH=dH-PAD.top-PAD.bottom;
+
+  const xOf=q=>PAD.left+(q/maxQ)*gW;
+  const yOf=y=>PAD.top+gH-(y/maxY)*gH;
+
+  // BG
+  ctx.fillStyle='#171a10';
+  ctx.fillRect(0,0,dW,dH);
+
+  // Zones
+  ctx.fillStyle='rgba(224,82,82,0.07)';
+  ctx.fillRect(xOf(0),PAD.top,xOf(PE)-xOf(0),gH);
+  ctx.fillStyle='rgba(107,191,106,0.055)';
+  ctx.fillRect(xOf(PE),PAD.top,gW-(xOf(PE)-PAD.left),gH);
+
+  // Gridlines
+  const gLines=5;
+  for(let i=0;i<=gLines;i++){
+    const y=(maxY/gLines)*i;
+    ctx.strokeStyle='rgba(42,47,28,0.9)';
+    ctx.lineWidth=1;
+    ctx.setLineDash([]);
+    ctx.beginPath();ctx.moveTo(Math.round(xOf(0)),Math.round(yOf(y)));ctx.lineTo(Math.round(xOf(maxQ)),Math.round(yOf(y)));ctx.stroke();
+  }
+
+  // Lines helper
+  const line=(pts,col,dash=[],lw=3.5)=>{
+    ctx.save();ctx.strokeStyle=col;ctx.lineWidth=lw;ctx.setLineDash(dash);
+    ctx.lineCap='round';ctx.lineJoin='round';
+    ctx.beginPath();pts.forEach(([q,y],i)=>i?ctx.lineTo(xOf(q),yOf(y)):ctx.moveTo(xOf(q),yOf(y)));
+    ctx.stroke();ctx.restore();
+  };
+
+  // CF dashed
+  line([[0,CF],[maxQ,CF]],'#2563eb',[8,6],2.5);
+  // CT
+  line([[0,CF],[maxQ,CF+CVu*maxQ]],'#dc2626',[],4);
+  // Ingresos
+  line([[0,0],[maxQ,PV*maxQ]],'#059669',[],4);
+
+  // PE vertical
+  ctx.save();ctx.strokeStyle='rgba(212,168,83,0.6)';ctx.lineWidth=1.2;ctx.setLineDash([4,3]);
+  ctx.beginPath();ctx.moveTo(xOf(PE),yOf(0));ctx.lineTo(xOf(PE),yOf(PV*PE));ctx.stroke();ctx.restore();
+
+  // PE point
+  ctx.fillStyle='#d4a853';
+  ctx.beginPath();ctx.arc(xOf(PE),yOf(PV*PE),8,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#171a10';
+  ctx.beginPath();ctx.arc(xOf(PE),yOf(PV*PE),3.5,0,Math.PI*2);ctx.fill();
+
+  // Current marker(s)
+  const drawMarker=(q,col,label)=>{
+    const x=xOf(q), y1=yOf(0), y2=yOf(PV*q);
+    ctx.save();ctx.strokeStyle=col;ctx.lineWidth=1.5;ctx.setLineDash([3,3]);
+    ctx.beginPath();ctx.moveTo(x,y1);ctx.lineTo(x,y2);ctx.stroke();ctx.restore();
+    ctx.fillStyle=col;
+    ctx.beginPath();ctx.arc(x,yOf(PV*q),5,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#171a10';
+    ctx.beginPath();ctx.arc(x,yOf(PV*q),2,0,Math.PI*2);ctx.fill();
+    // Triangle on x-axis
+    ctx.save();ctx.fillStyle=col;
+    ctx.beginPath();ctx.moveTo(x,yOf(0)+2);ctx.lineTo(x-5,yOf(0)+10);ctx.lineTo(x+5,yOf(0)+10);ctx.fill();ctx.restore();
+  };
+  drawMarker(current,'#f0c96a','actual');
+  if(current2) drawMarker(current2,'#e08c42','baja');
+
+  // Right labels
+  ctx.font=`${dW<500?8:9}px IBM Plex Mono`;
+  ctx.textAlign='left';
+  ctx.fillStyle='#6bbf6a';
+  ctx.fillText('Ingresos',xOf(maxQ)+5,yOf(PV*maxQ)+3);
+  ctx.fillStyle='#e05252';
+  ctx.fillText('CT',xOf(maxQ)+5,yOf(CF+CVu*maxQ)+3);
+  ctx.fillStyle='#5ab4d4';
+  ctx.fillText('CF',xOf(0)+5,yOf(CF)-7);
+
+  // Zone labels
+  ctx.font=`${dW<500?7:8}px IBM Plex Mono`;
+  ctx.textAlign='center';
+  ctx.fillStyle='rgba(224,82,82,0.5)';
+  ctx.fillText('PÉRDIDA',xOf(PE*0.42),PAD.top+14);
+  ctx.fillStyle='rgba(107,191,106,0.5)';
+  ctx.fillText('GANANCIA',xOf(PE+(maxQ-PE)*0.5),PAD.top+14);
+
+  // PE label
+  ctx.fillStyle='#d4a853';
+  ctx.font=`800 ${dW<500?11:12}px Space Grotesk`;
+  ctx.textAlign='center';
+  ctx.fillText(`PE=${fmt(PE)}`,xOf(PE),yOf(PV*PE)-16);
+
+  // Y axis
+  ctx.fillStyle='#5a6048';
+  ctx.textAlign='right';
+  ctx.font=`${dW<500?8:9}px IBM Plex Mono`;
+  for(let i=0;i<=gLines;i++){
+    const y=(maxY/gLines)*i;
+    const lbl=y>=1000000?`$${(y/1000000).toFixed(1)}M`:y>=1000?`$${(y/1000).toFixed(0)}k`:`$${y}`;
+    ctx.fillText(lbl,xOf(0)-6,yOf(y)+3);
+  }
+
+  // X axis
+  ctx.textAlign='center';
+  const xStep=Math.max(Math.ceil(maxQ/5/50)*50,50);
+  for(let q=0;q<=maxQ;q+=xStep){
+    ctx.fillText(fmt(q)+' '+unit,xOf(q),yOf(0)+15);
+  }
+
+  // Axes
+  ctx.strokeStyle='#363b26';ctx.lineWidth=2.5;ctx.setLineDash([]);
+  ctx.beginPath();ctx.moveTo(Math.round(xOf(0)),Math.round(yOf(0)));ctx.lineTo(Math.round(xOf(0)),Math.round(yOf(maxY)));ctx.stroke();
+  ctx.beginPath();ctx.moveTo(Math.round(xOf(0)),Math.round(yOf(0)));ctx.lineTo(Math.round(xOf(maxQ)),Math.round(yOf(0)));ctx.stroke();
+
+  // Axis titles
+  ctx.fillStyle='#5a6048';ctx.font='9px DM Sans';
+  ctx.textAlign='center';
+  ctx.fillText(`Unidades (${unit})`,xOf(maxQ/2),dH-6);
+  ctx.save();ctx.translate(10,PAD.top+gH/2);ctx.rotate(-Math.PI/2);
+  ctx.fillText('$ Ingresos / Costos',0,0);ctx.restore();
+}
+
+function drawChart1(){drawBE('c1',{CF:2100000,CVu:3500,PV:7000,PE:600,current:850,unit:'platos'});}
+function drawChart2(){drawBE('c2',{CF:480000,CVu:2000,PV:4000,PE:240,current:140,unit:'unid.'});}
+function drawChart3(){drawBE('c3',{CF:3500000,CVu:800,PV:2200,PE:2500,current:4200,unit:'kg'});}
+function drawChart4(){drawBE('c4',{CF:2800000,CVu:5000,PV:13000,PE:350,current:580,current2:200,unit:'cub.'});}
+
+// Redraw on resize
+let resizeTimer;
+window.addEventListener('resize',()=>{
+  clearTimeout(resizeTimer);
+  resizeTimer=setTimeout(()=>{
+    if(document.getElementById('tp').style.display!=='none'){
+      drawChart1();drawChart2();drawChart3();drawChart4();
+    }
+  },300);
+});
+</script>
+</body>
+</html>

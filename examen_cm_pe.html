@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CM & PE · Receta de la Rentabilidad</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,700;1,400&family=Unbounded:wght@300;600;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root {
+  --bg: #0c0d0a;
+  --s1: #111309;
+  --s2: #171a10;
+  --s3: #1c2014;
+  --border: #2a2e1c;
+  --border2: #363b26;
+  --gold: #d4a853;
+  --gold2: #f0c96a;
+  --gold3: rgba(212,168,83,.12);
+  --red: #e05252;
+  --red2: rgba(224,82,82,.1);
+  --green: #6bbf6a;
+  --green2: rgba(107,191,106,.08);
+  --blue: #5ab4d4;
+  --text: #dde0c8;
+  --muted: #6a7058;
+  --muted2: #8a9070;
+  --mono: 'IBM Plex Mono', monospace;
+  --display: 'Unbounded', sans-serif;
+  --body: 'DM Sans', sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:100vh;overflow-x:hidden}
+
+body::before{
+  content:'';position:fixed;inset:0;
+  background:
+    radial-gradient(ellipse 900px 500px at 10% 5%,rgba(212,168,83,.04) 0%,transparent 60%),
+    radial-gradient(ellipse 700px 600px at 90% 90%,rgba(107,191,106,.03) 0%,transparent 60%);
+  pointer-events:none;z-index:0;
+}
+
+/* ─── COVER ─── */
+#cover{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px;text-align:center}
+
+.inst-tag{font-family:var(--mono);font-size:9px;letter-spacing:4px;color:var(--muted);text-transform:uppercase;border:1px solid var(--border2);padding:5px 18px;margin-bottom:48px;opacity:0;animation:fadeUp .5s .1s forwards}
+
+.cover-kicker{font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:20px;opacity:0;animation:fadeUp .5s .3s forwards}
+
+.cover-h1{font-family:var(--display);font-size:clamp(38px,8vw,88px);font-weight:900;line-height:.95;letter-spacing:-2px;margin-bottom:16px;opacity:0;animation:fadeUp .6s .45s forwards}
+.cover-h1 em{color:var(--gold);font-style:normal}
+.cover-h1 sup{font-size:.35em;vertical-align:super;color:var(--muted)}
+
+.cover-sub{font-size:15px;color:var(--muted2);max-width:480px;line-height:1.75;margin-bottom:52px;opacity:0;animation:fadeUp .5s .6s forwards}
+
+.blocks-row{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;max-width:700px;width:100%;margin-bottom:44px;opacity:0;animation:fadeUp .5s .75s forwards}
+.br-card{background:var(--s2);border:1px solid var(--border);border-radius:5px;padding:16px 12px;text-align:left}
+.br-n{font-family:var(--display);font-size:24px;font-weight:900;color:var(--gold);line-height:1;margin-bottom:4px}
+.br-l{font-size:9px;color:var(--muted);line-height:1.5;letter-spacing:.3px}
+
+.name-block{width:100%;max-width:420px;opacity:0;animation:fadeUp .5s .9s forwards;margin-bottom:24px}
+.n-lbl{display:block;font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;text-align:left}
+.n-inp{width:100%;background:var(--s2);border:1px solid var(--border2);color:var(--text);font-family:var(--body);font-size:16px;padding:13px 16px;border-radius:4px;outline:none;transition:border-color .2s}
+.n-inp:focus{border-color:var(--gold)}
+
+.btn-go{background:var(--gold);color:#0c0d0a;font-family:var(--display);font-weight:600;font-size:13px;letter-spacing:.5px;padding:16px 52px;border:none;border-radius:4px;cursor:pointer;transition:all .15s;opacity:0;animation:fadeUp .5s 1.05s forwards}
+.btn-go:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 8px 30px rgba(212,168,83,.3)}
+
+/* ─── QUIZ ─── */
+#quiz{display:none;position:relative;z-index:1;max-width:900px;margin:0 auto;padding:36px 20px 90px}
+
+.topbar{display:flex;align-items:center;gap:14px;padding-bottom:18px;border-bottom:1px solid var(--border);margin-bottom:44px;flex-wrap:wrap}
+.tb-brand{font-family:var(--mono);font-size:10px;color:var(--gold);letter-spacing:2px}
+.tb-pb{flex:1;min-width:160px}
+.pb-track{height:2px;background:var(--border2);border-radius:1px;overflow:hidden;margin-bottom:5px}
+.pb-fill{height:100%;background:var(--gold);transition:width .4s ease;width:0%}
+.pb-txt{font-family:var(--mono);font-size:9px;color:var(--muted);text-align:right}
+.tb-score{font-family:var(--mono);font-size:11px;color:var(--gold);border:1px solid rgba(212,168,83,.25);padding:4px 12px;border-radius:2px}
+
+/* Section header */
+.sec-hdr{margin:48px 0 24px;display:flex;align-items:flex-end;gap:18px}
+.sh-num{font-family:var(--display);font-size:56px;font-weight:900;color:rgba(212,168,83,.08);line-height:1;flex-shrink:0}
+.sh-info{}
+.sh-tag{font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:5px}
+.sh-title{font-family:var(--display);font-size:20px;font-weight:600;line-height:1.2}
+
+/* Scenario box */
+.scenario{background:var(--s2);border:1px solid var(--border2);border-left:3px solid var(--gold);border-radius:4px;padding:22px 24px;margin-bottom:22px}
+.sc-tag{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:12px}
+.sc-table{width:100%;border-collapse:collapse;margin-top:10px}
+.sc-table td{padding:6px 10px;border-bottom:1px solid var(--border);font-size:13px}
+.sc-table td:first-child{color:var(--muted2)}
+.sc-table td:last-child{font-family:var(--mono);color:var(--gold2);text-align:right}
+.sc-table tr.sc-hl td{background:rgba(212,168,83,.05);color:var(--text)}
+.sc-note{font-size:11px;color:var(--muted);margin-top:10px;font-family:var(--mono)}
+
+/* Question card */
+.q-card{background:var(--s2);border:1px solid var(--border);border-radius:5px;padding:26px;margin-bottom:14px;animation:fadeUp .35s ease}
+.q-meta{display:flex;gap:8px;align-items:center;margin-bottom:15px}
+.q-badge{font-family:var(--mono);font-size:9px;color:var(--gold);background:rgba(212,168,83,.1);border:1px solid rgba(212,168,83,.2);padding:2px 8px;border-radius:2px}
+.q-type-tag{font-family:var(--mono);font-size:9px;color:var(--muted);border:1px solid var(--border2);padding:2px 8px;border-radius:2px}
+.q-label-tag{font-family:var(--mono);font-size:9px;color:var(--blue);background:rgba(90,180,212,.08);border:1px solid rgba(90,180,212,.2);padding:2px 8px;border-radius:2px}
+.q-text{font-size:16px;font-weight:500;line-height:1.55}
+.q-hint{font-family:var(--mono);font-size:11px;color:var(--blue);background:rgba(90,180,212,.06);border-left:2px solid var(--blue);padding:9px 12px;margin:12px 0 2px;border-radius:0 3px 3px 0}
+
+/* Options */
+.opts{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+.opt{background:var(--s1);border:1px solid var(--border);border-radius:4px;padding:11px 14px;cursor:pointer;font-size:13px;display:flex;align-items:flex-start;gap:11px;transition:all .12s;user-select:none}
+.opt:hover:not(.disabled){border-color:var(--gold);background:var(--gold3);transform:translateX(3px)}
+.opt-k{font-family:var(--mono);font-size:10px;color:var(--muted);min-width:18px;height:18px;border:1px solid var(--border2);border-radius:2px;display:flex;align-items:center;justify-content:center;transition:all .12s;flex-shrink:0;margin-top:1px}
+.opt.selected .opt-k{background:var(--gold);border-color:var(--gold);color:#000}
+.opt.correct-opt{border-color:var(--green)}
+.opt.correct-opt .opt-k{background:var(--green);border-color:var(--green);color:#000}
+.opt.wrong-opt{border-color:var(--red)}
+.opt.wrong-opt .opt-k{background:var(--red);border-color:var(--red);color:#fff}
+.opt.disabled{cursor:default;pointer-events:none}
+
+/* TF */
+.tf-row{display:flex;gap:10px;margin-top:16px}
+.tf-btn{flex:1;background:var(--s1);border:1px solid var(--border);color:var(--text);font-family:var(--body);font-weight:600;font-size:14px;padding:15px;border-radius:4px;cursor:pointer;transition:all .12s}
+.tf-btn:hover:not(.disabled){border-color:var(--gold)}
+.tf-btn.sel{border-color:var(--gold);background:var(--gold3);color:var(--gold)}
+.tf-btn.tf-ok{border-color:var(--green);background:rgba(107,191,106,.1);color:var(--green)}
+.tf-btn.tf-err{border-color:var(--red);background:var(--red2);color:var(--red)}
+
+/* Numeric */
+.num-row{display:flex;align-items:center;gap:12px;margin-top:16px;flex-wrap:wrap}
+.num-in{background:var(--s1);border:1px solid var(--border2);color:var(--text);font-family:var(--mono);font-size:20px;padding:11px 16px;border-radius:4px;outline:none;width:200px;transition:border-color .2s}
+.num-in:focus{border-color:var(--gold)}
+.num-in.ok{border-color:var(--green);background:rgba(107,191,106,.06)}
+.num-in.err{border-color:var(--red);background:var(--red2)}
+.num-unit{font-family:var(--mono);font-size:11px;color:var(--muted)}
+
+/* Feedback */
+.fb{margin-top:14px;padding:11px 14px;border-radius:4px;font-size:12px;line-height:1.7;display:none}
+.fb.ok-fb{display:block;background:rgba(107,191,106,.06);border-left:2px solid var(--green);color:#9de09b}
+.fb.err-fb{display:block;background:var(--red2);border-left:2px solid var(--red);color:#e89090}
+.fb strong{color:var(--gold2)}
+
+/* Confirm button */
+.btn-conf{margin-top:16px;background:transparent;border:1px solid rgba(212,168,83,.35);color:var(--gold);font-family:var(--body);font-weight:600;font-size:12px;padding:8px 22px;border-radius:4px;cursor:pointer;transition:all .12s}
+.btn-conf:hover{background:var(--gold3);border-color:var(--gold)}
+.btn-conf:disabled{opacity:.25;cursor:default;pointer-events:none}
+
+/* ─── CHART CARD ─── */
+.chart-card{background:var(--s2);border:1px solid var(--border2);border-radius:5px;padding:22px;margin:20px 0 32px;display:none}
+.chart-card.visible{display:block;animation:fadeUp .5s ease}
+.chart-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+.chart-title{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--gold);text-transform:uppercase}
+.chart-legend{display:flex;gap:16px;flex-wrap:wrap}
+.leg-item{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:9px;color:var(--muted2)}
+.leg-dot{width:10px;height:2px;border-radius:1px}
+
+.chart-wrap{position:relative;width:100%;height:320px}
+canvas.be-chart{width:100%!important;height:320px!important;display:block}
+
+.chart-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:16px}
+.cm-box{background:var(--s3);border:1px solid var(--border);border-radius:4px;padding:12px;text-align:center}
+.cm-val{font-family:var(--mono);font-size:14px;font-weight:700;margin-bottom:3px}
+.cm-lbl{font-size:9px;color:var(--muted);letter-spacing:.5px;text-transform:uppercase}
+
+/* Waterfall chart */
+.wf-wrap{position:relative;width:100%;height:260px}
+canvas.wf-chart{width:100%!important;height:260px!important;display:block}
+
+/* ─── Quiz footer ─── */
+.quiz-foot{display:flex;justify-content:flex-end;margin-top:36px}
+.btn-finish{display:none;background:var(--gold);color:#0c0d0a;font-family:var(--display);font-weight:600;font-size:13px;padding:14px 44px;border:none;border-radius:4px;cursor:pointer;transition:all .15s}
+.btn-finish:hover{background:var(--gold2);transform:translateY(-2px)}
+
+/* ─── RESULTS ─── */
+#results{display:none;position:relative;z-index:1;max-width:900px;margin:0 auto;padding:60px 20px 90px;animation:fadeUp .5s ease}
+.res-top{text-align:center;margin-bottom:56px}
+.res-grade{font-family:var(--display);font-size:110px;font-weight:900;line-height:1;margin-bottom:8px}
+.g10{color:var(--gold)}.g8{color:var(--green)}.g6{color:var(--blue)}.g4{color:var(--red)}
+.res-lbl{font-family:var(--mono);font-size:9px;letter-spacing:4px;color:var(--muted);text-transform:uppercase;margin-bottom:16px}
+.res-name{font-family:var(--display);font-size:28px;font-weight:600;margin-bottom:8px}
+.res-msg{font-size:14px;color:var(--muted2)}
+
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:44px}
+.stat-box{background:var(--s2);border:1px solid var(--border);border-radius:5px;padding:22px;text-align:center}
+.stat-n{font-family:var(--mono);font-size:36px;font-weight:700;margin-bottom:4px}
+.stat-l{font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
+
+.rev-hdr{font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;padding-bottom:12px;border-bottom:1px solid var(--border);margin-bottom:18px}
+.rev-item{background:var(--s2);border:1px solid var(--border);border-left:3px solid;border-radius:4px;padding:16px 20px;margin-bottom:8px}
+.rev-item.rok{border-left-color:var(--green)}.rev-item.rerr{border-left-color:var(--red)}
+.rev-q{font-size:12px;font-weight:500;margin-bottom:7px;line-height:1.5}
+.rev-d{font-family:var(--mono);font-size:10px;color:var(--muted)}
+.rev-d .ok{color:var(--green)}.rev-d .bad{color:var(--red)}.rev-d .ans{color:var(--gold2)}
+
+.res-actions{display:flex;gap:12px;justify-content:center;margin-top:36px;flex-wrap:wrap}
+.btn-retry{background:transparent;border:1px solid var(--gold);color:var(--gold);font-family:var(--body);font-weight:600;font-size:14px;padding:12px 40px;border-radius:4px;cursor:pointer;transition:all .15s}
+.btn-retry:hover{background:var(--gold3);transform:translateY(-2px)}
+.btn-print{background:var(--s3);border:1px solid var(--border2);color:var(--muted2);font-family:var(--body);font-weight:600;font-size:14px;padding:12px 28px;border-radius:4px;cursor:pointer;transition:all .15s}
+.btn-print:hover{border-color:var(--gold);color:var(--gold)}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:600px){
+  .blocks-row{grid-template-columns:repeat(3,1fr)}
+  .chart-metrics{grid-template-columns:repeat(2,1fr)}
+  .stats-row{grid-template-columns:1fr 1fr}
+  .res-grade{font-size:80px}
+  .q-card{padding:18px 14px}
+  .chart-wrap,.wf-wrap{height:240px}
+  canvas.be-chart{height:240px!important}
+  canvas.wf-chart{height:240px!important}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ PORTADA ═══════════════ -->
+<section id="cover">
+  <div class="inst-tag">IFTS N° 23 · Tecnicatura Superior en Gastronomía · 2026</div>
+  <div class="cover-kicker">Evaluación Integradora</div>
+  <h1 class="cover-h1">La Receta<br>de la <em>Rentabilidad</em></h1>
+  <p class="cover-sub">Contribución Marginal, Punto de Equilibrio y análisis visual del comportamiento de costos con datos reales.</p>
+  <div class="blocks-row">
+    <div class="br-card"><div class="br-n">5</div><div class="br-l">Conceptos CM y PE</div></div>
+    <div class="br-card"><div class="br-n">5</div><div class="br-l">La Pizzería · Gráfico</div></div>
+    <div class="br-card"><div class="br-n">4</div><div class="br-l">La Cafetería · Gráfico</div></div>
+    <div class="br-card"><div class="br-n">4</div><div class="br-l">Tablero Financiero</div></div>
+    <div class="br-card"><div class="br-n">3</div><div class="br-l">Análisis Final</div></div>
+  </div>
+  <div class="name-block">
+    <span class="n-lbl">Nombre y Apellido</span>
+    <input class="n-inp" id="nameInput" type="text" placeholder="Ej: Valentina García" autocomplete="off">
+  </div>
+  <button class="btn-go" onclick="startQuiz()">Comenzar evaluación →</button>
+</section>
+
+<!-- ═══════════════ QUIZ ═══════════════ -->
+<section id="quiz">
+  <div class="topbar">
+    <span class="tb-brand">// CM & PUNTO DE EQUILIBRIO</span>
+    <div class="tb-pb">
+      <div class="pb-track"><div class="pb-fill" id="pbFill"></div></div>
+      <div class="pb-txt" id="pbTxt">0 / 21</div>
+    </div>
+    <div class="tb-score" id="scorePill">Puntaje: 0</div>
+  </div>
+  <div id="qContainer"></div>
+  <div class="quiz-foot">
+    <button class="btn-finish" id="btnFinish" onclick="showResults()">Ver mis resultados →</button>
+  </div>
+</section>
+
+<!-- ═══════════════ RESULTADOS ═══════════════ -->
+<section id="results">
+  <div class="res-top">
+    <div class="res-grade" id="resGrade"></div>
+    <div class="res-lbl">Calificación Final</div>
+    <div class="res-name" id="resName"></div>
+    <div class="res-msg" id="resMsg"></div>
+  </div>
+  <div class="stats-row">
+    <div class="stat-box"><div class="stat-n" id="stC" style="color:var(--green)"></div><div class="stat-l">Correctas</div></div>
+    <div class="stat-box"><div class="stat-n" id="stW" style="color:var(--red)"></div><div class="stat-l">Incorrectas</div></div>
+    <div class="stat-box"><div class="stat-n" id="stP" style="color:var(--gold)"></div><div class="stat-l">Porcentaje</div></div>
+  </div>
+  <div class="rev-hdr">// Revisión completa · pregunta a pregunta</div>
+  <div id="revContainer"></div>
+  <div class="res-actions">
+    <button class="btn-print" onclick="window.print()">🖨 Imprimir</button>
+    <button class="btn-retry" onclick="retry()">↺ Intentar de nuevo</button>
+  </div>
+</section>
+
+<script>
+const SUPABASE_URL = 'https://dukgjrhyhyxvdqzhthje.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1a2dqcmh5aHl4dmRxemh0aGplIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc5MTQzNjIsImV4cCI6MjA4MzQ5MDM2Mn0.JYZWv2vYwMbTopyL-T8_kjbX2py5IL7Ap6ASZc2B4dM';
+const supabaseClient = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
+
+/* ═══════════════════════════════════════════════
+   DATA
+═══════════════════════════════════════════════ */
+
+const ITEMS = [
+
+/* ─── BLOQUE I: CONCEPTOS ─── */
+{ id:'q1', sec:'BLOQUE I · Conceptos de CM y Punto de Equilibrio', secNum:'I',
+  type:'mc',
+  text:'¿Qué mide la Contribución Marginal Unitaria (CMu)?',
+  opts:['El costo total de producir una unidad de producto.','La ganancia neta mensual del negocio antes de impuestos.','Lo que queda "limpio" de cada venta para cubrir los costos fijos. Es el motor del negocio.','El porcentaje de food cost del plato.'],
+  ans:2, fb:'CMu = PV − CVu. Es el "ladrillito" que cada venta aporta para construir el muro de los costos fijos. Una vez cubiertos los fijos, cada CMu adicional es ganancia pura.'
+},
+{ id:'q2', sec:null, type:'tf',
+  text:'Los Costos Fijos (CF) se pagan incluso si el restaurante no vende ni un solo plato en el mes.',
+  ans:true, fb:'Verdadero. Los CF son el "muro" que existe desde el día 0 del mes: alquiler, seguros, sueldos base. No dependen del nivel de actividad. Son independientes de la producción.'
+},
+{ id:'q3', sec:null, type:'mc',
+  text:'La fórmula del Punto de Equilibrio en unidades es:',
+  opts:['PE = PV × CVu','PE = Costos Fijos Totales ÷ Contribución Marginal Unitaria','PE = Ventas Totales − Costos Totales','PE = CVu × Cantidad Producida'],
+  ans:1, fb:'PE = CF ÷ CMu. El PE responde a: ¿cuántos ladrillitos (CMu) necesito para llenar el muro (CF)? El resultado es la cantidad mínima de unidades a vender para no perder dinero.'
+},
+{ id:'q4', sec:null, type:'mc',
+  text:'En el gráfico del PE, la línea de INGRESOS y la línea de COSTOS TOTALES se comportan así:',
+  opts:['Ambas parten del cero y son paralelas.','Ambas parten de los costos fijos y suben juntas.','La de Ingresos parte del cero; la de Costos Totales parte de la altura de los CF. Se cruzan en el PE.','La de Costos Totales siempre está por encima de la de Ingresos.'],
+  ans:2, fb:'Exacto. Los Ingresos = PV × Q (parten del 0,0). Los Costos Totales = CF + CVu × Q (parten desde CF en el eje Y). El cruce de ambas líneas es el Punto de Equilibrio: el umbral de supervivencia.'
+},
+{ id:'q5', sec:null, type:'mc',
+  text:'Un restaurante superó su PE este mes. ¿Qué sucede económicamente a partir del plato siguiente al PE?',
+  opts:['El negocio debe volver a cubrir los costos fijos desde cero.','Cada venta adicional genera ganancia pura equivalente a la CMu de ese plato.','El precio de venta debe subir automáticamente.','Los costos variables desaparecen.'],
+  ans:1, fb:'¡Correcto! Una vez superado el PE, los CF ya están 100% cubiertos. Por eso cada nueva CMu ya no va al muro sino directamente al bolsillo: es ganancia neta. Esa es la "Zona de Ganancia Pura" del gráfico.'
+},
+
+/* ─── BLOQUE II: PIZZERÍA ─── */
+{ id:'ex1', sec:'BLOQUE II · Ejercicio Guiado — La Pizzería de Güemes', secNum:'II',
+  type:'exercise',
+  scenario:{
+    title:'📋 DATOS DEL NEGOCIO',
+    rows:[
+      ['Alquiler del local','$600.000 / mes'],
+      ['Sueldos básicos del personal','$400.000 / mes'],
+      ['Precio de venta al público','$8.000 / pizza'],
+      ['Ingredientes + envase (CVu)','$3.000 / pizza'],
+    ],
+    note:'Seguí los pasos en orden. El gráfico se revela al completar el ejercicio.'
+  },
+  chartId:'chart-ex1',
+  chartParams:{ CF:1000000, CVu:3000, PV:8000, PE:200, label:'La Pizzería' },
+  steps:[
+    { id:'ex1s1', label:'Paso 1 / 5', text:'Calculá el Costo Fijo Total (CFT) del mes.', hint:'CFT = Alquiler + Sueldos básicos', ans:1000000, tol:0, unit:'$', fb:'CFT = $600.000 + $400.000 = <strong>$1.000.000</strong>. Este es el "muro" que el negocio tiene que escalar cada mes antes de generar ganancia.' },
+    { id:'ex1s2', label:'Paso 2 / 5', text:'Calculá la Contribución Marginal Unitaria (CMu).', hint:'CMu = Precio de Venta − Costo Variable Unitario', ans:5000, tol:0, unit:'$', fb:'CMu = $8.000 − $3.000 = <strong>$5.000 por pizza</strong>. Cada pizza vendida aporta $5.000 al muro de los costos fijos.' },
+    { id:'ex1s3', label:'Paso 3 / 5', text:'Calculá el Punto de Equilibrio en unidades de pizza.', hint:'PE = Costos Fijos Totales ÷ CMu', ans:200, tol:0, unit:'pizzas', fb:'PE = $1.000.000 ÷ $5.000 = <strong>200 pizzas/mes</strong>. Necesitás vender exactamente 200 pizzas para no ganar ni perder dinero.' },
+    { id:'ex1s4', label:'Paso 4 / 5', text:'¿Cuánto debe facturar el negocio para alcanzar el PE? (PE en pesos)', hint:'PE$ = PE en unidades × Precio de Venta', ans:1600000, tol:0, unit:'$', fb:'PE$ = 200 × $8.000 = <strong>$1.600.000</strong>. Esta es la facturación mínima del mes para no perder dinero.' },
+    { id:'ex1s5', label:'Paso 5 / 5', text:'El mes cerró con 300 pizzas vendidas. ¿Cuál es la ganancia neta?', hint:'Ganancia = (Unidades vendidas − PE) × CMu', ans:500000, tol:0, unit:'$', fb:'Ganancia = (300 − 200) × $5.000 = 100 × $5.000 = <strong>$500.000</strong>. Las primeras 200 cubrieron el muro; las 100 extras son ganancia pura. ¡Mirá el gráfico! 👇' },
+  ]
+},
+
+/* ─── BLOQUE III: CAFETERÍA ─── */
+{ id:'ex2', sec:'BLOQUE III · Ejercicio Desafío — La Cafetería del Mercado', secNum:'III',
+  type:'exercise',
+  scenario:{
+    title:'📋 DATOS DEL NEGOCIO',
+    rows:[
+      ['Costos Fijos Totales consolidados','$1.200.000 / mes'],
+      ['Precio de venta (combo café + torta)','$5.000'],
+      ['Costo directo de ingredientes','$1.500 / combo'],
+      ['Comisión de app de delivery','$500 / pedido'],
+    ],
+    note:'⚠️ Atención: la comisión de delivery también es un Costo Variable que aplica a cada unidad vendida.'
+  },
+  chartId:'chart-ex2',
+  chartParams:{ CF:1200000, CVu:2000, PV:5000, PE:400, label:'La Cafetería' },
+  steps:[
+    { id:'ex2s1', label:'Paso 1 / 4', text:'Calculá el Costo Variable Unitario (CVu) total por combo.', hint:'CVu = Ingredientes + Comisión delivery', ans:2000, tol:0, unit:'$', fb:'CVu = $1.500 + $500 = <strong>$2.000 por combo</strong>. La comisión de la app es un costo variable directo: si no hay venta, no hay comisión.' },
+    { id:'ex2s2', label:'Paso 2 / 4', text:'Calculá la Contribución Marginal Unitaria (CMu) del combo.', hint:'CMu = PV − CVu', ans:3000, tol:0, unit:'$', fb:'CMu = $5.000 − $2.000 = <strong>$3.000 por combo</strong>. Cada combo vendido aporta $3.000 para cubrir los $1.200.000 de costos fijos.' },
+    { id:'ex2s3', label:'Paso 3 / 4', text:'Calculá el Punto de Equilibrio mensual de la cafetería.', hint:'PE = CF ÷ CMu', ans:400, tol:0, unit:'combos', fb:'PE = $1.200.000 ÷ $3.000 = <strong>400 combos/mes</strong>. La cafetería necesita vender 400 combos al mes para sobrevivir.' },
+    { id:'ex2s4', label:'Paso 4 / 4', text:'Si la app sube su comisión a $800 por pedido (todo lo demás igual), ¿cuál es el nuevo PE?', hint:'Recalculá: nuevo CVu → nueva CMu → nuevo PE', ans:480, tol:0, unit:'combos', fb:'Nuevo CVu = $1.500 + $800 = $2.300 → Nueva CMu = $5.000 − $2.300 = $2.700 → Nuevo PE = $1.200.000 ÷ $2.700 ≈ <strong>444 combos</strong>. ¡El PE subió 44 combos por subir la comisión! Revisá el gráfico para ver el impacto visual. (Tolerancia: ±5)' },
+  ]
+},
+
+/* ─── BLOQUE IV: TABLERO FINANCIERO ─── */
+{ id:'ex3', sec:'BLOQUE IV · Tablero Financiero — El Restaurante', secNum:'IV',
+  type:'exercise',
+  scenario:{
+    title:'📋 TABLERO DEL MES',
+    rows:[
+      ['Unidades vendidas','1.000 platos'],
+      ['Precio de venta por plato','$6.000'],
+      ['Costo Variable Unitario','$2.600 / plato'],
+      ['Costos Fijos del mes','$2.400.000'],
+    ],
+    note:'Construí el Estado de Resultados paso a paso siguiendo la lógica: Ventas → CV → MC → CF → Resultado.'
+  },
+  chartId:'chart-ex3',
+  chartParams:'waterfall',
+  wfData:{ ventas:6000000, cv:2600000, mc:3400000, cf:2400000, gan:1000000 },
+  steps:[
+    { id:'ex3s1', label:'Paso 1 / 4', text:'Calculá las Ventas Totales del mes.', hint:'Ventas Totales = Precio de Venta × Unidades Vendidas', ans:6000000, tol:0, unit:'$', fb:'Ventas Totales = $6.000 × 1.000 = <strong>$6.000.000</strong>. Este es el punto de partida del tablero financiero.' },
+    { id:'ex3s2', label:'Paso 2 / 4', text:'Calculá los Costos Variables Totales del mes.', hint:'CVT = CVu × Unidades Vendidas', ans:2600000, tol:0, unit:'$', fb:'CVT = $2.600 × 1.000 = <strong>$2.600.000</strong>. Este es el costo que escaló con las ventas. Si vendían 2.000 platos, el CVT sería $5.200.000.' },
+    { id:'ex3s3', label:'Paso 3 / 4', text:'Calculá el Margen de Contribución Total del mes.', hint:'MC Total = Ventas Totales − Costos Variables Totales', ans:3400000, tol:0, unit:'$', fb:'MC = $6.000.000 − $2.600.000 = <strong>$3.400.000</strong>. Este es el dinero real disponible para pagar la estructura fija del negocio.' },
+    { id:'ex3s4', label:'Paso 4 / 4', text:'¿Cuál es la Ganancia (o Pérdida) Neta del mes?', hint:'Resultado = Margen de Contribución Total − Costos Fijos', ans:1000000, tol:0, unit:'$', fb:'Resultado = $3.400.000 − $2.400.000 = <strong>$1.000.000 de Ganancia Neta</strong>. El presupuesto en 5 pasos: Ventas → Costos Variables → MC → Costos Fijos → Resultado. ¡Mirá el tablero! 👇' },
+  ]
+},
+
+/* ─── BLOQUE V: ANÁLISIS ─── */
+{ id:'q6', sec:'BLOQUE V · Análisis y Toma de Decisiones', secNum:'V',
+  type:'mc',
+  text:'Un restaurant tiene CF = $2.000.000 y CMu = $4.000/plato. Su PE actual es 500 platos. Si los CF suben un 50%, ¿cuál es el nuevo PE?',
+  opts:['500 platos (los CF no afectan el PE)','750 platos, porque PE = $3.000.000 ÷ $4.000','600 platos, porque solo sube proporcionalmente el precio.','1.000 platos.'],
+  ans:1, fb:'Nuevo CF = $2.000.000 × 1,5 = $3.000.000 → Nuevo PE = $3.000.000 ÷ $4.000 = 750 platos. Conclusión clave: cuando los CF suben, el PE sube y el negocio queda más expuesto al riesgo. El objetivo de la gerencia es siempre reducir el PE.'
+},
+{ id:'q7', sec:null, type:'mc',
+  text:'Tenés dos productos: Producto A con CMu = $3.000 y Producto B con CMu = $8.000. ¿Cuál conviene priorizar en ventas para alcanzar el PE más rápido?',
+  opts:['El Producto A, porque es más barato y lo compra más gente.','El Producto B, porque aporta $8.000 por unidad al muro de costos fijos — necesitás vender menos unidades.','Es indiferente, ya que el PE depende solo de los costos fijos.','El que tenga mayor food cost.'],
+  ans:1, fb:'Correcto. Con CMu $8.000 (B), cada unidad "pone 8 ladrillos" al muro. Con CMu $3.000 (A), solo "pone 3 ladrillos". Para alcanzar el mismo muro de CF más rápido, necesitás vender menos unidades del B. Maximizar la CMu del mix de ventas es estrategia pura de rentabilidad.'
+},
+{ id:'q8', sec:null, type:'numeric',
+  text:'Un restaurante tiene CF = $1.800.000/mes y CMu = $6.000/plato. Lograron reducir los CF en $600.000 aplicando eficiencias. ¿Cuál es el nuevo Punto de Equilibrio?',
+  hint:'Nuevo CF = $1.800.000 − $600.000 = $1.200.000 → Nuevo PE = Nuevo CF ÷ CMu',
+  ans:200, tol:0, unit:'platos',
+  fb:'Nuevo CF = $1.800.000 − $600.000 = $1.200.000 → Nuevo PE = $1.200.000 ÷ $6.000 = <strong>200 platos</strong>. Antes necesitaban vender 300 platos para equilibrar; ahora solo 200. Reducir CF es la forma más directa de "empujar el PE hacia el día 1 del mes".'
+},
+
+];
+
+/* ═══════════════════════════════════════════════
+   ESTADO
+═══════════════════════════════════════════════ */
+let nombre = '';
+let answers = {};   // id → valor
+let confirmed = {}; // id → bool
+let correct = {};   // id → bool
+let score = 0;
+const TOTAL = 21;
+
+/* ═══════════════════════════════════════════════
+   INICIO
+═══════════════════════════════════════════════ */
+function startQuiz() {
+  const n = document.getElementById('nameInput').value.trim();
+  if (!n) { document.getElementById('nameInput').style.borderColor='var(--red)'; return; }
+  nombre = n;
+  document.getElementById('cover').style.display = 'none';
+  document.getElementById('quiz').style.display = 'block';
+  renderAll();
+  updatePB();
+}
+
+/* ═══════════════════════════════════════════════
+   RENDER
+═══════════════════════════════════════════════ */
+function renderAll() {
+  const c = document.getElementById('qContainer');
+  c.innerHTML = '';
+  let lastSec = null;
+  const secNums = { 'I':1, 'II':2, 'III':3, 'IV':4, 'V':5 };
+
+  ITEMS.forEach(item => {
+    // Section header
+    if (item.sec && item.sec !== lastSec) {
+      lastSec = item.sec;
+      const [tag, ...rest] = item.sec.split(' · ');
+      const sh = document.createElement('div');
+      sh.className = 'sec-hdr';
+      sh.innerHTML = `<div class="sh-num">${item.secNum||'I'}</div>
+        <div class="sh-info"><div class="sh-tag">${tag}</div><div class="sh-title">${rest.join(' · ')}</div></div>`;
+      c.appendChild(sh);
+    }
+
+    if (item.type === 'exercise') {
+      renderExercise(c, item);
+    } else {
+      renderQuestion(c, item);
+    }
+  });
+}
+
+function renderQuestion(container, q) {
+  const card = document.createElement('div');
+  card.className = 'q-card';
+  card.id = `card-${q.id}`;
+
+  const typeMap = { mc:'Opción múltiple', tf:'Verdadero / Falso', numeric:'Cálculo numérico' };
+  let html = `<div class="q-meta">
+    <span class="q-badge">${q.id.toUpperCase()}</span>
+    <span class="q-type-tag">${typeMap[q.type]}</span>
+  </div>
+  <div class="q-text">${q.text}</div>`;
+
+  if (q.hint) html += `<div class="q-hint">📐 ${q.hint}</div>`;
+
+  if (q.type === 'mc') {
+    html += `<div class="opts">` + q.opts.map((o,j)=>
+      `<div class="opt" id="o-${q.id}-${j}" onclick="pickOpt('${q.id}',${j})">
+        <span class="opt-k">${String.fromCharCode(65+j)}</span><span>${o}</span>
+      </div>`).join('') + `</div>`;
+  } else if (q.type === 'tf') {
+    html += `<div class="tf-row">
+      <button class="tf-btn" id="tf-${q.id}-t" onclick="pickTF('${q.id}',true)">✓ Verdadero</button>
+      <button class="tf-btn" id="tf-${q.id}-f" onclick="pickTF('${q.id}',false)">✗ Falso</button>
+    </div>`;
+  } else {
+    html += `<div class="num-row">
+      <input class="num-in" id="ni-${q.id}" type="number" step="any" placeholder="0"
+        oninput="pickNum('${q.id}')" onkeydown="if(event.key==='Enter')confirmItem('${q.id}')">
+      <span class="num-unit">${q.unit}</span>
+    </div>`;
+  }
+
+  html += `<button class="btn-conf" id="bc-${q.id}" onclick="confirmItem('${q.id}')" disabled>Confirmar →</button>`;
+  html += `<div class="fb" id="fb-${q.id}"></div>`;
+  card.innerHTML = html;
+  container.appendChild(card);
+}
+
+function renderExercise(container, ex) {
+  // Scenario
+  const sc = document.createElement('div');
+  sc.className = 'scenario';
+  let shtml = `<div class="sc-tag">📋 ${ex.scenario.title}</div>`;
+  shtml += `<table class="sc-table">`;
+  ex.scenario.rows.forEach(([k,v],i) => {
+    const hl = i >= ex.scenario.rows.length - 2 ? ' class="sc-hl"' : '';
+    shtml += `<tr${hl}><td>${k}</td><td>${v}</td></tr>`;
+  });
+  shtml += `</table>`;
+  if (ex.scenario.note) shtml += `<div class="sc-note">// ${ex.scenario.note}</div>`;
+  sc.innerHTML = shtml;
+  container.appendChild(sc);
+
+  // Steps
+  ex.steps.forEach((step, si) => {
+    const card = document.createElement('div');
+    card.className = 'q-card';
+    card.id = `card-${step.id}`;
+    let html = `<div class="q-meta">
+      <span class="q-badge">${step.id.toUpperCase()}</span>
+      <span class="q-label-tag">${step.label}</span>
+      <span class="q-type-tag">Cálculo numérico</span>
+    </div>
+    <div class="q-text">${step.text}</div>`;
+    if (step.hint) html += `<div class="q-hint">📐 ${step.hint}</div>`;
+    html += `<div class="num-row">
+      <input class="num-in" id="ni-${step.id}" type="number" step="any" placeholder="0"
+        oninput="pickNum('${step.id}')" onkeydown="if(event.key==='Enter')confirmStep('${ex.id}','${step.id}',${si})">
+      <span class="num-unit">${step.unit}</span>
+    </div>`;
+    html += `<button class="btn-conf" id="bc-${step.id}" onclick="confirmStep('${ex.id}','${step.id}',${si})" disabled>Confirmar →</button>`;
+    html += `<div class="fb" id="fb-${step.id}"></div>`;
+    card.innerHTML = html;
+    container.appendChild(card);
+  });
+
+  // Chart card (hidden initially)
+  const chartCard = document.createElement('div');
+  chartCard.className = 'chart-card';
+  chartCard.id = ex.chartId;
+
+  if (ex.chartParams === 'waterfall') {
+    // Waterfall / bar chart
+    chartCard.innerHTML = `
+      <div class="chart-hdr">
+        <span class="chart-title">// Tablero Financiero · Estado de Resultados</span>
+        <div class="chart-legend">
+          <div class="leg-item"><div class="leg-dot" style="background:var(--green)"></div>Ventas / MC</div>
+          <div class="leg-item"><div class="leg-dot" style="background:var(--red)"></div>Costos</div>
+          <div class="leg-item"><div class="leg-dot" style="background:var(--gold)"></div>Ganancia Neta</div>
+        </div>
+      </div>
+      <div class="wf-wrap"><canvas id="wfc-${ex.id}" class="wf-chart"></canvas></div>
+      <div class="chart-metrics" id="wf-metrics-${ex.id}"></div>`;
+  } else {
+    // Break-even chart
+    const p = ex.chartParams;
+    chartCard.innerHTML = `
+      <div class="chart-hdr">
+        <span class="chart-title">// Gráfico de Punto de Equilibrio · ${p.label}</span>
+        <div class="chart-legend">
+          <div class="leg-item"><div class="leg-dot" style="background:var(--green)"></div>Ingresos</div>
+          <div class="leg-item"><div class="leg-dot" style="background:var(--red)"></div>Costos Totales</div>
+          <div class="leg-item"><div class="leg-dot" style="background:var(--blue);height:2px;border-top:1px dashed var(--blue)"></div>Costos Fijos</div>
+        </div>
+      </div>
+      <div class="chart-wrap"><canvas id="bec-${ex.id}" class="be-chart"></canvas></div>
+      <div class="chart-metrics" id="metrics-${ex.id}">
+        <div class="cm-box"><div class="cm-val" style="color:var(--blue)">$${fmt(p.CF)}</div><div class="cm-lbl">Costos Fijos</div></div>
+        <div class="cm-box"><div class="cm-val" style="color:var(--red)">$${fmt(p.CVu)}</div><div class="cm-lbl">CVu</div></div>
+        <div class="cm-box"><div class="cm-val" style="color:var(--gold)">$${fmt(p.PV - p.CVu)}</div><div class="cm-lbl">CMu</div></div>
+        <div class="cm-box"><div class="cm-val" style="color:var(--green)">${fmt(p.PE)} u.</div><div class="cm-lbl">Punto de Equilibrio</div></div>
+      </div>`;
+  }
+  container.appendChild(chartCard);
+}
+
+/* ═══════════════════════════════════════════════
+   INTERACTION
+═══════════════════════════════════════════════ */
+function pickOpt(qid, oi) {
+  if (confirmed[qid]) return;
+  answers[qid] = oi;
+  document.querySelectorAll(`[id^="o-${qid}-"]`).forEach((el,j) => el.classList.toggle('selected',j===oi));
+  document.getElementById(`bc-${qid}`).disabled = false;
+}
+function pickTF(qid, val) {
+  if (confirmed[qid]) return;
+  answers[qid] = val;
+  document.getElementById(`tf-${qid}-t`).classList.toggle('sel',val===true);
+  document.getElementById(`tf-${qid}-f`).classList.toggle('sel',val===false);
+  document.getElementById(`bc-${qid}`).disabled = false;
+}
+function pickNum(qid) {
+  if (confirmed[qid]) return;
+  const v = document.getElementById(`ni-${qid}`).value;
+  if (v !== '') { answers[qid] = parseFloat(v); document.getElementById(`bc-${qid}`).disabled = false; }
+}
+
+function confirmItem(qid) {
+  if (confirmed[qid] || answers[qid] === undefined) return;
+  confirmed[qid] = true;
+  document.getElementById(`bc-${qid}`).disabled = true;
+  const q = ITEMS.find(i => i.id === qid);
+  let ok = false;
+
+  if (q.type === 'mc') {
+    ok = answers[qid] === q.ans;
+    document.querySelectorAll(`[id^="o-${qid}-"]`).forEach((el,j)=>{
+      el.classList.add('disabled');
+      if (j === q.ans) el.classList.add('correct-opt');
+      else if (j === answers[qid] && !ok) el.classList.add('wrong-opt');
+    });
+  } else if (q.type === 'tf') {
+    ok = answers[qid] === q.ans;
+    const bt = document.getElementById(`tf-${qid}-t`);
+    const bf = document.getElementById(`tf-${qid}-f`);
+    bt.classList.add('disabled'); bf.classList.add('disabled');
+    (q.ans ? bt : bf).classList.add('tf-ok');
+    if (!ok) (answers[qid] ? bt : bf).classList.add('tf-err');
+  } else {
+    ok = Math.abs(answers[qid] - q.ans) <= (q.tol || 0);
+    const inp = document.getElementById(`ni-${qid}`);
+    inp.classList.add(ok ? 'ok' : 'err');
+    inp.disabled = true;
+  }
+
+  correct[qid] = ok;
+  if (ok) score++;
+  showFB(qid, ok, q.fb, q.type === 'numeric' && !ok ? `$${fmt(q.ans)} ${q.unit}` : null);
+  updatePB();
+  checkDone();
+}
+
+function confirmStep(exId, stepId, stepIdx) {
+  if (confirmed[stepId] || answers[stepId] === undefined) return;
+  confirmed[stepId] = true;
+  document.getElementById(`bc-${stepId}`).disabled = true;
+  const ex = ITEMS.find(i => i.id === exId);
+  const step = ex.steps[stepIdx];
+  const ok = Math.abs(answers[stepId] - step.ans) <= (step.tol || 5);
+  correct[stepId] = ok;
+  if (ok) score++;
+
+  const inp = document.getElementById(`ni-${stepId}`);
+  inp.classList.add(ok ? 'ok' : 'err');
+  inp.disabled = true;
+  showFB(stepId, ok, step.fb, !ok ? `${fmt(step.ans)} ${step.unit}` : null);
+  updatePB();
+
+  // Check if all steps confirmed → reveal chart
+  const allConfirmed = ex.steps.every(s => confirmed[s.id]);
+  if (allConfirmed) {
+    const chartCard = document.getElementById(ex.chartId);
+    chartCard.classList.add('visible');
+    setTimeout(() => {
+      if (ex.chartParams === 'waterfall') drawWaterfall(ex);
+      else drawBEChart(ex);
+      chartCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 300);
+  }
+
+  checkDone();
+}
+
+function showFB(id, ok, text, correctVal) {
+  const fb = document.getElementById(`fb-${id}`);
+  fb.className = `fb ${ok ? 'ok-fb' : 'err-fb'}`;
+  fb.innerHTML = (ok ? '✓ ' : '✗ ') + text + (correctVal ? ` → <strong>Correcto: ${correctVal}</strong>` : '');
+}
+
+function updatePB() {
+  const done = Object.keys(confirmed).length;
+  document.getElementById('pbFill').style.width = `${done/TOTAL*100}%`;
+  document.getElementById('pbTxt').textContent = `${done} / ${TOTAL}`;
+  document.getElementById('scorePill').textContent = `Puntaje: ${score}`;
+}
+
+function checkDone() {
+  if (Object.keys(confirmed).length === TOTAL) {
+    const btn = document.getElementById('btnFinish');
+    btn.style.display = 'block';
+    setTimeout(() => btn.scrollIntoView({ behavior:'smooth', block:'center' }), 400);
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   CHARTS
+═══════════════════════════════════════════════ */
+function fmt(n) {
+  if (n === undefined || n === null) return '0';
+  return Math.round(n).toLocaleString('es-AR');
+}
+
+function drawBEChart(ex) {
+  const p = ex.chartParams;
+  const canvas = document.getElementById(`bec-${ex.id}`);
+  if (!canvas) return;
+
+  const dpr = window.devicePixelRatio || 1;
+  const dW = canvas.clientWidth || canvas.offsetWidth || 700;
+  const dH = 320;
+  canvas.width = dW * dpr;
+  canvas.height = dH * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  const PAD = { top:30, right:90, bottom:52, left:dW < 500 ? 70 : 90 };
+  const { CF, CVu, PV } = p;
+  // Determine PE from confirmed answers or params
+  const PE = p.PE;
+
+  const maxQ = Math.ceil(PE * 2.3);
+  const maxY = Math.ceil((PV * maxQ) / 1000000) * 1000000;
+
+  const gW = dW - PAD.left - PAD.right;
+  const gH = dH - PAD.top - PAD.bottom;
+
+  const xOf = (q) => PAD.left + (q / maxQ) * gW;
+  const yOf = (y) => PAD.top + gH - (y / maxY) * gH;
+
+  // BG
+  ctx.fillStyle = '#161a10';
+  ctx.fillRect(0, 0, dW, dH);
+
+  // Zones
+  ctx.fillStyle = 'rgba(224,82,82,0.07)';
+  ctx.fillRect(xOf(0), PAD.top, xOf(PE)-xOf(0), gH);
+  ctx.fillStyle = 'rgba(107,191,106,0.06)';
+  ctx.fillRect(xOf(PE), PAD.top, gW-(xOf(PE)-PAD.left), gH);
+
+  // Gridlines
+  ctx.strokeStyle = '#22271a';
+  ctx.lineWidth = 1;
+  for (let i=0; i<=5; i++) {
+    const y = (maxY/5)*i;
+    ctx.beginPath();
+    ctx.moveTo(xOf(0), yOf(y));
+    ctx.lineTo(xOf(maxQ), yOf(y));
+    ctx.stroke();
+  }
+
+  // Lines helper
+  function line(pts, color, dash=[]) {
+    ctx.save();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2.5;
+    ctx.setLineDash(dash);
+    ctx.beginPath();
+    pts.forEach(([q,y],i) => i===0 ? ctx.moveTo(xOf(q),yOf(y)) : ctx.lineTo(xOf(q),yOf(y)));
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  // CF line (dashed blue)
+  line([[0,CF],[maxQ,CF]], '#5ab4d4', [8,4]);
+  // CT line (red)
+  line([[0,CF],[maxQ,CF+CVu*maxQ]], '#e05252');
+  // Ingresos line (green)
+  line([[0,0],[maxQ,PV*maxQ]], '#6bbf6a');
+
+  // PE vertical dashed
+  ctx.save();
+  ctx.strokeStyle = '#d4a853';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([5,3]);
+  ctx.beginPath();
+  ctx.moveTo(xOf(PE), yOf(0));
+  ctx.lineTo(xOf(PE), yOf(PV*PE));
+  ctx.stroke();
+  ctx.restore();
+
+  // PE point
+  ctx.fillStyle = '#d4a853';
+  ctx.beginPath();
+  ctx.arc(xOf(PE), yOf(PV*PE), 7, 0, Math.PI*2);
+  ctx.fill();
+  ctx.fillStyle = '#0c0d0a';
+  ctx.beginPath();
+  ctx.arc(xOf(PE), yOf(PV*PE), 3, 0, Math.PI*2);
+  ctx.fill();
+
+  // Line labels (right side)
+  ctx.font = `${dW < 500 ? 9 : 10}px IBM Plex Mono, monospace`;
+  ctx.textAlign = 'left';
+
+  ctx.fillStyle = '#6bbf6a';
+  ctx.fillText('Ingresos', xOf(maxQ)+6, yOf(PV*maxQ)+4);
+
+  ctx.fillStyle = '#e05252';
+  ctx.fillText('Costos', xOf(maxQ)+6, yOf(CF+CVu*maxQ)+4);
+  ctx.fillText('Totales', xOf(maxQ)+6, yOf(CF+CVu*maxQ)+15);
+
+  ctx.fillStyle = '#5ab4d4';
+  ctx.fillText(`CF $${fmt(CF/1000)}k`, xOf(0)+6, yOf(CF)-8);
+
+  // PE annotation
+  ctx.fillStyle = '#d4a853';
+  ctx.textAlign = 'center';
+  ctx.font = `bold ${dW < 500 ? 9 : 10}px IBM Plex Mono, monospace`;
+  ctx.fillText(`PE = ${fmt(PE)} u.`, xOf(PE), yOf(PV*PE)-14);
+
+  // Zone labels
+  ctx.font = `${dW < 500 ? 8 : 9}px IBM Plex Mono, monospace`;
+  ctx.fillStyle = 'rgba(224,82,82,0.55)';
+  ctx.fillText('ZONA DE PÉRDIDA', xOf(PE*0.38), PAD.top+18);
+  ctx.fillStyle = 'rgba(107,191,106,0.55)';
+  ctx.fillText('ZONA DE GANANCIA', xOf(PE+(maxQ-PE)*0.5), PAD.top+18);
+
+  // Y axis labels
+  ctx.fillStyle = '#6a7058';
+  ctx.textAlign = 'right';
+  ctx.font = `${dW < 500 ? 9 : 10}px IBM Plex Mono, monospace`;
+  for (let i=0; i<=5; i++) {
+    const y = (maxY/5)*i;
+    const lbl = y >= 1000000 ? `$${(y/1000000).toFixed(1)}M` : `$${(y/1000).toFixed(0)}k`;
+    ctx.fillText(lbl, xOf(0)-8, yOf(y)+4);
+  }
+
+  // X axis labels
+  ctx.textAlign = 'center';
+  const step = Math.ceil(maxQ/5/50)*50;
+  for (let q=0; q<=maxQ; q+=step) {
+    ctx.fillText(fmt(q), xOf(q), yOf(0)+16);
+  }
+
+  // Axis lines
+  ctx.strokeStyle = '#3a4030';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(xOf(0), yOf(0));
+  ctx.lineTo(xOf(0), yOf(maxY));
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(xOf(0), yOf(0));
+  ctx.lineTo(xOf(maxQ), yOf(0));
+  ctx.stroke();
+
+  // Axis titles
+  ctx.fillStyle = '#6a7058';
+  ctx.font = '10px DM Sans, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('Unidades Vendidas', xOf(maxQ/2), dH-8);
+
+  ctx.save();
+  ctx.translate(12, PAD.top+gH/2);
+  ctx.rotate(-Math.PI/2);
+  ctx.fillText('$ Ingresos / Costos', 0, 0);
+  ctx.restore();
+}
+
+function drawWaterfall(ex) {
+  const canvas = document.getElementById(`wfc-${ex.id}`);
+  if (!canvas) return;
+  const d = ex.wfData;
+
+  const dpr = window.devicePixelRatio || 1;
+  const dW = canvas.clientWidth || canvas.offsetWidth || 700;
+  const dH = 260;
+  canvas.width = dW * dpr;
+  canvas.height = dH * dpr;
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+
+  const PAD = { top:24, right:20, bottom:48, left:dW<500?60:80 };
+  const gW = dW - PAD.left - PAD.right;
+  const gH = dH - PAD.top - PAD.bottom;
+  const maxY = Math.ceil(d.ventas / 1000000) * 1000000;
+  const bars = [
+    { label:'Ventas\nTotales', val:d.ventas, color:'#6bbf6a', from:0 },
+    { label:'− Costos\nVariables', val:d.cv, color:'#e05252', from:0 },
+    { label:'= Margen\nContrib.', val:d.mc, color:'#d4a853', from:0 },
+    { label:'− Costos\nFijos', val:d.cf, color:'#e05252', from:0 },
+    { label:'= Ganancia\nNeta', val:d.gan, color:'#6bbf6a', from:0 },
+  ];
+
+  const nBars = bars.length;
+  const bW = (gW / nBars) * 0.55;
+  const gap = gW / nBars;
+
+  const xBar = (i) => PAD.left + i * gap + (gap - bW) / 2;
+  const yOf = (y) => PAD.top + gH - (y / maxY) * gH;
+  const hOf = (y) => (y / maxY) * gH;
+
+  // BG
+  ctx.fillStyle = '#161a10';
+  ctx.fillRect(0, 0, dW, dH);
+
+  // Gridlines
+  ctx.strokeStyle = '#22271a';
+  ctx.lineWidth = 1;
+  for (let i=0; i<=4; i++) {
+    const y = (maxY/4)*i;
+    ctx.beginPath();
+    ctx.moveTo(PAD.left, yOf(y));
+    ctx.lineTo(dW-PAD.right, yOf(y));
+    ctx.stroke();
+  }
+
+  // Bars
+  bars.forEach((bar, i) => {
+    ctx.fillStyle = bar.color;
+    const opacity = [1, 0.7, 1, 0.7, 1][i];
+    ctx.globalAlpha = opacity;
+    ctx.fillRect(xBar(i), yOf(bar.val), bW, hOf(bar.val));
+    ctx.globalAlpha = 1;
+
+    // Value label on bar
+    ctx.fillStyle = '#dde0c8';
+    ctx.font = `bold ${dW<500?9:10}px IBM Plex Mono, monospace`;
+    ctx.textAlign = 'center';
+    const lbl = bar.val >= 1000000 ? `$${(bar.val/1000000).toFixed(1)}M` : `$${(bar.val/1000).toFixed(0)}k`;
+    ctx.fillText(lbl, xBar(i)+bW/2, yOf(bar.val)-6);
+
+    // X label (multiline)
+    ctx.fillStyle = '#6a7058';
+    ctx.font = `${dW<500?8:9}px DM Sans, sans-serif`;
+    const lines = bar.label.split('\n');
+    lines.forEach((line, li) => {
+      ctx.fillText(line, xBar(i)+bW/2, dH - PAD.bottom + 14 + li*11);
+    });
+  });
+
+  // Y axis labels
+  ctx.fillStyle = '#6a7058';
+  ctx.textAlign = 'right';
+  ctx.font = `${dW<500?9:10}px IBM Plex Mono, monospace`;
+  for (let i=0; i<=4; i++) {
+    const y = (maxY/4)*i;
+    const lbl = y >= 1000000 ? `$${(y/1000000).toFixed(1)}M` : `$${(y/1000).toFixed(0)}k`;
+    ctx.fillText(lbl, PAD.left-6, yOf(y)+4);
+  }
+
+  // Render metrics below chart
+  const metricsDiv = document.getElementById(`wf-metrics-${ex.id}`);
+  if (metricsDiv) {
+    metricsDiv.innerHTML = `
+      <div class="cm-box"><div class="cm-val" style="color:var(--green)">$${fmt(d.ventas)}</div><div class="cm-lbl">Ventas Totales</div></div>
+      <div class="cm-box"><div class="cm-val" style="color:var(--red)">$${fmt(d.cv)}</div><div class="cm-lbl">Costos Variables</div></div>
+      <div class="cm-box"><div class="cm-val" style="color:var(--gold)">$${fmt(d.mc)}</div><div class="cm-lbl">Margen Contribución</div></div>
+      <div class="cm-box"><div class="cm-val" style="color:var(--green)">$${fmt(d.gan)}</div><div class="cm-lbl">Ganancia Neta</div></div>`;
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   RESULTS
+═══════════════════════════════════════════════ */
+function showResults() {
+  document.getElementById('quiz').style.display = 'none';
+  document.getElementById('results').style.display = 'block';
+  window.scrollTo(0,0);
+
+  const pct = Math.round(score/TOTAL*100);
+  let grade, cls;
+  if(pct>=90){grade='10';cls='g10';}
+  else if(pct>=75){grade='8';cls='g8';}
+  else if(pct>=60){grade='6';cls='g6';}
+  else{grade='4';cls='g4';}
+
+  const grEl = document.getElementById('resGrade');
+  grEl.textContent = grade; grEl.className = `res-grade ${cls}`;
+  document.getElementById('resName').textContent = nombre;
+  document.getElementById('resMsg').textContent =
+    pct>=90 ? '¡Excelente! Dominás completamente la lógica de CM y Punto de Equilibrio.' :
+    pct>=75 ? 'Muy bien. Revisá los puntos donde cometiste errores antes del examen final.' :
+    pct>=60 ? 'Aprobado. Hay conceptos y cálculos para reforzar. Repasá el material.' :
+    'Te recomendamos releer la presentación y volver a practicar los ejercicios.';
+
+  document.getElementById('stC').textContent = score;
+  document.getElementById('stW').textContent = TOTAL-score;
+  document.getElementById('stP').textContent = pct+'%';
+
+  // Build review
+  const rc = document.getElementById('revContainer');
+  rc.innerHTML = '';
+
+  // Collect all confirmable items
+  const allItems = [];
+  ITEMS.forEach(item => {
+    if (item.type === 'exercise') {
+      item.steps.forEach(s => allItems.push({ id:s.id, text:s.text, ans:s.ans, tol:s.tol||5, unit:s.unit, type:'numeric' }));
+    } else {
+      allItems.push({ id:item.id, text:item.text, ans:item.ans, type:item.type, opts:item.opts });
+    }
+  });
+
+  allItems.forEach((q, i) => {
+    const a = answers[q.id];
+    const ok = correct[q.id] || false;
+    let detail;
+    if (q.type==='mc') {
+      ok ? detail=`<span class="ok">✓ Opción ${String.fromCharCode(65+q.ans)} — correcta</span>`
+         : detail=`<span class="bad">✗ Respondiste: ${a!==undefined?String.fromCharCode(65+a):'—'}</span> · <span class="ans">Correcta: ${String.fromCharCode(65+q.ans)}</span>`;
+    } else if (q.type==='tf') {
+      ok ? detail=`<span class="ok">✓ ${q.ans?'Verdadero':'Falso'} — correcto</span>`
+         : detail=`<span class="bad">✗ Respondiste: ${a?'Verdadero':'Falso'}</span> · <span class="ans">Correcta: ${q.ans?'Verdadero':'Falso'}</span>`;
+    } else {
+      ok ? detail=`<span class="ok">✓ ${a!==undefined?fmt(a):0} ${q.unit} — correcto</span>`
+         : detail=`<span class="bad">✗ Respondiste: ${a!==undefined?fmt(a):'—'} ${q.unit}</span> · <span class="ans">Correcta: ${fmt(q.ans)} ${q.unit}</span>`;
+    }
+    const d = document.createElement('div');
+    d.className = `rev-item ${ok?'rok':'rerr'}`;
+    d.innerHTML = `<div class="rev-q">${String(i+1).padStart(2,'0')} — ${q.text}</div><div class="rev-d">${detail}</div>`;
+    rc.appendChild(d);
+  });
+
+  // Collect failed questions
+  const failedQs = allItems.filter(q => !correct[q.id]).map(q => {
+    let a = answers[q.id];
+    let ansStr = 'Sin responder';
+    if (a !== undefined) {
+        if(q.type === 'mc') ansStr = String.fromCharCode(65 + a);
+        else if(q.type === 'tf') ansStr = a ? 'Verdadero' : 'Falso';
+        else ansStr = a + (q.unit ? ' ' + q.unit : '');
+    }
+    return q.id.toUpperCase() + '||' + ansStr;
+  });
+
+  // Submit metrics
+  if (supabaseClient) {
+    supabaseClient.from('exam_resultados').insert([
+      { nombre: nombre, puntaje: score, total: TOTAL, porcentaje: pct, errores: failedQs.join(', ') }
+    ]).then(res => { if(res.error) console.error('Supabase Error:', res.error); });
+  }
+}
+
+function retry() {
+  answers={}; confirmed={}; correct={}; score=0;
+  document.getElementById('results').style.display='none';
+  document.getElementById('quiz').style.display='block';
+  document.getElementById('btnFinish').style.display='none';
+  window.scrollTo(0,0);
+  renderAll();
+  updatePB();
+}
+</script>
+</body>
+</html>

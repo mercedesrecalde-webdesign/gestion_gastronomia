@@ -37,7 +37,17 @@ const CampusQuiz = {
         ${q.scen ? `
           <div style="background: var(--card2); border-left: 3px solid var(--gold); padding: 20px; border-radius: 4px; margin-bottom: 24px; font-size: 14px;">
             <strong style="color:var(--gold); font-family:var(--mono); font-size:10px; display:block; margin-bottom:10px;">ESCENARIO</strong>
-            ${q.scen.body}
+            <p style="margin-bottom:15px;">${q.scen.body}</p>
+            ${q.scen.rows ? `
+              <div style="display: flex; flex-direction: column; gap: 8px; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 6px;">
+                ${q.scen.rows.map(row => `
+                  <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 4px;">
+                    <span style="color: var(--muted)">${row[0]}</span>
+                    <span style="font-family: var(--mono); color: var(--text)">${row[1]}</span>
+                  </div>
+                `).join('')}
+              </div>
+            ` : ''}
           </div>
         ` : ''}
 

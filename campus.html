@@ -293,8 +293,30 @@
             </div>
           </div>`;
         setTimeout(updateCalc, 100);
+      } else if (mod.practice && mod.practice.examples) {
+        container.innerHTML = `
+          <div style="margin-bottom: 32px;">
+            <p style="color: var(--muted); margin-bottom: 24px;">Entrena con estos casos de ejemplo antes de pasar a la evaluación final.</p>
+            <div style="display: grid; grid-template-columns: 1fr; gap: 20px;">
+              ${mod.practice.examples.map((ex, i) => `
+                <div class="theory-card" style="cursor: pointer; position: relative;" onclick="this.querySelector('.solution').style.display = 'block'; this.style.borderColor = 'var(--gold)'">
+                  <span style="font-family: var(--mono); font-size: 10px; color: var(--gold); display: block; margin-bottom: 12px;">CASO DE ESTUDIO ${i + 1}</span>
+                  <h4 style="font-family: var(--body); font-size: 18px; margin-bottom: 12px;">${ex.case}</h4>
+                  <div class="solution" style="display: none; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); animation: fadeIn 0.3s ease;">
+                    <div style="color: var(--green); font-family: var(--mono); font-size: 11px; margin-bottom: 8px;">RESOLUCIÓN</div>
+                    <p style="font-size: 15px;">${ex.solution}</p>
+                    <div style="margin-top: 12px; font-size: 13px; color: var(--muted); font-style: italic;">
+                      <strong>Por qué:</strong> ${ex.reason}
+                    </div>
+                  </div>
+                  <div style="position: absolute; top: 32px; right: 32px; font-size: 12px; color: var(--gold); font-family: var(--mono);">VER RESPUESTA ↓</div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
       } else {
-        container.innerHTML = `<div class="theory-card"><h3>Práctica de ${mod.title}</h3><p>Realiza los ejercicios en la pestaña siguiente.</p></div>`;
+        container.innerHTML = `<div class="theory-card"><h3>Práctica de ${mod.title}</h3><p>Realiza los ejercicios en la pestaña siguiente para evaluar tus conocimientos.</p></div>`;
       }
     }
 

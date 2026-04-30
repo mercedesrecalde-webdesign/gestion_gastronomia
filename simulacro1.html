@@ -343,9 +343,26 @@ function start(){
   const n=document.getElementById('ni').value.trim();
   if(!n){document.getElementById('ni').style.borderColor='var(--red)';return;}
   nombre=n;
+  
+  // Check for saved progress
+  const saved = localStorage.getItem('simulacro1_progress');
+  if (saved) {
+    const data = JSON.parse(saved);
+    if (data.nombre === nombre && confirm('Tienes un progreso guardado. ¿Deseas continuar donde dejaste?')) {
+      ans = data.ans || {};
+      conf = data.conf || {};
+      corr = data.corr || {};
+      score = data.score || 0;
+    }
+  }
+
   document.getElementById('cover').style.display='none';
   document.getElementById('exam').style.display='block';
   render();upd();
+}
+
+function save(){
+  localStorage.setItem('simulacro1_progress', JSON.stringify({ nombre, ans, conf, corr, score }));
 }
 
 function render(){
@@ -382,45 +399,81 @@ function render(){
     }
     const card=document.createElement('div');card.className='qcard';card.id=`cd-${q.id}`;
     const typeLabel={mc:'Opción múltiple',tf:'Verdadero / Falso',numeric:'Cálculo numérico'};
-    let h=`<div class="qmeta"><span class="qbadge">P${String(i+1).padStart(2,'0')}</span><span class="qtype">${typeLabel[q.type]}</span></div><div class="qtext">${q.text}</div>`;
+    let h=`<div class="qmeta">
+      <span class="qbadge">P${String(i+1).padStart(2,'0')}</span>
+      <span class="qtype">${typeLabel[q.type]}</span>
+      ${i > 0 ? `<button onclick="document.getElementById('cd-${QS[i-1].id}').scrollIntoView({behavior:'smooth'})" style="background:none; border:none; color:var(--muted); font-size:9px; font-family:var(--mono); cursor:pointer; margin-left:auto;">← VOLVER ATRÁS</button>` : ''}
+    </div><div class="qtext">${q.text}</div>`;
+    
     if(q.type==='mc'){
-      h+=`<div class="opts">`+q.opts.map((o,j)=>`<div class="opt" id="o-${q.id}-${j}" onclick="pickO('${q.id}',${j})"><span class="ok">${String.fromCharCode(65+j)}</span><span>${o}</span></div>`).join('')+`</div>`;
+      h+=`<div class="opts">`+q.opts.map((o,j)=>`<div class="opt ${ans[q.id]===j?'sel':''} ${conf[q.id]?'disabled':''}" id="o-${q.id}-${j}" onclick="pickO('${q.id}',${j})"><span class="ok">${String.fromCharCode(65+j)}</span><span>${o}</span></div>`).join('')+`</div>`;
     }else if(q.type==='tf'){
-      h+=`<div class="tf-row"><button class="tf-btn" id="tf-${q.id}-t" onclick="pickTF('${q.id}',true)">✓ Verdadero</button><button class="tf-btn" id="tf-${q.id}-f" onclick="pickTF('${q.id}',false)">✗ Falso</button></div>`;
+      h+=`<div class="tf-row">
+        <button class="tf-btn ${ans[q.id]===true?'sel':''} ${conf[q.id]?'disabled':''}" id="tf-${q.id}-t" onclick="pickTF('${q.id}',true)">✓ Verdadero</button>
+        <button class="tf-btn ${ans[q.id]===false?'sel':''} ${conf[q.id]?'disabled':''}" id="tf-${q.id}-f" onclick="pickTF('${q.id}',false)">✗ Falso</button>
+      </div>`;
     }else{
-      h+=`<div class="num-row"><input class="num-in" id="ni-${q.id}" type="number" step="any" placeholder="0" oninput="pickN('${q.id}')" onkeydown="if(event.key==='Enter')cfm('${q.id}')"><span class="num-u">${q.unit}</span></div>`;
+      h+=`<div class="num-row">
+        <input class="num-in ${conf[q.id]?(corr[q.id]?'ok2':'err2'):''}" id="ni-${q.id}" type="number" step="any" placeholder="0" oninput="pickN('${q.id}')" value="${ans[q.id]!==undefined?ans[q.id]:''}" ${conf[q.id]?'disabled':''}>
+        <span class="num-u">${q.unit}</span>
+      </div>`;
     }
-    h+=`<button class="btn-c" id="bc-${q.id}" onclick="cfm('${q.id}')" disabled>Confirmar</button>`;
-    h+=`<div class="fb" id="fb-${q.id}"></div>`;
+    h+=`<button class="btn-c" id="bc-${q.id}" onclick="cfm('${q.id}')" ${ans[q.id]!==undefined && !conf[q.id] ? '' : 'disabled'}>${conf[q.id]?'✓ Corregido':'Confirmar Respuesta'}</button>`;
+    
+    if(conf[q.id]) {
+       h += `<button class="btn-c" style="margin-left:10px; border-color:var(--muted); color:var(--muted);" onclick="unlock('${q.id}')">✏️ Editar</button>`;
+    }
+
+    h+=`<div class="fb" id="fb-${q.id}" style="${conf[q.id]?'display:block':''}"></div>`;
     card.innerHTML=h;c.appendChild(card);
+    if(conf[q.id]) showFb(q);
   });
 }
 
-function pickO(id,oi){if(conf[id])return;ans[id]=oi;document.querySelectorAll(`[id^="o-${id}-"]`).forEach((el,j)=>el.classList.toggle('sel',j===oi));document.getElementById(`bc-${id}`).disabled=false;}
-function pickTF(id,v){if(conf[id])return;ans[id]=v;document.getElementById(`tf-${id}-t`).classList.toggle('sel',v===true);document.getElementById(`tf-${id}-f`).classList.toggle('sel',v===false);document.getElementById(`bc-${id}`).disabled=false;}
-function pickN(id){const v=document.getElementById(`ni-${id}`).value;if(v!==''){ans[id]=parseFloat(v);document.getElementById(`bc-${id}`).disabled=false;}}
+function unlock(id){
+  conf[id]=false;
+  if(corr[id]){score--; corr[id]=false;}
+  render();upd();save();
+}
+
+function pickO(id,oi){if(conf[id])return;ans[id]=oi;document.querySelectorAll(`[id^="o-${id}-"]`).forEach((el,j)=>el.classList.toggle('sel',j===oi));document.getElementById(`bc-${id}`).disabled=false;save();}
+function pickTF(id,v){if(conf[id])return;ans[id]=v;document.getElementById(`tf-${id}-t`).classList.toggle('sel',v===true);document.getElementById(`tf-${id}-f`).classList.toggle('sel',v===false);document.getElementById(`bc-${id}`).disabled=false;save();}
+function pickN(id){const v=document.getElementById(`ni-${id}`).value;if(v!==''){ans[id]=parseFloat(v);document.getElementById(`bc-${id}`).disabled=false;save();}}
 
 function cfm(id){
   if(conf[id]||ans[id]===undefined)return;
-  conf[id]=true;document.getElementById(`bc-${id}`).disabled=true;
-  const q=QS.find(x=>x.id===id);let ok=false;
-  if(q.type==='mc'){
-    ok=ans[id]===q.ans;
-    document.querySelectorAll(`[id^="o-${id}-"]`).forEach((el,j)=>{el.classList.add('disabled');if(j===q.ans)el.classList.add('c-ok');else if(j===ans[id]&&!ok)el.classList.add('c-err');});
-  }else if(q.type==='tf'){
-    ok=ans[id]===q.ans;
-    const bt=document.getElementById(`tf-${id}-t`),bf=document.getElementById(`tf-${id}-f`);
-    bt.classList.add('disabled');bf.classList.add('disabled');
-    (q.ans?bt:bf).classList.add('tf-ok');if(!ok)(ans[id]?bt:bf).classList.add('tf-err');
-  }else{
-    ok=Math.abs(ans[id]-q.ans)<=(q.tol||0);
-    const inp=document.getElementById(`ni-${id}`);inp.classList.add(ok?'ok2':'err2');inp.disabled=true;
+  conf[id]=true;
+  const q=QS.find(x=>x.id===id);
+  let ok=false;
+  if(q.type==='mc') ok=ans[id]===q.ans;
+  else if(q.type==='tf') ok=ans[id]===q.ans;
+  else ok=Math.abs(ans[id]-q.ans)<=(q.tol||0);
+  
+  corr[id]=ok; if(ok)score++;
+  render();upd();save();
+  
+  if(Object.keys(conf).length===TOTAL){
+    const b=document.getElementById('bfin');
+    b.style.display='block';
+    setTimeout(()=>b.scrollIntoView({behavior:'smooth',block:'center'}),300);
   }
-  corr[id]=ok;if(ok)score++;
+}
+
+function showFb(q){
+  const id=q.id; const ok=corr[id];
   const fb=document.getElementById(`fb-${id}`);
   fb.className=`fb ${ok?'ok-fb':'err-fb'}`;
   fb.innerHTML=(ok?'✓ ':' ✗ ')+q.fb+(!ok&&q.type==='numeric'?` <strong>→ Correcto: ${fmt(q.ans)} ${q.unit}</strong>`:'');
-  upd();if(Object.keys(conf).length===TOTAL){const b=document.getElementById('bfin');b.style.display='block';setTimeout(()=>b.scrollIntoView({behavior:'smooth',block:'center'}),300);}
+  
+  if(q.type==='mc'){
+    document.querySelectorAll(`[id^="o-${id}-"]`).forEach((el,j)=>{
+      if(j===q.ans)el.classList.add('c-ok');
+      else if(j===ans[id]&&!ok)el.classList.add('c-err');
+    });
+  }else if(q.type==='tf'){
+    const bt=document.getElementById(`tf-${id}-t`),bf=document.getElementById(`tf-${id}-f`);
+    (q.ans?bt:bf).classList.add('tf-ok');if(!ok)(ans[id]?bt:bf).classList.add('tf-err');
+  }
 }
 
 function upd(){const d=Object.keys(conf).length;document.getElementById('pbf').style.width=`${d/TOTAL*100}%`;document.getElementById('pbt').textContent=`${d} / ${TOTAL}`;document.getElementById('sp').textContent=`Puntaje: ${score}`;}

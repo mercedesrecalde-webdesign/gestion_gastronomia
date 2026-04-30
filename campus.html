@@ -227,17 +227,42 @@
   </main>
 
   <script>
+    const SUPABASE_URL = 'https://dukgjrhyhyxvdqzhthje.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1a2dqcmh5aHl4dmRxemh0aGplIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc5MTQzNjIsImV4cCI6MjA4MzQ5MDM2Mn0.JYZWv2vYwMbTopyL-T8_kjbX2py5IL7Ap6ASZc2B4dM';
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let campusModules = [];
     let currentModuleIndex = 0;
     let currentTab = 'theory';
 
-    function init() {
-      renderNav();
-      loadModule(0);
+    async function init() {
+      try {
+        const { data, error } = await supabase
+          .from('campus_modules')
+          .select('*')
+          .order('order_index', { ascending: true });
+
+        if (error) throw error;
+        campusModules = data;
+        
+        if (campusModules.length > 0) {
+          renderNav();
+          loadModule(0);
+        } else {
+          document.getElementById('currentModTitle').innerText = "Crea tu primer módulo en Supabase";
+        }
+      } catch (err) {
+        console.error("Error cargando módulos:", err);
+        // Fallback a datos locales si la DB falla o no está creada
+        campusModules = CAMPUS_DATA.modules;
+        renderNav();
+        loadModule(0);
+      }
     }
 
     function renderNav() {
       const nav = document.getElementById('moduleNav');
-      nav.innerHTML = CAMPUS_DATA.modules.map((mod, idx) => `
+      nav.innerHTML = campusModules.map((mod, idx) => `
         <div class="nav-item ${idx === currentModuleIndex ? 'active' : ''}" onclick="loadModule(${idx})">
           <span class="nav-icon">${mod.icon}</span>
           <span class="nav-label">${mod.title}</span>
@@ -247,7 +272,7 @@
 
     function loadModule(idx) {
       currentModuleIndex = idx;
-      const mod = CAMPUS_DATA.modules[idx];
+      const mod = campusModules[idx];
       document.getElementById('currentModTag').innerText = `Módulo 0${idx + 1}`;
       document.getElementById('currentModTitle').innerText = mod.title;
       renderNav();

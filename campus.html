@@ -41,157 +41,27 @@
     }
 
     /* --- SIDEBAR --- */
-    aside {
+    .sidebar {
       width: var(--sidebar-w);
       background: var(--surface);
       border-right: 1px solid var(--border);
       display: flex;
       flex-direction: column;
       flex-shrink: 0;
-      transition: transform 0.3s ease;
       z-index: 100;
     }
 
-    .brand {
+    .sidebar-header {
       padding: 32px 24px;
       border-bottom: 1px solid var(--border);
     }
-    .brand h1 {
+    .logo {
       font-family: var(--display);
       font-size: 20px;
       color: var(--gold);
     }
-    .brand p {
-      font-size: 10px;
-      font-family: var(--mono);
-      letter-spacing: 2px;
-      color: var(--muted);
-      margin-top: 4px;
-    }
 
-    .nav-links {
-      flex: 1;
-      padding: 24px 16px;
-      overflow-y: auto;
-    }
-    .nav-item {
-      display: flex;
-      align-items: center;
-      padding: 12px 16px;
-      border-radius: 8px;
-      color: var(--muted);
-      text-decoration: none;
-      margin-bottom: 4px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .nav-item:hover {
-      background: var(--card);
-      color: var(--text);
-    }
-    .nav-item.active {
-      background: var(--gold-low);
-      color: var(--gold);
-      border: 1px solid rgba(212, 168, 83, 0.2);
-    }
-    .nav-icon { margin-right: 12px; font-size: 18px; }
-
-    /* --- MAIN CONTENT --- */
-    main {
-      flex: 1;
-      overflow-y: auto;
-      padding: 40px;
-      position: relative;
-    }
-
-    .content-header {
-      margin-bottom: 48px;
-    }
-    .mod-tag {
-      font-family: var(--mono);
-      font-size: 10px;
-      color: var(--gold);
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-    .mod-title {
-      font-family: var(--display);
-      font-size: 42px;
-      font-weight: 600;
-    }
-
-    /* --- TABS --- */
-    .tabs-nav {
-      display: flex;
-      gap: 32px;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 40px;
-    }
-    .tab-btn {
-      padding: 12px 0;
-      background: none;
-      border: none;
-      color: var(--muted);
-      font-family: var(--mono);
-      font-size: 11px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      cursor: pointer;
-      position: relative;
-      transition: color 0.2s;
-    }
-    .tab-btn.active {
-      color: var(--gold);
-    }
-    .tab-btn.active::after {
-      content: '';
-      position: absolute;
-      bottom: -1px;
-      left: 0;
-      width: 100%;
-      height: 2px;
-      background: var(--gold);
-    }
-
-    /* --- MODULE VIEWS --- */
-    .view-container { animation: fadeIn 0.4s ease forwards; }
-
-    /* Theory View */
-    .theory-wrap { max-width: 800px; line-height: 1.7; }
-    .theory-section { margin-bottom: 40px; }
-    .theory-section h3 { font-family: var(--display); font-size: 24px; margin-bottom: 16px; color: var(--gold); }
-    .pro-tip {
-      background: var(--card2);
-      border-left: 3px solid var(--gold);
-      padding: 24px;
-      border-radius: 4px;
-      margin-top: 24px;
-      font-size: 14px;
-    }
-    .pro-tip strong { color: var(--gold); font-family: var(--mono); font-size: 11px; display: block; margin-bottom: 8px; }
-
-    /* Practice View */
-    .practice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
-    .calc-card { background: var(--card); border: 1px solid var(--border); padding: 32px; border-radius: 12px; }
-    .input-group { margin-bottom: 24px; }
-    .input-group label { display: block; font-family: var(--mono); font-size: 10px; color: var(--muted); margin-bottom: 8px; }
-    .input-group input { 
-      width: 100%; background: var(--surface); border: 1px solid var(--border); 
-      color: var(--text); padding: 12px; border-radius: 4px; font-family: var(--mono);
-      outline: none; transition: border-color 0.2s;
-    }
-    .input-group input:focus { border-color: var(--gold); }
-    
-    .res-card { background: var(--gold-low); border: 1px solid rgba(212,168,83,0.2); padding: 24px; border-radius: 8px; }
-    .res-label { font-size: 11px; font-family: var(--mono); color: var(--gold); margin-bottom: 4px; }
-    .res-value { font-size: 32px; font-family: var(--display); font-weight: 700; color: var(--text); }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
+    .main-nav { padding: 24px 16px; border-bottom: 1px solid var(--border); }
     .nav-btn {
       display: flex;
       align-items: center;
@@ -201,34 +71,151 @@
       cursor: pointer;
       transition: all 0.2s;
       color: var(--muted);
+      margin-bottom: 4px;
     }
     .nav-btn:hover { background: rgba(255,255,255,0.05); color: var(--text); }
     .nav-btn.active { background: var(--gold-low); color: var(--gold); }
-    .nav-btn .nav-icon { font-size: 18px; }
-    .nav-btn .nav-label { font-weight: 500; font-size: 14px; }
+    
+    .module-list { padding: 16px; overflow-y: auto; flex: 1; }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      padding: 10px 12px;
+      border-radius: 6px;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 13px;
+      margin-bottom: 2px;
+    }
+    .nav-item:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+    .nav-item.active { color: var(--gold); background: rgba(212,168,83,0.05); }
+    .nav-icon { margin-right: 10px; }
+
+    /* --- MAIN --- */
+    .main-content { flex: 1; overflow-y: auto; padding: 40px; }
+    .content-header { margin-bottom: 40px; }
+    .tag { font-family: var(--mono); font-size: 10px; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; }
+    .title { font-family: var(--display); font-size: 36px; margin-top: 8px; }
+
+    .tabs { display: flex; gap: 24px; margin-top: 32px; border-bottom: 1px solid var(--border); }
+    .tab {
+      padding: 12px 0; background: none; border: none; color: var(--muted);
+      font-family: var(--mono); font-size: 11px; letter-spacing: 1px; cursor: pointer;
+      position: relative;
+    }
+    .tab.active { color: var(--gold); }
+    .tab.active::after { content: ''; position: absolute; bottom: -1px; left: 0; width: 100%; height: 2px; background: var(--gold); }
+
+    .theory-card { background: var(--card2); padding: 32px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 24px; }
+    .practice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+    .calc-card { background: var(--card); border: 1px solid var(--border); padding: 32px; border-radius: 12px; }
+    .input-group { margin-bottom: 20px; }
+    .input-group label { display: block; font-family: var(--mono); font-size: 10px; color: var(--muted); margin-bottom: 8px; }
+    .input-group input { width: 100%; background: var(--surface); border: 1px solid var(--border); color: var(--text); padding: 12px; border-radius: 4px; outline: none; }
+    .res-card { background: var(--gold-low); border: 1px solid rgba(212,168,83,0.2); padding: 20px; border-radius: 8px; margin-bottom: 12px; }
+    
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .main-view { animation: fadeIn 0.4s ease forwards; }
+
+    @media (max-width: 900px) {
+      .sidebar { position: fixed; left: -280px; }
+      .practice-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body onload="init()">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h1 class="logo">Campus Culinario</h1>
+      <p style="font-size: 10px; color: var(--muted); font-family: var(--mono); margin-top: 4px;">SISTEMA DE GESTIÓN</p>
+    </div>
+
+    <div class="main-nav">
+      <div class="nav-btn active" onclick="switchMainView('campus')" id="btn-campus">
+        <span class="nav-icon">📚</span>
+        <span class="nav-label">Campus</span>
+      </div>
+      <div class="nav-btn" onclick="switchMainView('exams')" id="btn-exams">
+        <span class="nav-icon">📝</span>
+        <span class="nav-label">Exámenes</span>
+      </div>
+      <div class="nav-btn" onclick="switchMainView('dashboard')" id="btn-dashboard">
+        <span class="nav-icon">📊</span>
+        <span class="nav-label">Panel</span>
+      </div>
+    </div>
+
+    <div id="moduleNavContainer" class="module-list">
+      <p style="font-size: 9px; color: var(--muted); font-family: var(--mono); margin-bottom: 12px; text-transform: uppercase;">Módulos</p>
+      <nav id="moduleNav"></nav>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <!-- VISTA CAMPUS -->
+    <div id="view-campus" class="main-view">
+      <header class="content-header">
+        <span class="tag" id="currentModTag">Módulo 01</span>
+        <h2 class="title" id="currentModTitle">Cargando...</h2>
+        <div class="tabs">
+          <button class="tab active" onclick="setTab('theory', this)">Teoría</button>
+          <button class="tab" onclick="setTab('practice', this)">Práctica</button>
+          <button class="tab" onclick="setTab('exercises', this)">Ejercicios</button>
+        </div>
+      </header>
+      <div id="moduleView"></div>
+    </div>
+
+    <!-- VISTA EXÁMENES -->
+    <div id="view-exams" class="main-view" style="display: none;">
+      <header class="content-header">
+        <span class="tag">Evaluación</span>
+        <h2 class="title">Exámenes Finales</h2>
+      </header>
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
+        <div class="calc-card" onclick="window.open('simulacro1.html')" style="cursor: pointer;">
+          <h3 style="color: var(--gold);">Simulacro 01</h3>
+          <p style="color: var(--muted); font-size: 13px; margin-top: 10px;">Clasificación y Comportamiento.</p>
+        </div>
+        <div class="calc-card" onclick="window.open('simulacro2.html')" style="cursor: pointer;">
+          <h3 style="color: var(--gold);">Simulacro 02</h3>
+          <p style="color: var(--muted); font-size: 13px; margin-top: 10px;">PE y Rentabilidad.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- VISTA DASHBOARD -->
+    <div id="view-dashboard" class="main-view" style="display: none;">
+      <header class="content-header">
+        <span class="tag">Analytics</span>
+        <h2 class="title">Panel de Alumnos</h2>
+      </header>
+      <iframe src="dashboard.html" style="width: 100%; height: 75vh; border: none; border-radius: 12px;"></iframe>
+    </div>
+  </main>
+
+  <script>
+    const SUPABASE_URL = 'https://dukgjrhyhyxvdqzhthje.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1a2dqcmh5aHl4dmRxemh0aGplIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc5MTQzNjIsImV4cCI6MjA4MzQ5MDM2Mn0.JYZWv2vYwMbTopyL-T8_kjbX2py5IL7Ap6ASZc2B4dM';
+    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let campusModules = [];
+    let currentModuleIndex = 0;
+    let currentTab = 'theory';
 
     async function init() {
       try {
-        const { data, error } = await supabase
-          .from('campus_modules')
-          .select('*')
-          .order('order_index', { ascending: true });
-
-        if (error) throw error;
-        campusModules = data;
-        
-        if (campusModules.length > 0) {
-          renderNav();
-          loadModule(0);
+        const { data, error } = await sb.from('campus_modules').select('*').order('order_index', { ascending: true });
+        if (error || !data || data.length === 0) {
+           campusModules = CAMPUS_DATA.modules;
         } else {
-          document.getElementById('currentModTitle').innerText = "Crea tu primer módulo en Supabase";
+           campusModules = data;
         }
       } catch (err) {
-        console.error("Error cargando módulos:", err);
         campusModules = CAMPUS_DATA.modules;
-        renderNav();
-        loadModule(0);
       }
+      renderNav();
+      loadModule(0);
     }
 
     function renderNav() {
@@ -250,134 +237,12 @@
       renderTab();
     }
 
-    @media (max-width: 900px) {
-      aside { position: fixed; left: -280px; }
-      main { padding: 24px; }
-      .sidebar { position: fixed; left: -280px; }
-      .main-content { padding: 24px; }
-      .practice-grid { grid-template-columns: 1fr; }
-    }
-  </style>
-</head>
-<body>
-  <aside class="sidebar">
-    <div class="sidebar-header">
-      <h1 class="logo">Campus Culinario</h1>
-      <p style="font-size: 10px; color: var(--gold); font-family: var(--mono); letter-spacing: 1px;">SISTEMA DE GESTIÓN</p>
-    </div>
-
-    <div class="main-nav" style="margin-bottom: 30px; display: flex; flex-direction: column; gap: 8px;">
-      <div class="nav-btn active" onclick="switchMainView('campus')" id="btn-campus">
-        <span class="nav-icon">📚</span>
-        <span class="nav-label">Campus & Teoría</span>
-      </div>
-      <div class="nav-btn" onclick="switchMainView('exams')" id="btn-exams">
-        <span class="nav-icon">📝</span>
-        <span class="nav-label">Exámenes Finales</span>
-      </div>
-      <div class="nav-btn" onclick="switchMainView('dashboard')" id="btn-dashboard">
-        <span class="nav-icon">📊</span>
-        <span class="nav-label">Panel de Alumnos</span>
-      </div>
-    </div>
-
-    <div id="moduleNavContainer">
-      <p style="font-size: 10px; color: var(--muted); font-family: var(--mono); margin-bottom: 12px; padding-left: 12px;">MÓDULOS DE APRENDIZAJE</p>
-      <nav id="moduleNav" class="module-list"></nav>
-    </div>
-  </aside>
-
-  <main class="main-content">
-    <!-- VISTA CAMPUS (MÓDULOS) -->
-    <div id="view-campus" class="main-view">
-      <header class="content-header">
-        <div class="header-info">
-          <span class="tag" id="currentModTag">Módulo 01</span>
-          <h2 class="title" id="currentModTitle">Cargando...</h2>
-        </div>
-        <div class="tabs">
-          <button class="tab active" onclick="setTab('theory', this)">Teoría</button>
-          <button class="tab" onclick="setTab('practice', this)">Práctica</button>
-          <button class="tab" onclick="setTab('exercises', this)">Ejercicios</button>
-        </div>
-      </header>
-      <div id="moduleView" class="module-content"></div>
-    </div>
-
-    <!-- VISTA EXÁMENES -->
-    <div id="view-exams" class="main-view" style="display: none;">
-      <header class="content-header">
-        <div class="header-info">
-          <span class="tag">Evaluación</span>
-          <h2 class="title">Exámenes y Simulacros</h2>
-        </div>
-      </header>
-      <div class="exam-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; padding: 40px;">
-        <div class="exam-card" onclick="window.open('simulacro1.html')" style="background: var(--card); border: 1px solid var(--border); padding: 32px; border-radius: 12px; cursor: pointer; transition: transform 0.2s;">
-          <div style="font-size: 32px; margin-bottom: 16px;">📄</div>
-          <h3 style="color: var(--gold); margin-bottom: 8px;">Simulacro 01</h3>
-          <p style="color: var(--muted); font-size: 14px;">Evaluación integral de Clasificación y Comportamiento.</p>
-        </div>
-        <div class="exam-card" onclick="window.open('simulacro2.html')" style="background: var(--card); border: 1px solid var(--border); padding: 32px; border-radius: 12px; cursor: pointer; transition: transform 0.2s;">
-          <div style="font-size: 32px; margin-bottom: 16px;">📄</div>
-          <h3 style="color: var(--gold); margin-bottom: 8px;">Simulacro 02</h3>
-          <p style="color: var(--muted); font-size: 14px;">Evaluación avanzada: Punto de Equilibrio y Rentabilidad.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- VISTA DASHBOARD -->
-    <div id="view-dashboard" class="main-view" style="display: none;">
-      <header class="content-header">
-        <div class="header-info">
-          <span class="tag">Seguimiento</span>
-          <h2 class="title">Panel de Control de Alumnos</h2>
-        </div>
-      </header>
-      <iframe src="dashboard.html" style="width: 100%; height: calc(100vh - 150px); border: none; background: transparent;"></iframe>
-    </div>
-  </main>
-
-  <script>
-    const SUPABASE_URL = 'https://dukgjrhyhyxvdqzhthje.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1a2dqcmh5aHl4dmRxemh0aGplIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc5MTQzNjIsImV4cCI6MjA4MzQ5MDM2Mn0.JYZWv2vYwMbTopyL-T8_kjbX2py5IL7Ap6ASZc2B4dM';
-    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-    let campusModules = [];
-    let currentModuleIndex = 0;
-    let currentTab = 'theory';
-
-    async function init() {
-      try {
-        const { data, error } = await sb
-          .from('campus_modules')
-          .select('*')
-          .order('order_index', { ascending: true });
-
-        if (error || !data || data.length === 0) {
-           console.log("Usando datos locales (fallback)");
-           campusModules = CAMPUS_DATA.modules;
-        } else {
-           campusModules = data;
-        }
-      } catch (err) {
-        console.error("Error conectando a Supabase, usando locales:", err);
-        campusModules = CAMPUS_DATA.modules;
-      }
-      
-      renderNav();
-      loadModule(0);
-    }
-
     function switchMainView(viewId) {
       document.querySelectorAll('.main-view').forEach(v => v.style.display = 'none');
       document.getElementById(`view-${viewId}`).style.display = 'block';
-      
       document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
       document.getElementById(`btn-${viewId}`).classList.add('active');
-
-      const modNav = document.getElementById('moduleNavContainer');
-      modNav.style.display = viewId === 'campus' ? 'block' : 'none';
+      document.getElementById('moduleNavContainer').style.display = viewId === 'campus' ? 'block' : 'none';
     }
 
     function setTab(tab, btn) {
@@ -387,50 +252,24 @@
       renderTab();
     }
 
-    function switchTab(tab, btn) {
-      currentTab = tab;
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      renderTab();
-    }
-
     function renderTab() {
       const container = document.getElementById('moduleView');
-      const mod = CAMPUS_DATA.modules[currentModuleIndex];
-
-      function renderTheory(container, mod) {
-        if (mod.pdf_url) {
-          container.innerHTML = `
-            <div style="height: 800px; background: var(--card2); border-radius: 8px; overflow: hidden;">
-              <iframe src="${mod.pdf_url}" width="100%" height="100%" style="border: none;"></iframe>
-            </div>
-            <div style="margin-top: 20px; text-align: center;">
-              <a href="${mod.pdf_url}" target="_blank" style="color: var(--gold); text-decoration: none; font-size: 14px;">
-                📥 ¿No puedes ver el PDF? Haz clic aquí para descargarlo.
-              </a>
-            </div>
-          `;
-          return;
-        }
-
-        container.innerHTML = `
-          <p style="color: var(--muted); font-size: 18px; line-height: 1.6; margin-bottom: 40px; border-left: 3px solid var(--gold); padding-left: 24px;">
-            ${mod.intro || mod.theory.intro}
-          </p>
-          <div class="theory-grid">
-            ${(mod.sections || mod.theory.sections).map(sec => `
-              <div class="theory-card" style="background: var(--card2); padding: 32px; border-radius: 12px; border: 1px solid var(--border);">
-                <h3 style="color: var(--gold); margin-bottom: 16px; font-family: var(--display);">${sec.title}</h3>
-                <p style="line-height: 1.6; color: var(--text);">${sec.content}</p>
-                ${sec.proTip ? `<div style="margin-top: 24px; padding: 16px; background: rgba(212, 168, 83, 0.1); border-radius: 8px; font-size: 14px; color: var(--gold);"><strong>💡 PRO-TIP:</strong> ${sec.proTip}</div>` : ''}
-              </div>
-            `).join('')}
-          </div>
-        `;
-      }
+      const mod = campusModules[currentModuleIndex];
 
       if (currentTab === 'theory') {
-        renderTheory(container, mod);
+        if (mod.pdf_url) {
+          container.innerHTML = `<iframe src="${mod.pdf_url}" width="100%" height="800px" style="border: none; border-radius: 8px;"></iframe>`;
+        } else {
+          container.innerHTML = `
+            <p style="color: var(--muted); margin-bottom: 30px;">${mod.intro || mod.theory.intro}</p>
+            ${(mod.sections || mod.theory.sections).map(sec => `
+              <div class="theory-card">
+                <h3>${sec.title}</h3>
+                <p style="margin-top: 15px;">${sec.content}</p>
+                ${sec.proTip ? `<div class="pro-tip"><strong>PRO TIP</strong>${sec.proTip}</div>` : ''}
+              </div>
+            `).join('')}`;
+        }
       } else if (currentTab === 'practice') {
         renderPractice(container, mod);
       } else {
@@ -439,42 +278,23 @@
     }
 
     function renderPractice(container, mod) {
-      if (mod.practice.type === 'calculator') {
+      if (mod.practice && mod.practice.type === 'calculator') {
         container.innerHTML = `
           <div class="practice-grid">
             <div class="calc-card">
-              <h3 style="margin-bottom: 24px; font-family: var(--display)">Simulador de PE</h3>
-              <div class="input-group">
-                <label>Costos Fijos Totales ($)</label>
-                <input type="number" id="in_cf" value="${mod.practice.defaultValues.cf}" oninput="updateCalc()">
-              </div>
-              <div class="input-group">
-                <label>Precio de Venta ($)</label>
-                <input type="number" id="in_pv" value="${mod.practice.defaultValues.pv}" oninput="updateCalc()">
-              </div>
-              <div class="input-group">
-                <label>Costo Variable Unitario ($)</label>
-                <input type="number" id="in_cvu" value="${mod.practice.defaultValues.cvu}" oninput="updateCalc()">
-              </div>
+              <div class="input-group"><label>Costos Fijos ($)</label><input type="number" id="in_cf" value="${mod.practice.defaultValues.cf}" oninput="updateCalc()"></div>
+              <div class="input-group"><label>Precio Venta ($)</label><input type="number" id="in_pv" value="${mod.practice.defaultValues.pv}" oninput="updateCalc()"></div>
+              <div class="input-group"><label>Costo Var. Unit ($)</label><input type="number" id="in_cvu" value="${mod.practice.defaultValues.cvu}" oninput="updateCalc()"></div>
             </div>
-            <div style="display: flex; flex-direction: column; gap: 20px;">
-               <div class="res-card">
-                  <div class="res-label">Contribución Marginal</div>
-                  <div class="res-value" id="res_cm">$0</div>
-               </div>
-               <div class="res-card" style="background: rgba(123, 198, 122, 0.1); border-color: rgba(123, 198, 122, 0.2);">
-                  <div class="res-label" style="color: var(--green)">Punto de Equilibrio</div>
-                  <div class="res-value" id="res_pe">0 unidades</div>
-               </div>
-               <div class="calc-card" style="flex: 1; padding: 20px;">
-                  <canvas id="peChart"></canvas>
-               </div>
+            <div>
+              <div class="res-card"><div class="tag">CM</div><div class="title" id="res_cm" style="font-size: 24px;">$0</div></div>
+              <div class="res-card" style="background: rgba(123,198,122,0.1);"><div class="tag" style="color:var(--green)">PE</div><div class="title" id="res_pe" style="font-size: 24px;">0 u.</div></div>
+              <div class="calc-card" style="height: 250px;"><canvas id="peChart"></canvas></div>
             </div>
-          </div>
-        `;
+          </div>`;
         setTimeout(updateCalc, 100);
       } else {
-        container.innerHTML = `<h3>${mod.practice.title}</h3><p>${mod.practice.description}</p>`;
+        container.innerHTML = `<div class="theory-card"><h3>Práctica de ${mod.title}</h3><p>Realiza los ejercicios en la pestaña siguiente.</p></div>`;
       }
     }
 
@@ -483,13 +303,10 @@
       const cf = parseFloat(document.getElementById('in_cf').value) || 0;
       const pv = parseFloat(document.getElementById('in_pv').value) || 0;
       const cvu = parseFloat(document.getElementById('in_cvu').value) || 0;
-
       const cm = pv - cvu;
       const pe = cm > 0 ? Math.ceil(cf / cm) : 0;
-
       document.getElementById('res_cm').innerText = `$${cm.toLocaleString()}`;
-      document.getElementById('res_pe').innerText = `${pe.toLocaleString()} unidades`;
-
+      document.getElementById('res_pe').innerText = `${pe.toLocaleString()} u.`;
       renderChart(cf, pv, cvu, pe);
     }
 
@@ -497,33 +314,16 @@
       const ctx = document.getElementById('peChart').getContext('2d');
       const maxQ = pe > 0 ? pe * 2 : 100;
       const labels = [0, Math.floor(maxQ/2), maxQ];
-      
-      const dataIngresos = labels.map(q => q * pv);
-      const dataCostos = labels.map(q => cf + (q * cvu));
-
       if (peChart) peChart.destroy();
       peChart = new Chart(ctx, {
         type: 'line',
-        data: {
-          labels: labels,
-          datasets: [
-            { label: 'Ingresos', data: dataIngresos, borderColor: '#d4a853', borderWidth: 2, tension: 0.1, pointRadius: 0 },
-            { label: 'Costos Totales', data: dataCostos, borderColor: '#e05a5a', borderWidth: 2, tension: 0.1, pointRadius: 0 }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: {
-            x: { grid: { color: '#2a3023' }, ticks: { color: '#7a8470', font: { family: 'IBM Plex Mono', size: 9 } } },
-            y: { grid: { color: '#2a3023' }, ticks: { color: '#7a8470', font: { family: 'IBM Plex Mono', size: 9 } } }
-          }
-        }
+        data: { labels: labels, datasets: [
+          { label: 'Ingresos', data: labels.map(q => q * pv), borderColor: '#d4a853', borderWidth: 2, pointRadius: 0 },
+          { label: 'Costos', data: labels.map(q => cf + (q * cvu)), borderColor: '#e05a5a', borderWidth: 2, pointRadius: 0 }
+        ]},
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { grid: { color: '#2a3023' } }, y: { grid: { color: '#2a3023' } } } }
       });
     }
-
-    init();
   </script>
 </body>
 </html>

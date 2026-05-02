@@ -324,6 +324,7 @@ function start(){
   document.getElementById('cover').style.display='none';
   document.getElementById('exam').style.display='block';
   render();upd();
+  initParcial();
 }
 
 function save(){
@@ -405,10 +406,47 @@ function cfm(id){
   corr[id]=ok; if(ok)score++;
   render();upd();save();
   
+  // Auto-save partial progress to Supabase
+  autoSave();
+  
   if(Object.keys(conf).length===TOTAL){
     const b=document.getElementById('bfin');
     setTimeout(()=>b.scrollIntoView({behavior:'smooth',block:'center'}),300);
   }
+}
+
+let parcialId = null;
+async function initParcial(){
+  try{
+    const {data}=await SB.from('exam_resultados').insert({nombre:nombre,puntaje:0,total:TOTAL,porcentaje:0,errores:'S2: [EN CURSO 0/'+TOTAL+']'}).select('id').single();
+    if(data) parcialId=data.id;
+  }catch(e){console.warn('initParcial:',e);}
+}
+
+async function autoSave(){
+  if(!parcialId) return;
+  const confirmed = Object.keys(conf).length;
+  const pct = Math.round(score/TOTAL*100);
+  const failedQs = [];
+  QS.forEach((q)=>{
+    const ok=corr[q.id]||false; const a=ans[q.id];
+    if(conf[q.id] && !ok){
+      let ansStr='Sin responder';
+      if(a!==undefined){
+        if(q.type==='mc') ansStr=String.fromCharCode(65+a);
+        else if(q.type==='tf') ansStr=a?'Verdadero':'Falso';
+        else ansStr=a+(q.unit?' '+q.unit:'');
+      }
+      failedQs.push(q.id.toUpperCase()+'||'+ansStr);
+    }
+  });
+  const errStr = failedQs.length ? 'S2: '+failedQs.join(', ') : 'S2: OK';
+  try{
+    await SB.from('exam_resultados').update({
+      puntaje:score, porcentaje:pct,
+      errores: confirmed===TOTAL ? errStr : '[PARCIAL '+confirmed+'/'+TOTAL+'] '+errStr
+    }).eq('id',parcialId);
+  }catch(e){console.warn('AutoSave:',e);}
 }
 
 function showFb(q){

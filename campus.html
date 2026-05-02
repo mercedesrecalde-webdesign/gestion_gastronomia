@@ -135,10 +135,7 @@
         <span class="nav-icon">📚</span>
         <span class="nav-label">Campus</span>
       </div>
-      <div class="nav-btn" onclick="switchMainView('exams')" id="btn-exams">
-        <span class="nav-icon">📝</span>
-        <span class="nav-label">Exámenes</span>
-      </div>
+
       <div class="nav-btn" onclick="switchMainView('dashboard')" id="btn-dashboard">
         <span class="nav-icon">📊</span>
         <span class="nav-label">Panel</span>
@@ -170,31 +167,6 @@
       <div id="moduleView"></div>
     </div>
 
-    <!-- VISTA EXÁMENES -->
-    <div id="view-exams" class="main-view" style="display: none;">
-      <header class="content-header">
-        <span class="tag">Evaluación Integral</span>
-        <h2 class="title">Exámenes y Simulacros</h2>
-      </header>
-      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
-        <div class="calc-card" onclick="window.open('simulacro1.html')" style="cursor: pointer;">
-          <h3 style="color: var(--gold);">Simulacro 01</h3>
-          <p style="color: var(--muted); font-size: 13px; margin-top: 10px;">Clasificación y Comportamiento.</p>
-        </div>
-        <div class="calc-card" onclick="window.open('simulacro2.html')" style="cursor: pointer;">
-          <h3 style="color: var(--gold);">Simulacro 02</h3>
-          <p style="color: var(--muted); font-size: 13px; margin-top: 10px;">PE y Rentabilidad.</p>
-        </div>
-        <div class="calc-card" onclick="window.open('tp_graficos_pe.html')" style="cursor: pointer;">
-          <h3 style="color: var(--blue);">TP Gráficos PE</h3>
-          <p style="color: var(--muted); font-size: 13px; margin-top: 10px;">Análisis visual de Punto de Equilibrio.</p>
-        </div>
-        <div class="calc-card" onclick="window.open('examen_cm_pe.html')" style="cursor: pointer;">
-          <h3 style="color: var(--green);">Examen CM & PE</h3>
-          <p style="color: var(--muted); font-size: 13px; margin-top: 10px;">Evaluación específica de márgenes.</p>
-        </div>
-      </div>
-    </div>
 
     <!-- VISTA DASHBOARD -->
     <div id="view-dashboard" class="main-view" style="display: none;">

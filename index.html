@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Evaluación Integral · Costos y Presupuestos</title>
+<title>Campus Virtual · Costos y Presupuestos · IFTS N°23</title>
+<meta name="description" content="Campus virtual de la materia Costos y Presupuestos – Tecnicatura Superior en Gastronomía, IFTS N°23.">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&family=Fraunces:ital,wght@0,300;0,600;0,700;1,300&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root {
   --bg: #0d0f0c;
@@ -15,6 +15,7 @@
   --border: #2a3023;
   --gold: #d4a853;
   --gold2: #f0c96a;
+  --goldf: rgba(212,168,83,.08);
   --green: #7bc67a;
   --red: #e05a5a;
   --blue: #6ab4d4;
@@ -46,13 +47,13 @@ body::before {
   z-index: 0;
 }
 
-/* ═══ COVER ═══ */
-#cover {
+/* ═══ HERO ═══ */
+.hero {
   position: relative; z-index: 1;
-  min-height: 100vh;
+  min-height: 60vh;
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
-  padding: 48px 24px;
+  padding: 80px 24px 48px;
   text-align: center;
 }
 
@@ -65,281 +66,156 @@ body::before {
   opacity: 0; animation: fadeUp .5s .1s forwards;
 }
 
-.cover-eyebrow {
+.hero-eyebrow {
   font-family: var(--mono); font-size: 11px;
   letter-spacing: 3px; color: var(--gold);
   text-transform: uppercase; margin-bottom: 18px;
   opacity: 0; animation: fadeUp .5s .25s forwards;
 }
 
-.cover-title {
+.hero-title {
   font-family: var(--display);
-  font-size: clamp(44px, 8vw, 90px);
-  font-weight: 700; line-height: 1;
+  font-size: clamp(36px, 7vw, 72px);
+  font-weight: 700; line-height: 1.05;
   letter-spacing: -1px; margin-bottom: 10px;
   opacity: 0; animation: fadeUp .6s .4s forwards;
 }
-.cover-title em { color: var(--gold); font-style: italic; }
+.hero-title em { color: var(--gold); font-style: italic; }
 
-.cover-subtitle {
+.hero-subtitle {
   font-family: var(--display);
-  font-size: clamp(18px, 3vw, 26px);
+  font-size: clamp(16px, 2.5vw, 22px);
   font-weight: 300; color: var(--muted);
-  margin-bottom: 48px;
+  margin-bottom: 12px;
+  max-width: 600px;
   opacity: 0; animation: fadeUp .6s .55s forwards;
 }
 
-.blocks-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 12px; max-width: 860px; width: 100%;
-  margin-bottom: 48px;
-  opacity: 0; animation: fadeUp .6s .7s forwards;
+.hero-welcome {
+  font-size: 14px; color: var(--muted);
+  max-width: 520px; line-height: 1.7;
+  margin-bottom: 0;
+  opacity: 0; animation: fadeUp .5s .7s forwards;
 }
 
-.block-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 20px 16px;
-  text-align: left;
+/* divider */
+.divider {
+  width: 60px; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin: 48px auto 56px;
+  opacity: 0; animation: fadeUp .4s .85s forwards;
 }
 
-.bc-num {
-  font-family: var(--mono); font-size: 28px;
-  font-weight: 700; color: var(--gold); line-height: 1;
-  margin-bottom: 4px;
+/* ═══ ACTIVITIES ═══ */
+.section-label {
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 3px; color: var(--gold);
+  text-transform: uppercase; text-align: center;
+  margin-bottom: 32px;
+  opacity: 0; animation: fadeUp .4s .9s forwards;
 }
-.bc-label { font-size: 11px; color: var(--muted); line-height: 1.4; }
 
-.name-wrap {
-  width: 100%; max-width: 440px;
-  opacity: 0; animation: fadeUp .5s .85s forwards;
-  margin-bottom: 28px;
-}
-.name-lbl {
-  display: block; font-family: var(--mono);
-  font-size: 10px; letter-spacing: 2px;
-  color: var(--muted); text-transform: uppercase;
-  margin-bottom: 10px; text-align: left;
-}
-.name-input {
-  width: 100%;
-  background: var(--card); border: 1px solid var(--border);
-  color: var(--text); font-family: var(--body); font-size: 16px;
-  padding: 14px 18px; border-radius: 4px; outline: none;
-  transition: border-color .2s;
-}
-.name-input:focus { border-color: var(--gold); }
-
-.btn-start {
-  background: var(--gold); color: #111;
-  font-family: var(--body); font-weight: 600; font-size: 16px;
-  padding: 16px 52px; border: none; border-radius: 4px;
-  cursor: pointer; transition: all .15s;
+.activities {
+  position: relative; z-index: 1;
+  max-width: 960px; margin: 0 auto;
+  padding: 0 24px 80px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 18px;
   opacity: 0; animation: fadeUp .5s 1s forwards;
 }
-.btn-start:hover { background: var(--gold2); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(212,168,83,.3); }
 
-/* ═══ QUIZ ═══ */
-#quiz { display: none; position: relative; z-index: 1; max-width: 860px; margin: 0 auto; padding: 36px 20px 80px; }
-
-.quiz-topbar {
-  display: flex; align-items: center; gap: 16px;
-  padding-bottom: 20px; border-bottom: 1px solid var(--border);
-  margin-bottom: 40px; flex-wrap: wrap;
-}
-.quiz-brand { font-family: var(--mono); font-size: 11px; color: var(--gold); letter-spacing: 2px; }
-.pb-wrap { flex: 1; min-width: 180px; }
-.pb-track { height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; margin-bottom: 5px; }
-.pb-fill { height: 100%; background: var(--gold); transition: width .4s ease; width: 0%; }
-.pb-txt { font-family: var(--mono); font-size: 10px; color: var(--muted); text-align: right; }
-.score-pill { font-family: var(--mono); font-size: 12px; color: var(--gold); border: 1px solid rgba(212,168,83,.3); padding: 4px 12px; border-radius: 2px; }
-
-/* Section header */
-.sec-header {
-  display: flex; align-items: center; gap: 14px;
-  margin: 44px 0 28px;
-}
-.sec-num { font-family: var(--mono); font-size: 42px; font-weight: 700; color: rgba(212,168,83,.15); line-height: 1; }
-.sec-info {}
-.sec-tag { font-family: var(--mono); font-size: 10px; letter-spacing: 3px; color: var(--gold); text-transform: uppercase; margin-bottom: 4px; }
-.sec-title { font-family: var(--display); font-size: 22px; font-weight: 600; }
-
-/* Scenario box */
-.scenario-box {
-  background: var(--card2);
+.act-card {
+  background: var(--card);
   border: 1px solid var(--border);
-  border-left: 3px solid var(--gold);
-  border-radius: 4px;
-  padding: 22px 24px;
-  margin-bottom: 28px;
-  font-size: 14px; line-height: 1.75;
+  border-radius: 8px;
+  padding: 32px 28px;
+  text-decoration: none;
+  color: var(--text);
+  display: flex; flex-direction: column;
+  transition: all .2s ease;
+  position: relative;
+  overflow: hidden;
 }
-.scenario-box strong { color: var(--gold2); }
-.scenario-title {
-  font-family: var(--mono); font-size: 10px; letter-spacing: 2px;
-  color: var(--gold); text-transform: uppercase; margin-bottom: 12px;
+.act-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transition: transform .3s ease;
 }
-.scenario-table {
-  width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 13px;
+.act-card:hover {
+  border-color: rgba(212,168,83,.4);
+  background: var(--card2);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 36px rgba(0,0,0,.3), 0 0 0 1px rgba(212,168,83,.1);
 }
-.scenario-table td { padding: 5px 10px; border-bottom: 1px solid var(--border); }
-.scenario-table td:first-child { color: var(--muted); }
-.scenario-table td:last-child { font-family: var(--mono); color: var(--gold2); text-align: right; }
-.scenario-table tr.hl td { color: var(--text); background: rgba(212,168,83,.05); }
+.act-card:hover::before { transform: scaleX(1); }
 
-/* Question card */
-.q-card {
-  background: var(--card); border: 1px solid var(--border);
-  border-radius: 6px; padding: 30px 28px;
-  margin-bottom: 18px;
-  animation: fadeUp .4s ease forwards;
+.act-icon {
+  font-size: 32px;
+  margin-bottom: 16px;
+  filter: grayscale(.3);
+  transition: filter .2s;
 }
-.q-meta { display: flex; gap: 10px; align-items: center; margin-bottom: 18px; }
-.q-badge { font-family: var(--mono); font-size: 10px; color: var(--gold); background: rgba(212,168,83,.1); border: 1px solid rgba(212,168,83,.2); padding: 3px 9px; border-radius: 2px; }
-.q-type { font-family: var(--mono); font-size: 10px; color: var(--muted); border: 1px solid var(--border); padding: 3px 9px; border-radius: 2px; }
-.q-text { font-size: 17px; font-weight: 500; line-height: 1.55; }
-.q-hint { font-family: var(--mono); font-size: 12px; color: var(--blue); background: rgba(106,180,212,.07); border-left: 2px solid var(--blue); padding: 10px 14px; margin: 14px 0 4px; border-radius: 0 3px 3px 0; }
+.act-card:hover .act-icon { filter: none; }
 
-/* Options */
-.opts { display: flex; flex-direction: column; gap: 9px; margin-top: 18px; }
-.opt {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 4px; padding: 13px 16px;
-  cursor: pointer; font-size: 14px;
-  display: flex; align-items: flex-start; gap: 12px;
-  transition: border-color .15s, background .15s, transform .1s;
-  user-select: none;
+.act-tag {
+  font-family: var(--mono); font-size: 9px;
+  letter-spacing: 2px; color: var(--muted);
+  text-transform: uppercase; margin-bottom: 8px;
 }
-.opt:hover:not(.disabled) { border-color: var(--gold); background: rgba(212,168,83,.04); transform: translateX(3px); }
-.opt-key {
-  font-family: var(--mono); font-size: 11px; color: var(--muted);
-  min-width: 20px; height: 20px; border: 1px solid var(--border);
-  border-radius: 2px; display: flex; align-items: center; justify-content: center;
-  transition: all .15s; flex-shrink: 0; margin-top: 1px;
+.act-name {
+  font-family: var(--display); font-size: 20px;
+  font-weight: 600; margin-bottom: 10px;
+  line-height: 1.3;
 }
-.opt.selected .opt-key { background: var(--gold); border-color: var(--gold); color: #111; }
-.opt.correct-opt { border-color: var(--green); background: rgba(123,198,122,.07); }
-.opt.correct-opt .opt-key { background: var(--green); border-color: var(--green); color: #111; }
-.opt.wrong-opt { border-color: var(--red); background: rgba(224,90,90,.07); }
-.opt.wrong-opt .opt-key { background: var(--red); border-color: var(--red); color: #fff; }
-.opt.disabled { cursor: default; pointer-events: none; }
-
-/* TF */
-.tf-row { display: flex; gap: 10px; margin-top: 18px; }
-.tf-btn {
-  flex: 1; background: var(--surface); border: 1px solid var(--border);
-  color: var(--text); font-family: var(--body); font-weight: 600; font-size: 15px;
-  padding: 16px; border-radius: 4px; cursor: pointer; transition: all .15s;
+.act-desc {
+  font-size: 13px; color: var(--muted);
+  line-height: 1.6; flex: 1;
 }
-.tf-btn:hover:not(.disabled) { border-color: var(--gold); }
-.tf-btn.sel { border-color: var(--gold); background: rgba(212,168,83,.08); color: var(--gold); }
-.tf-btn.tf-ok { border-color: var(--green); background: rgba(123,198,122,.1); color: var(--green); }
-.tf-btn.tf-err { border-color: var(--red); background: rgba(224,90,90,.09); color: var(--red); }
-
-/* Numeric */
-.num-wrap { display: flex; align-items: center; gap: 12px; margin-top: 18px; flex-wrap: wrap; }
-.num-in {
-  background: var(--surface); border: 1px solid var(--border);
-  color: var(--text); font-family: var(--mono); font-size: 22px;
-  padding: 12px 18px; border-radius: 4px; outline: none;
-  width: 220px; transition: border-color .2s;
+.act-meta {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 20px; padding-top: 16px;
+  border-top: 1px solid var(--border);
+  font-family: var(--mono); font-size: 10px;
+  color: var(--muted);
 }
-.num-in:focus { border-color: var(--gold); }
-.num-in.ok { border-color: var(--green); background: rgba(123,198,122,.06); }
-.num-in.err { border-color: var(--red); background: rgba(224,90,90,.06); }
-.num-unit { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.act-meta .dot { width: 4px; height: 4px; background: var(--gold); border-radius: 50%; }
 
-/* Feedback & confirm */
-.fb {
-  margin-top: 16px; padding: 12px 16px; border-radius: 4px;
-  font-size: 13px; line-height: 1.65; display: none;
+.act-arrow {
+  margin-left: auto;
+  font-size: 16px;
+  color: var(--gold);
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: all .2s;
 }
-.fb.ok-fb { display: block; background: rgba(123,198,122,.06); border-left: 3px solid var(--green); color: #a8dca7; }
-.fb.err-fb { display: block; background: rgba(224,90,90,.06); border-left: 3px solid var(--red); color: #e89090; }
-.fb strong { color: var(--gold2); }
+.act-card:hover .act-arrow { opacity: 1; transform: translateX(0); }
 
-.btn-conf {
-  margin-top: 18px; background: transparent;
-  border: 1px solid rgba(212,168,83,.4); color: var(--gold);
-  font-family: var(--body); font-weight: 600; font-size: 13px;
-  padding: 9px 24px; border-radius: 4px; cursor: pointer; transition: all .15s;
+/* Featured card */
+.act-card.featured {
+  border-color: rgba(212,168,83,.25);
+  background: linear-gradient(135deg, var(--card) 0%, rgba(212,168,83,.04) 100%);
 }
-.btn-conf:hover { background: rgba(212,168,83,.08); border-color: var(--gold); }
-.btn-conf:disabled { opacity: .3; cursor: default; pointer-events: none; }
+.act-card.featured .act-tag { color: var(--gold); }
 
-/* Nav */
-.quiz-foot { display: flex; justify-content: flex-end; margin-top: 36px; }
-.btn-finish {
-  display: none; background: var(--gold); color: #111;
-  font-family: var(--body); font-weight: 700; font-size: 15px;
-  padding: 14px 44px; border: none; border-radius: 4px;
-  cursor: pointer; transition: all .15s;
+/* ═══ FOOTER ═══ */
+.campus-footer {
+  position: relative; z-index: 1;
+  text-align: center;
+  padding: 40px 24px;
+  border-top: 1px solid var(--border);
+  font-family: var(--mono); font-size: 10px;
+  color: var(--muted); letter-spacing: 1px;
 }
-.btn-finish:hover { background: var(--gold2); transform: translateY(-2px); }
-
-/* ═══ RESULTS ═══ */
-#results {
-  display: none; position: relative; z-index: 1;
-  max-width: 860px; margin: 0 auto; padding: 64px 20px 80px;
-  animation: fadeUp .5s ease;
+.campus-footer a {
+  color: var(--gold);
+  text-decoration: none;
 }
-.res-top { text-align: center; margin-bottom: 56px; }
-.res-grade {
-  font-family: var(--display); font-style: italic;
-  font-size: 120px; line-height: 1; margin-bottom: 6px;
-}
-.grade-10 { color: var(--gold); }
-.grade-8 { color: var(--green); }
-.grade-6 { color: #8bc4dd; }
-.grade-4 { color: var(--red); }
-
-.res-lbl { font-family: var(--mono); font-size: 11px; letter-spacing: 3px; color: var(--muted); text-transform: uppercase; margin-bottom: 18px; }
-.res-name { font-family: var(--display); font-size: 30px; font-weight: 600; margin-bottom: 8px; }
-.res-msg { font-size: 15px; color: var(--muted); }
-
-.stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-bottom: 48px; }
-.stat { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 24px; text-align: center; }
-.stat-n { font-family: var(--mono); font-size: 38px; font-weight: 700; margin-bottom: 5px; }
-.stat-l { font-size: 11px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
-
-.rev-hdr { font-family: var(--mono); font-size: 10px; letter-spacing: 3px; color: var(--gold); text-transform: uppercase; padding-bottom: 12px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
-.rev-item { background: var(--card); border: 1px solid var(--border); border-left: 3px solid; border-radius: 4px; padding: 18px 22px; margin-bottom: 10px; }
-.rev-item.rok { border-left-color: var(--green); }
-.rev-item.rerr { border-left-color: var(--red); }
-.rev-q { font-size: 13px; font-weight: 500; margin-bottom: 8px; line-height: 1.5; }
-.rev-d { font-family: var(--mono); font-size: 11px; color: var(--muted); }
-.rev-d .ok { color: var(--green); }
-.rev-d .bad { color: var(--red); }
-.rev-d .ans { color: var(--gold2); }
-
-.actions-row { display: flex; justify-content: center; gap: 16px; margin-top: 40px; flex-wrap: wrap; }
-.btn-print {
-  background: var(--gold); border: none; color: #111;
-  font-family: var(--body); font-weight: 600; font-size: 15px;
-  padding: 13px 36px; border-radius: 4px; cursor: pointer; transition: all .15s;
-}
-.btn-print:hover { background: var(--gold2); transform: translateY(-2px); box-shadow: 0 4px 14px rgba(212,168,83,.2); }
-
-.btn-retry {
-  background: transparent; border: 1px solid var(--gold);
-  color: var(--gold); font-family: var(--body); font-weight: 600; font-size: 15px;
-  padding: 13px 36px; border-radius: 4px; cursor: pointer; transition: all .15s;
-}
-.btn-retry:hover { background: rgba(212,168,83,.08); transform: translateY(-2px); }
-
-@media print {
-  body { background: #fff !important; color: #000 !important; }
-  body::before { display: none; }
-  .actions-row, .quiz-topbar { display: none !important; }
-  .stat, .rev-item { background: #fff; border-color: #ddd; color: #000; break-inside: avoid; }
-  .stat-n { color: #000 !important; }
-  .rev-d .ok { color: #2e7d32; }
-  .rev-d .bad { color: #c62828; }
-  .rev-d .ans { color: #1565c0; }
-  .res-grade { color: #000 !important; }
-  #results { padding: 0; }
-}
+.campus-footer a:hover { text-decoration: underline; }
 
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(18px); }
@@ -347,720 +223,121 @@ body::before {
 }
 
 @media (max-width:600px) {
-  .q-card { padding: 22px 16px; }
-  .blocks-grid { grid-template-columns: 1fr 1fr; }
-  .stats-row { grid-template-columns: 1fr 1fr; }
-  .res-grade { font-size: 88px; }
+  .hero { padding: 60px 20px 32px; min-height: 50vh; }
+  .activities { grid-template-columns: 1fr; padding: 0 16px 60px; }
+  .act-card { padding: 24px 20px; }
 }
 </style>
 </head>
 <body>
 
-<!-- ═══════════ PORTADA ═══════════ -->
-<section id="cover">
+<!-- ═══════════ HERO ═══════════ -->
+<section class="hero">
   <div class="inst-badge">IFTS N° 23 · Tecnicatura Superior en Gastronomía</div>
-  <div class="cover-eyebrow">Simulacro de Evaluación Parcial</div>
-  <h1 class="cover-title">Costos &amp;<br><em>Presupuestos</em></h1>
-  <p class="cover-subtitle">Clasificación · Cálculo · Food Cost · Punto de Equilibrio</p>
-
-  <div class="blocks-grid">
-    <div class="block-card">
-      <div class="bc-num">8</div>
-      <div class="bc-label">Bloque I<br>Clasificación de Costos</div>
-    </div>
-    <div class="block-card">
-      <div class="bc-num">5</div>
-      <div class="bc-label">Bloque II<br>Comportamiento y Tabla</div>
-    </div>
-    <div class="block-card">
-      <div class="bc-num">12</div>
-      <div class="bc-label">Bloque III<br>Cálculos Prácticos</div>
-    </div>
-    <div class="block-card">
-      <div class="bc-num">5</div>
-      <div class="bc-label">Bloque IV<br>Análisis Rápido</div>
-    </div>
-    <div class="block-card">
-      <div class="bc-num">6</div>
-      <div class="bc-label">Bloque V<br>Clasificación Guiada</div>
-    </div>
-  </div>
-
-  <div class="name-wrap">
-    <span class="name-lbl">Nombre y Apellido del alumno/a</span>
-    <input class="name-input" id="nameInput" type="text" placeholder="Ej: Emiliano Molinari" autocomplete="off">
-  </div>
-  <button class="btn-start" onclick="startQuiz()">Comenzar evaluación →</button>
+  <div class="hero-eyebrow">Campus Virtual</div>
+  <h1 class="hero-title">Costos &amp;<br><em>Presupuestos</em></h1>
+  <p class="hero-subtitle">Bienvenido/a al campus de práctica y evaluación</p>
+  <p class="hero-welcome">Acá vas a encontrar simulacros, ejercicios y material teórico para prepararte para el parcial. Elegí una actividad para comenzar.</p>
 </section>
 
-<!-- ═══════════ QUIZ ═══════════ -->
-<section id="quiz">
-  <div class="quiz-topbar">
-    <span class="quiz-brand">// COSTOS Y PRESUPUESTOS</span>
-    <div class="pb-wrap">
-      <div class="pb-track"><div class="pb-fill" id="pbFill"></div></div>
-      <div class="pb-txt" id="pbTxt">0 / 32</div>
+<div class="divider"></div>
+
+<!-- ═══════════ ACTIVIDADES ═══════════ -->
+<div class="section-label">// Actividades disponibles</div>
+
+<div class="activities">
+
+  <!-- Simulacro 1 -->
+  <a href="simulacro1.html" class="act-card featured">
+    <div class="act-icon">🍔</div>
+    <div class="act-tag">Simulacro de Parcial</div>
+    <div class="act-name">Simulacro 1: Don Burger</div>
+    <div class="act-desc">Caso completo de hamburguesería gourmet. Clasificación de costos, comportamiento, cálculo de PE y análisis de rentabilidad.</div>
+    <div class="act-meta">
+      <span>20 preguntas</span>
+      <span class="dot"></span>
+      <span>MC · V/F · Cálculo</span>
+      <span class="act-arrow">→</span>
     </div>
-    <div class="score-pill" id="scorePill">Puntaje: 0</div>
-  </div>
-  <div id="qContainer"></div>
-  <div class="quiz-foot">
-    <button class="btn-finish" id="btnFinish" onclick="showResults()">Ver mis resultados →</button>
-  </div>
-</section>
+  </a>
 
-<!-- ═══════════ RESULTADOS ═══════════ -->
-<section id="results">
-  <div class="res-top">
-    <div class="res-grade" id="resGrade"></div>
-    <div class="res-lbl">Calificación Final</div>
-    <div class="res-name" id="resName"></div>
-    <div class="res-msg" id="resMsg"></div>
-  </div>
-  <div class="stats-row">
-    <div class="stat"><div class="stat-n" id="stC" style="color:var(--green)"></div><div class="stat-l">Correctas</div></div>
-    <div class="stat"><div class="stat-n" id="stW" style="color:var(--red)"></div><div class="stat-l">Incorrectas</div></div>
-    <div class="stat"><div class="stat-n" id="stP" style="color:var(--gold)"></div><div class="stat-l">Porcentaje</div></div>
-  </div>
-  <div class="rev-hdr">// Revisión completa — pregunta a pregunta</div>
-  <div id="revContainer"></div>
-  <div class="actions-row">
-    <button class="btn-print" onclick="window.print()">🖨 Imprimir Métricas (PDF)</button>
-    <button class="btn-retry" onclick="retry()">↺ Intentar de nuevo</button>
-  </div>
-</section>
-
-<script>
-// ── Configuración Supabase ──
-const SUPABASE_URL = 'https://dukgjrhyhyxvdqzhthje.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1a2dqcmh5aHl4dmRxemh0aGplIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc5MTQzNjIsImV4cCI6MjA4MzQ5MDM2Mn0.JYZWv2vYwMbTopyL-T8_kjbX2py5IL7Ap6ASZc2B4dM';
-let supabaseClient = null;
-if (SUPABASE_URL !== 'PEGAR_AQUI_TU_URL' && window.supabase) {
-  supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-}
-
-const QS = [
-
-/* ──────── BLOQUE I: CLASIFICACIÓN DE COSTOS ──────── */
-{
-  sec: "BLOQUE I · Clasificación de Costos",
-  type: "mc",
-  text: "El alquiler del salón de un restaurante es $1.250.000 por mes, lo pago aunque tenga clientes o no. ¿Cómo se clasifica según su variabilidad?",
-  opts: [
-    "Costo Variable, porque cambia con las ventas.",
-    "Costo Fijo, porque permanece constante independientemente del nivel de actividad.",
-    "Costo Mixto, porque tiene parte fija y parte variable.",
-    "Gasto de Comercialización."
-  ],
-  ans: 1,
-  fb: "Exacto. El alquiler es el ejemplo más clásico de Costo Fijo: la empresa debe pagarlo atienda 10 o 200 cubiertos. No depende del volumen de ventas."
-},
-{
-  sec: null, type: "mc",
-  text: "Los insumos de cocina (ingredientes) cuestan $1.465.000 por día según el nivel de producción. ¿Cuál es su clasificación por variabilidad?",
-  opts: [
-    "Costo Fijo, porque siempre se compran ingredientes.",
-    "Costo Variable, porque fluctúan en proporción directa a la cantidad de producción.",
-    "Costo Mixto, porque incluyen diferentes ingredientes.",
-    "Costo Indirecto Fijo."
-  ],
-  ans: 1,
-  fb: "Correcto. Los insumos son el ejemplo más claro de Costo Variable: a mayor producción, mayor costo total de ingredientes. Si no se produce, este costo es cero."
-},
-{
-  sec: null, type: "mc",
-  text: "La factura de gas tiene un cargo fijo mensual obligatorio MÁS un componente que aumenta en temporada alta porque la cocina trabaja más horas. ¿Cómo se clasifica?",
-  opts: [
-    "Costo Fijo Puro, porque es un servicio mensual.",
-    "Costo Variable Puro, porque depende del consumo.",
-    "Costo Mixto o Semifijo, porque tiene una parte fija (obligación contractual) y una parte variable (consumo real).",
-    "Gasto Administrativo."
-  ],
-  ans: 2,
-  fb: "Muy bien. Luz, Gas y Agua son costos Mixtos o Semifijos: tienen un cargo fijo inamovible (la obligación mensual del servicio) más un componente variable que sube con el consumo. Esto los diferencia del internet, que es puramente fijo."
-},
-{
-  sec: null, type: "mc",
-  text: "Los honorarios del contador externo del restaurante ($300.000/mes) son:",
-  opts: [
-    "Costo de Materia Prima, porque el contador produce informes.",
-    "Gasto Administrativo, porque es una erogación destinada a la administración del negocio y no puede asignarse directamente a un plato.",
-    "Costo Fijo de Producción (CIF), porque beneficia a toda la operación.",
-    "Costo Variable Indirecto."
-  ],
-  ans: 1,
-  fb: "Correcto. El honorario del contador es un GASTO Administrativo, no un costo de producción. Regla: no se le puede asignar directamente a ningún plato. El gasto se consume en el período y no se recupera con una venta específica."
-},
-{
-  sec: null, type: "mc",
-  text: "La empresa compra una nueva amasadora industrial por $2.000.000 para mejorar la producción de pastas. Esta erogación se clasifica como:",
-  opts: [
-    "Costo Variable de Producción.",
-    "Gasto de Comercialización.",
-    "Inversión, porque se asigna a un activo que generará beneficios futuros y se recupera mediante amortizaciones mensuales.",
-    "Costo Fijo mensual completo."
-  ],
-  ans: 2,
-  fb: "Exactamente. La compra de equipamiento es una INVERSIÓN. El desembolso se activa como un activo y su costo se recupera gradualmente vía amortización mensual (ej. $2.000.000 ÷ 60 meses = $33.333/mes de amortización)."
-},
-{
-  sec: null, type: "tf",
-  text: "El salario de los cocineros que trabajan directamente en la línea de producción se clasifica como Mano de Obra Directa (MOD). Es un costo, no un gasto.",
-  ans: true,
-  fb: "Verdadero. La MOD incluye el trabajo humano aplicado exclusivamente a la producción. Los cocineros de la línea son MOD. En cambio, el sueldo de un administrativo sería un Gasto, porque no interviene en la producción del plato."
-},
-{
-  sec: null, type: "mc",
-  text: "Las comisiones de aplicaciones de delivery ($200.000/mes promedio) y las comisiones de tarjetas ($226.000/mes promedio) son costos:",
-  opts: [
-    "Fijos, porque se pagan todos los meses.",
-    "Variables, porque aumentan en proporción al volumen de ventas realizadas.",
-    "Mixtos, porque tienen una cuota fija y una variable.",
-    "De Materia Prima."
-  ],
-  ans: 1,
-  fb: "Correcto. Estas comisiones son Variables y de Comercialización: si no hay ventas, no hay comisión. Cuantas más ventas, mayor el total a pagar. Son proporcionales al nivel de actividad."
-},
-{
-  sec: null, type: "mc",
-  text: "Al hacer el inventario semanal, el sistema indica 20 kg de salmón en stock (stock teórico), pero la cámara física tiene solo 15 kg. ¿Cómo se denomina la diferencia de 5 kg?",
-  opts: [
-    "Costo Fijo de Almacenamiento.",
-    "Costo Oculto: surge de la brecha entre el stock teórico y el stock físico real. Erosiona directamente la ganancia.",
-    "Gasto de Comercialización.",
-    "Costo Variable de Producción esperado."
-  ],
-  ans: 1,
-  fb: "Exacto. El Costo Oculto es la brecha entre lo que debería haber (teórico del sistema) y lo que realmente hay (físico en cámara). Sus causas: mermas no reportadas, mala manipulación, vencimientos por no aplicar PEPS y robos. Se descubre en la auditoría de inventarios."
-},
-
-/* ──────── BLOQUE II: COMPORTAMIENTO DE COSTOS ──────── */
-{
-  sec: "BLOQUE II · Comportamiento de Costos — La Pizzería de la Esquina",
-  scen: {
-    title: "DATOS DE LA EMPRESA",
-    body: "La pizzería tiene <strong>Costos Fijos Totales de $20.000</strong> sin importar cuántas pizzas produzca. Cada pizza producida genera un <strong>Costo Variable Unitario de $200.000</strong>.",
-    note: "Usá estos datos para resolver las preguntas P09 a P13."
-  },
-  type: "numeric",
-  text: "Si se producen 3 pizzas en el turno, ¿cuál es el Costo Total?",
-  hint: "CT = Costos Fijos Totales + Costos Variables Totales",
-  ans: 620000, tol: 0,
-  unit: "$",
-  fb: "CT = $20.000 (CF) + ($200.000 × 3) = $20.000 + $600.000 = <strong>$620.000</strong>. Los costos fijos no cambian; los variables se multiplican por la cantidad producida."
-},
-{
-  sec: null, type: "numeric",
-  text: "Si se producen 5 pizzas, ¿cuál es el Costo Fijo Unitario (CFU)?",
-  hint: "CFU = Costos Fijos Totales ÷ Cantidad de Unidades Producidas",
-  ans: 4000, tol: 0,
-  unit: "$",
-  fb: "CFU = $20.000 ÷ 5 = <strong>$4.000 por pizza</strong>. A medida que producís más unidades, el mismo costo fijo se reparte entre más pizzas y por eso el CFU baja."
-},
-{
-  sec: null, type: "numeric",
-  text: "Si se producen 8 pizzas, ¿cuál es el Costo Variable Unitario (CVU)?",
-  hint: "El CVU es constante. No depende de la cantidad producida.",
-  ans: 200000, tol: 0,
-  unit: "$",
-  fb: "CVU = <strong>$200.000 siempre</strong>, sin importar si producís 1 o 10 pizzas. El costo variable unitario no cambia. Lo que cambia es el Costo Variable TOTAL (CVT = CVU × cantidad)."
-},
-{
-  sec: null, type: "mc",
-  text: "A medida que aumenta la cantidad producida, el Costo Fijo Unitario (CFU = CF ÷ Q):",
-  opts: [
-    "Aumenta, porque hay más producción que administrar.",
-    "Se mantiene constante, como el CVU.",
-    "Disminuye y tiende a cero, porque un valor fijo se divide entre cada vez más unidades.",
-    "Se vuelve igual al costo variable unitario."
-  ],
-  ans: 2,
-  fb: "Correcto. CFU = CF ÷ Q. El numerador (CF) es fijo; el denominador (Q) crece. Resultado: el CFU se achica cada vez más. Ejemplo: CF $20.000 con Q=1 → CFU $20.000; con Q=10 → CFU $2.000; con Q=100 → CFU $200. Tiende a cero pero nunca llega."
-},
-{
-  sec: null, type: "mc",
-  text: "Cuando la producción es muy alta, el Costo Total Unitario (CTU = CFU + CVU) tiende a:",
-  opts: [
-    "Cero, porque se reparte entre muchas unidades.",
-    "El Costo Fijo Unitario, porque domina la producción.",
-    "El Costo Variable Unitario, porque el CFU se diluye hasta casi desaparecer.",
-    "El doble del costo variable."
-  ],
-  ans: 2,
-  fb: "Exacto. CTU = CFU + CVU. A mayor producción, CFU → 0. Entonces: CTU = (algo → 0) + CVU constante. Por eso el CTU se acerca cada vez más al CVU. Como dice el apunte: 'el costo fijo deja de influir por unidad; el único que realmente queda es el variable'."
-},
-
-/* ──────── BLOQUE III: CÁLCULOS PRÁCTICOS ──────── */
-{
-  sec: "BLOQUE III · Cálculos Prácticos — La Pasta del Puerto",
-  scen: {
-    title: "CONTEXTO DEL EJERCICIO",
-    body: "Un restaurante de pastas llamado <strong>La Pasta del Puerto</strong> te contrata como gestor de costos. Estos son sus datos del mes:",
-    rows: [
-      ["Alquiler del salón", "$400.000 / mes"],
-      ["Sueldo del cocinero", "$300.000 / mes"],
-      ["Internet y teléfono", "$20.000 / mes"],
-      ["Ingredientes por porción", "$900 (costo directo)"],
-      ["Envase take-away por porción", "$100"],
-      ["Producción del mes", "800 porciones vendidas"],
-      ["Food Cost objetivo", "30%"],
-    ],
-    note: "Usá estos datos para resolver las preguntas P14 a P21."
-  },
-  type: "numeric",
-  text: "¿Cuál es el Costo Variable Unitario (CVu) por porción?",
-  hint: "CVu = suma de todos los costos variables que aplican a UNA unidad",
-  ans: 1000, tol: 0,
-  unit: "$",
-  fb: "CVu = Ingredientes + Envase = $900 + $100 = <strong>$1.000 por porción</strong>. Este es el costo que 'sale' de la cocina con cada plato vendido."
-},
-{
-  sec: null, type: "numeric",
-  text: "¿Cuál es el Costo Variable Total (CVT) del mes con 800 porciones?",
-  hint: "CVT = CVu × Cantidad de unidades producidas",
-  ans: 800000, tol: 0,
-  unit: "$",
-  fb: "CVT = $1.000 × 800 porciones = <strong>$800.000</strong>. El costo variable total escala en proporción directa con las ventas. Si vendieran 1.600 porciones, el CVT sería $1.600.000."
-},
-{
-  sec: null, type: "numeric",
-  text: "¿Cuál es el Costo Fijo Total (CFT) del mes?",
-  hint: "CFT = suma de todos los costos que se pagan sin importar la producción",
-  ans: 720000, tol: 0,
-  unit: "$",
-  fb: "CFT = Alquiler + Sueldo cocinero + Internet = $400.000 + $300.000 + $20.000 = <strong>$720.000</strong>. Estos costos se pagan igual si se venden 0 o 800 porciones."
-},
-{
-  sec: null, type: "numeric",
-  text: "¿Cuál es el Costo Total (CT) del mes?",
-  hint: "CT = CVT + CFT",
-  ans: 1520000, tol: 0,
-  unit: "$",
-  fb: "CT = CVT + CFT = $800.000 + $720.000 = <strong>$1.520.000</strong>. Este es el total de dinero que \"sale\" del negocio en el mes para producir las 800 porciones."
-},
-{
-  sec: null, type: "numeric",
-  text: "Usando el método del Food Cost al 30%, ¿cuál debe ser el Precio de Venta (PV) por porción? (Solo el costo de ingredientes aplica como base)",
-  hint: "PV = Costo Ingredientes ÷ Food Cost deseado  →  PV = $900 ÷ 0,30",
-  ans: 3000, tol: 0,
-  unit: "$",
-  fb: "PV = $900 ÷ 0,30 = <strong>$3.000 por porción</strong>. Esto garantiza que los ingredientes representen exactamente el 30% del precio final. El 70% restante cubre mano de obra, costos fijos y genera ganancia."
-},
-{
-  sec: null, type: "numeric",
-  text: "Con ese Precio de Venta, ¿cuál es la Contribución Marginal Unitaria (CMu)?",
-  hint: "CMu = Precio de Venta − Costo Variable Unitario",
-  ans: 2000, tol: 0,
-  unit: "$",
-  fb: "CMu = $3.000 − $1.000 = <strong>$2.000 por porción</strong>. Esta es la cantidad que \"queda limpia\" de cada venta para ir pagando los costos fijos. Cada porción vendida aporta $2.000 a la \"bolsa\" que cubre el alquiler, sueldos y servicios."
-},
-{
-  sec: null, type: "numeric",
-  text: "¿Cuántas porciones debe vender el restaurante para alcanzar el Punto de Equilibrio (PE)?",
-  hint: "PE (unidades) = Costos Fijos Totales ÷ Contribución Marginal Unitaria",
-  ans: 360, tol: 0,
-  unit: "porciones",
-  fb: "PE = $720.000 ÷ $2.000 = <strong>360 porciones</strong>. Hasta la porción 360, cada venta solo cubre costos. Desde la porción 361 en adelante, el negocio empieza a generar ganancia real."
-},
-{
-  sec: null, type: "mc",
-  text: "El restaurante vendió 800 porciones este mes. Su Punto de Equilibrio es 360 porciones. ¿Qué significa esto económicamente?",
-  opts: [
-    "El negocio perdió dinero porque superó el punto de equilibrio.",
-    "El negocio sobrevivió pero sin ganancia, ya que llegó exactamente al PE.",
-    "Las primeras 360 porciones cubrieron todos los costos fijos. Las 440 porciones restantes (800 − 360) generaron ganancia pura de $880.000.",
-    "El precio de venta debe bajarse porque se vendió de más."
-  ],
-  ans: 2,
-  fb: "Exacto. Ganancia = (800 − 360) × CMu = 440 × $2.000 = <strong>$880.000 de ganancia real</strong>. Esta es la lógica del PE: una vez que la CMu acumulada 'completó la pared' de costos fijos, cada venta adicional es rentabilidad pura para el propietario."
-},
-{
-  sec: null, type: "mc",
-  text: "Siguiendo con La Pasta del Puerto: Si por un problema el local cierra unos días y solo logra vender 300 porciones en el mes (recordá que su PE es 360 porciones y su CMu es $2.000). ¿Cuál fue el resultado económico?",
-  opts: [
-    "Ganaron $600.000, porque 300 x $2.000 = $600.000.",
-    "Perdieron dinero. Exactamente $120.000 de pérdida.",
-    "Salieron 'hechos' (ni ganaron ni perdieron)."
-  ],
-  ans: 1,
-  fb: "Exacto. Al faltar 60 porciones para llegar al Punto de Equilibrio (360 − 300 = 60), esas 60 porciones a $2.000 de CMu cada una representan el dinero faltante: $120.000 de pérdida."
-},
-{
-  sec: null, type: "tf",
-  text: "Opciones para mejorar: Para AUMENTAR nuestra Contribución Marginal Unitaria, una excelente estrategia sería buscar un proveedor de materia prima más barato sin perder calidad, bajando así el Costo Variable Unitario.",
-  ans: true,
-  fb: "Verdadero. Si bajás el Costo Variable Unitario (ingredientes) y mantenés el Precio de Venta, la Contribución Marginal (lo que te queda limpio por plato) crece automáticamente."
-},
-{
-  sec: null, type: "tf",
-  text: "Opciones para mejorar: Bajar el sueldo del cocinero o mudarnos a un local con alquiler más barato hace que nuestra Contribución Marginal UNITARIA aumente.",
-  ans: false,
-  fb: "Falso. Bajar alquileres o sueldos achica los COSTOS FIJOS, lo cual baja tu Punto de Equilibrio, pero NO cambia tu Contribución Marginal por plato."
-},
-{
-  sec: null, type: "tf",
-  text: "Opciones para mejorar: Aumentar el Precio de Venta del plato al cliente es otra forma directa de mejorar la Contribución Marginal Unitaria.",
-  ans: true,
-  fb: "Verdadero. Si el cliente te paga más caro (y tus costos son los mismos), te queda una porción de dinero más grande 'limpia' por cada plato."
-},
-/* ──────── BLOQUE IV: ANÁLISIS RÁPIDO ──────── */
-{
-  sec: "BLOQUE IV · Análisis Rápido",
-  scen: {
-    title: "DATOS DEL CASO",
-    body: "Una cafetería tiene <strong>Costos Fijos Totales de $50.000</strong> por día. El costo de los ingredientes y el vaso (<strong>Costo Variable Unitario</strong>) es de <strong>$500</strong> por cada café preparado.",
-    note: "Completá los valores solicitados pensando en el comportamiento de los costos fijos y variables."
-  },
-  type: "numeric",
-  text: "Si hoy preparan 10 cafés, ¿cuál es el Costo Variable Total?",
-  hint: "Multiplicá la cantidad por el costo variable de cada café.",
-  ans: 5000, tol: 0,
-  unit: "$",
-  fb: "Correcto. 10 cafés × $500 = <strong>$5.000</strong>."
-},
-{
-  sec: null, type: "numeric",
-  text: "Si preparan 10 cafés, ¿a cuánto ascienden los Costos Fijos Totales del día?",
-  hint: "Recordá la definición de Costo Fijo.",
-  ans: 50000, tol: 0,
-  unit: "$",
-  fb: "Exacto. Los Costos Fijos Totales son siempre <strong>$50.000</strong>, sin importar si preparan 10 o 100 cafés."
-},
-{
-  sec: null, type: "numeric",
-  text: "Si en un día excelente preparan 100 cafés, ¿cuál es el Costo Fijo Unitario (CFU)?",
-  hint: "Repartí el costo fijo total entre la cantidad de cafés.",
-  ans: 500, tol: 0,
-  unit: "$",
-  fb: "Muy bien. $50.000 ÷ 100 cafés = <strong>$500</strong>. Al vender más, el peso del costo fijo en cada café es mucho menor."
-},
-{
-  sec: null, type: "mc",
-  text: "¿Qué pasaría si la cafetería no abre un día por feriado y vende 0 cafés?",
-  opts: [
-    "No tiene ningún costo ese día.",
-    "El Costo Variable Total es $0, pero igual debe asumir los $50.000 de Costos Fijos.",
-    "Tendrá que pagar el doble de costos al día siguiente."
-  ],
-  ans: 1,
-  fb: "Exactamente. Si la producción es cero, el Costo Variable es $0 (no gastás café ni vasos). Pero los Costos Fijos ($50.000 de alquiler y sueldos) se siguen devengando."
-},
-{
-  sec: null, type: "tf",
-  text: "El Costo Variable Unitario ($500 por café) se mantiene constante sin importar cuántos cafés se vendan en el día.",
-  ans: true,
-  fb: "Verdadero. El costo por unidad no cambia (cada café siempre gasta $500 en insumos). Lo que aumenta en total es el Costo Variable TOTAL a medida que hacés más cafés."
-},
-/* ──────── BLOQUE V: CLASIFICACIÓN GUIADA ──────── */
-{
-  sec: "BLOQUE V · Clasificación Guiada",
-  scen: {
-    title: "CASO: LA HAMBURGUESERÍA",
-    body: "Clasificá los siguientes conceptos del local de hamburguesas en <strong>Costo Fijo</strong>, <strong>Costo Variable</strong> o <strong>Gasto</strong>.",
-    note: "Leé atentamente la guía que acompaña a cada pregunta para deducir la respuesta."
-  },
-  type: "mc",
-  text: "El <strong>Pan de papa</strong> cuesta $300 por unidad. ¿Cómo se clasifica?",
-  hint: "Guía: Pensá en la palabra 'producción'. Si producís más hamburguesas, consumís más panes.",
-  opts: ["Costo Fijo", "Costo Variable", "Gasto"],
-  ans: 1,
-  fb: "Correcto. Como depende directamente de la cantidad de hamburguesas producidas, es un Costo Variable."
-},
-{
-  sec: null, type: "mc",
-  text: "El <strong>Alquiler del local</strong> sale $400.000 por mes.",
-  hint: "Guía: Pensá en la palabra 'tiempo'. Se paga por mes, sin importar si vendés mucho o poco.",
-  opts: ["Costo Fijo", "Costo Variable", "Gasto"],
-  ans: 0,
-  fb: "Exacto. Es un Costo Fijo porque permanece constante frente a los cambios en el nivel de actividad."
-},
-{
-  sec: null, type: "mc",
-  text: "El <strong>Queso cheddar</strong> cuesta $200 por unidad (feta).",
-  hint: "Guía: Pensá en los 'ingredientes'. Todo ingrediente del plato varía con las ventas.",
-  opts: ["Costo Fijo", "Costo Variable", "Gasto"],
-  ans: 1,
-  fb: "Muy bien. El queso es materia prima directa, por ende es un Costo Variable."
-},
-{
-  sec: null, type: "mc",
-  text: "El <strong>Sueldo del cocinero</strong> es de $350.000 por mes.",
-  hint: "Guía: Pensá en 'fijo mensual'. Es mano de obra de producción, pero cobra un sueldo estable todos los meses.",
-  opts: ["Costo Fijo", "Costo Variable", "Gasto"],
-  ans: 0,
-  fb: "Correcto. El cocinero es Mano de Obra Directa (Costo), y como cobra un salario mensual fijo independientemente de los platos que saque, su comportamiento es de Costo Fijo."
-},
-{
-  sec: null, type: "mc",
-  text: "El pago de <strong>Internet y Teléfono</strong> por $25.000 al mes.",
-  hint: "Guía: Pensá en 'administración'. No se usa directamente para cocinar la hamburguesa.",
-  opts: ["Costo Fijo de Producción", "Costo Variable", "Gasto (Administrativo)"],
-  ans: 2,
-  fb: "Perfecto. Es un Gasto porque es una erogación necesaria para administrar el local, pero no se incorpora al producto final."
-},
-{
-  sec: null, type: "mc",
-  text: "La <strong>Publicidad en Instagram</strong> por $15.000 al mes.",
-  hint: "Guía: Pensá en 'comercialización'. Ayuda a vender, pero no es parte de la receta.",
-  opts: ["Costo Fijo", "Costo Variable", "Gasto (Comercial)"],
-  ans: 2,
-  fb: "Exactamente. La publicidad es un Gasto de Comercialización. No es un costo de producción porque no interviene en la cocina."
-}
-
-];
-
-// ── Estado
-let nombre = '';
-let answers = {};
-let confirmed = {};
-let score = 0;
-
-function startQuiz() {
-  const n = document.getElementById('nameInput').value.trim();
-  if (!n) { document.getElementById('nameInput').style.borderColor = 'var(--red)'; return; }
-  nombre = n;
-  document.getElementById('cover').style.display = 'none';
-  document.getElementById('quiz').style.display = 'block';
-  renderQuestions();
-  updatePB();
-}
-
-function renderQuestions() {
-  const c = document.getElementById('qContainer');
-  c.innerHTML = '';
-  let lastSec = null;
-
-  QS.forEach((q, i) => {
-    // Section header
-    if (q.sec && q.sec !== lastSec) {
-      lastSec = q.sec;
-      const [tag, ...rest] = q.sec.split(' · ');
-      const sh = document.createElement('div');
-      sh.className = 'sec-header';
-      sh.innerHTML = `<div class="sec-num">${'I'.repeat(Math.min(i,3)+1).replace(/I{4}/,'IV').replace(/I{3}/,'III').replace(/I{2}/,'II')}</div>
-        <div class="sec-info"><div class="sec-tag">${tag}</div><div class="sec-title">${rest.join(' · ')}</div></div>`;
-      // Fix roman numerals
-      const rm = ['I','II','III','IV','V'];
-      const idx = ['BLOQUE I','BLOQUE II','BLOQUE III','BLOQUE IV','BLOQUE V'].findIndex(b => q.sec.startsWith(b));
-      sh.querySelector('.sec-num').textContent = rm[idx] ?? rm[0];
-      c.appendChild(sh);
-    }
-
-    // Scenario box
-    if (q.scen) {
-      const sb = document.createElement('div');
-      sb.className = 'scenario-box';
-      let inner = `<div class="scenario-title">📋 ${q.scen.title}</div><p>${q.scen.body}</p>`;
-      if (q.scen.rows) {
-        inner += `<table class="scenario-table">`;
-        q.scen.rows.forEach(([k,v], ri) => {
-          const hl = ri >= q.scen.rows.length - 2 ? ' class="hl"' : '';
-          inner += `<tr${hl}><td>${k}</td><td>${v}</td></tr>`;
-        });
-        inner += `</table>`;
-      }
-      if (q.scen.note) inner += `<p style="margin-top:12px;font-size:12px;color:var(--muted)">${q.scen.note}</p>`;
-      sb.innerHTML = inner;
-      c.appendChild(sb);
-    }
-
-    const card = document.createElement('div');
-    card.className = 'q-card';
-    card.id = `card-${i}`;
-
-    let html = `<div class="q-meta">
-      <span class="q-badge">P${String(i+1).padStart(2,'0')}</span>
-      <span class="q-type">${{mc:'Opción múltiple',tf:'Verdadero / Falso',numeric:'Cálculo'}[q.type]}</span>
+  <!-- Simulacro 2 -->
+  <a href="simulacro2.html" class="act-card featured">
+    <div class="act-icon">☕</div>
+    <div class="act-tag">Simulacro de Parcial</div>
+    <div class="act-name">Simulacro 2: El Mentidero</div>
+    <div class="act-desc">Caso de cafetería con análisis presupuestario, Food Cost, contribución marginal y punto de equilibrio con gráficos.</div>
+    <div class="act-meta">
+      <span>20 preguntas</span>
+      <span class="dot"></span>
+      <span>MC · V/F · Cálculo</span>
+      <span class="act-arrow">→</span>
     </div>
-    <div class="q-text">${q.text}</div>`;
+  </a>
 
-    if (q.hint) html += `<div class="q-hint">📐 ${q.hint}</div>`;
+  <!-- Evaluación General -->
+  <a href="evaluacion.html" class="act-card">
+    <div class="act-icon">📝</div>
+    <div class="act-tag">Evaluación Integral</div>
+    <div class="act-name">Evaluación General</div>
+    <div class="act-desc">Evaluación completa con 5 bloques: clasificación, comportamiento, cálculos prácticos, análisis rápido y clasificación guiada.</div>
+    <div class="act-meta">
+      <span>36 preguntas</span>
+      <span class="dot"></span>
+      <span>5 bloques</span>
+      <span class="act-arrow">→</span>
+    </div>
+  </a>
 
-    if (q.type === 'mc') {
-      html += `<div class="opts">` + q.opts.map((o,j) =>
-        `<div class="opt" id="o-${i}-${j}" onclick="pickOpt(${i},${j})">
-          <span class="opt-key">${String.fromCharCode(65+j)}</span><span>${o}</span>
-        </div>`).join('') + `</div>`;
-    } else if (q.type === 'tf') {
-      html += `<div class="tf-row">
-        <button class="tf-btn" id="tf-${i}-t" onclick="pickTF(${i},true)">✓ Verdadero</button>
-        <button class="tf-btn" id="tf-${i}-f" onclick="pickTF(${i},false)">✗ Falso</button>
-      </div>`;
-    } else {
-      html += `<div class="num-wrap">
-        <input class="num-in" id="ni-${i}" type="number" step="any" placeholder="0"
-          oninput="pickNum(${i})" onkeydown="if(event.key==='Enter')confirm(${i})">
-        <span class="num-unit">${q.unit}</span>
-      </div>`;
-    }
+  <!-- Examen CM y PE -->
+  <a href="examen_cm_pe.html" class="act-card">
+    <div class="act-icon">📊</div>
+    <div class="act-tag">Práctica Específica</div>
+    <div class="act-name">Receta Rentabilidad (CM y PE)</div>
+    <div class="act-desc">Ejercitación focalizada en Contribución Marginal y Punto de Equilibrio con tres casos prácticos de resolución paso a paso.</div>
+    <div class="act-meta">
+      <span>21 preguntas</span>
+      <span class="dot"></span>
+      <span>Teoría + Casos</span>
+      <span class="act-arrow">→</span>
+    </div>
+  </a>
 
-    html += `<button class="btn-conf" id="bc-${i}" onclick="confirm(${i})" disabled>Confirmar →</button>`;
-    html += `<div class="fb" id="fb-${i}"></div>`;
+  <!-- TP Gráficos -->
+  <a href="tp_graficos_pe.html" class="act-card">
+    <div class="act-icon">📈</div>
+    <div class="act-tag">Trabajo Práctico</div>
+    <div class="act-name">TP Gráficos de PE</div>
+    <div class="act-desc">Trabajo práctico con gráficos interactivos del Punto de Equilibrio. Visualización de zonas de ganancia y pérdida.</div>
+    <div class="act-meta">
+      <span>13 preguntas</span>
+      <span class="dot"></span>
+      <span>Gráficos interactivos</span>
+      <span class="act-arrow">→</span>
+    </div>
+  </a>
 
-    card.innerHTML = html;
-    c.appendChild(card);
-  });
-}
+  <!-- Campus Teórico -->
+  <a href="campus.html" class="act-card">
+    <div class="act-icon">📚</div>
+    <div class="act-tag">Material de Estudio</div>
+    <div class="act-name">Campus Teórico</div>
+    <div class="act-desc">Módulos de estudio con teoría y autoevaluaciones por tema. Ideal para repasar antes de los simulacros.</div>
+    <div class="act-meta">
+      <span>Teoría + Quiz</span>
+      <span class="dot"></span>
+      <span>Autoestudio</span>
+      <span class="act-arrow">→</span>
+    </div>
+  </a>
 
-function pickOpt(qi, oi) {
-  if (confirmed[qi]) return;
-  answers[qi] = oi;
-  document.querySelectorAll(`[id^="o-${qi}-"]`).forEach((el,j) => el.classList.toggle('selected', j===oi));
-  document.getElementById(`bc-${qi}`).disabled = false;
-}
+</div>
 
-function pickTF(qi, val) {
-  if (confirmed[qi]) return;
-  answers[qi] = val;
-  document.getElementById(`tf-${qi}-t`).classList.toggle('sel', val===true);
-  document.getElementById(`tf-${qi}-f`).classList.toggle('sel', val===false);
-  document.getElementById(`bc-${qi}`).disabled = false;
-}
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer class="campus-footer">
+  IFTS N°23 · Costos y Presupuestos · 2025<br>
+  <a href="dashboard.html" style="margin-top:8px;display:inline-block;">Panel docente →</a>
+</footer>
 
-function pickNum(qi) {
-  if (confirmed[qi]) return;
-  const v = document.getElementById(`ni-${qi}`).value;
-  if (v !== '') { answers[qi] = parseFloat(v); document.getElementById(`bc-${qi}`).disabled = false; }
-}
-
-function confirm(qi) {
-  if (confirmed[qi] || answers[qi] === undefined) return;
-  confirmed[qi] = true;
-  document.getElementById(`bc-${qi}`).disabled = true;
-  const q = QS[qi];
-  let ok = false;
-
-  if (q.type === 'mc') {
-    ok = answers[qi] === q.ans;
-    document.querySelectorAll(`[id^="o-${qi}-"]`).forEach((el,j) => {
-      el.classList.add('disabled');
-      if (j === q.ans) el.classList.add('correct-opt');
-      else if (j === answers[qi] && !ok) el.classList.add('wrong-opt');
-    });
-  } else if (q.type === 'tf') {
-    ok = answers[qi] === q.ans;
-    const bt = document.getElementById(`tf-${qi}-t`);
-    const bf = document.getElementById(`tf-${qi}-f`);
-    bt.classList.add('disabled'); bf.classList.add('disabled');
-    (q.ans ? bt : bf).classList.add('tf-ok');
-    if (!ok) (answers[qi] ? bt : bf).classList.add('tf-err');
-  } else {
-    ok = Math.abs(answers[qi] - q.ans) <= q.tol;
-    const inp = document.getElementById(`ni-${qi}`);
-    inp.classList.add(ok ? 'ok' : 'err');
-    inp.disabled = true;
-  }
-
-  if (ok) score++;
-
-  const fb = document.getElementById(`fb-${qi}`);
-  fb.className = `fb ${ok ? 'ok-fb' : 'err-fb'}`;
-  
-  let feedbackText = q.fb;
-  if (!ok) {
-    feedbackText = feedbackText.replace(/^(Exacto|Correcto|Muy bien|Exactamente|Verdadero)\.\s*/i, '');
-  }
-  
-  fb.innerHTML = (ok ? '✓ ' : '✗ <strong>Incorrecto.</strong> ') + feedbackText +
-    (!ok && q.type === 'numeric' ? ` → <strong>Respuesta correcta: ${q.ans.toLocaleString('es-AR')} ${q.unit}</strong>` : '');
-
-  updatePB();
-  if (Object.keys(confirmed).length === QS.length) {
-    const btn = document.getElementById('btnFinish');
-    btn.style.display = 'block';
-    setTimeout(() => btn.scrollIntoView({behavior:'smooth',block:'center'}), 300);
-  }
-}
-
-function updatePB() {
-  const done = Object.keys(confirmed).length;
-  document.getElementById('pbFill').style.width = `${done/QS.length*100}%`;
-  document.getElementById('pbTxt').textContent = `${done} / ${QS.length}`;
-  document.getElementById('scorePill').textContent = `Puntaje: ${score}`;
-}
-
-function showResults() {
-  document.getElementById('quiz').style.display = 'none';
-  document.getElementById('results').style.display = 'block';
-  window.scrollTo(0,0);
-
-  const pct = Math.round(score/QS.length*100);
-  let grade, cls;
-  if (pct>=90){grade='10';cls='grade-10';}
-  else if(pct>=75){grade='8';cls='grade-8';}
-  else if(pct>=60){grade='6';cls='grade-6';}
-  else{grade='4';cls='grade-4';}
-
-  const grEl = document.getElementById('resGrade');
-  grEl.textContent = grade; grEl.className = `res-grade ${cls}`;
-  document.getElementById('resName').textContent = nombre;
-  document.getElementById('resMsg').textContent =
-    pct>=90 ? '¡Excelente! Dominás los conceptos fundamentales de costos y food cost.' :
-    pct>=75 ? 'Muy bien. Revisá los temas donde cometiste errores antes del examen.' :
-    pct>=60 ? 'Aprobado, pero hay conceptos clave para repasar.' :
-    'Te recomendamos releer el apunte y volver a practicar.';
-
-  document.getElementById('stC').textContent = score;
-  document.getElementById('stW').textContent = QS.length - score;
-  document.getElementById('stP').textContent = pct + '%';
-
-  const rc = document.getElementById('revContainer');
-  rc.innerHTML = '';
-  QS.forEach((q,i) => {
-    const a = answers[i];
-    let ok;
-    if(q.type==='mc'||q.type==='tf') ok = a===q.ans;
-    else ok = Math.abs(a-q.ans)<=q.tol;
-
-    let detail;
-    if(q.type==='mc'){
-      ok ? detail=`<span class="ok">✓ Opción ${String.fromCharCode(65+q.ans)} correcta</span>`
-         : detail=`<span class="bad">✗ Respondiste: ${a!==undefined?String.fromCharCode(65+a):'—'}</span> · <span class="ans">Correcta: ${String.fromCharCode(65+q.ans)}</span>`;
-    } else if(q.type==='tf'){
-      ok ? detail=`<span class="ok">✓ ${q.ans?'Verdadero':'Falso'} — correcto</span>`
-         : detail=`<span class="bad">✗ Respondiste: ${a?'Verdadero':'Falso'}</span> · <span class="ans">Correcta: ${q.ans?'Verdadero':'Falso'}</span>`;
-    } else {
-      ok ? detail=`<span class="ok">✓ ${(a||0).toLocaleString('es-AR')} ${q.unit} — correcto</span>`
-         : detail=`<span class="bad">✗ Respondiste: ${a!==undefined?(a).toLocaleString('es-AR'):'—'} ${q.unit}</span> · <span class="ans">Correcta: ${q.ans.toLocaleString('es-AR')} ${q.unit}</span>`;
-    }
-
-    const d = document.createElement('div');
-    d.className = `rev-item ${ok?'rok':'rerr'}`;
-    d.innerHTML = `<div class="rev-q">P${String(i+1).padStart(2,'0')} — ${q.text}</div><div class="rev-d">${detail}</div>`;
-    rc.appendChild(d);
-  });
-
-  // Enviar a Supabase
-  if (supabaseClient) {
-    const failedQs = [];
-    QS.forEach((q,i) => {
-      const a = answers[i];
-      let ok = (q.type==='mc'||q.type==='tf') ? a===q.ans : Math.abs(a-q.ans)<=q.tol;
-      if (!ok) {
-        let ansStr = 'Sin responder';
-        if (a !== undefined) {
-          if (q.type === 'mc') ansStr = String.fromCharCode(65 + a);
-          else if (q.type === 'tf') ansStr = a ? 'Verdadero' : 'Falso';
-          else ansStr = a + (q.unit ? ' ' + q.unit : '');
-        }
-        failedQs.push(`P${String(i+1).padStart(2,'0')}||${ansStr}`);
-      }
-    });
-    supabaseClient.from('exam_resultados').insert([
-      { nombre: nombre, puntaje: score, total: QS.length, porcentaje: pct, errores: failedQs.join(', ') }
-    ]).then(res => { if(res.error) console.error('Supabase Error:', res.error); });
-  }
-}
-
-function retry() {
-  answers={}; confirmed={}; score=0;
-  document.getElementById('results').style.display='none';
-  document.getElementById('quiz').style.display='block';
-  document.getElementById('btnFinish').style.display='none';
-  window.scrollTo(0,0);
-  renderQuestions();
-  updatePB();
-}
-</script>
 </body>
 </html>

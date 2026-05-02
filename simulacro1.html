@@ -118,7 +118,7 @@ canvas.ch{width:100%!important;height:290px!important;display:block}
 
 /* FOOT */
 .exam-foot{display:flex;justify-content:flex-end;margin-top:32px}
-.btn-fin{display:none;background:var(--gold);color:#0b0d09;font-family:var(--display);font-weight:900;font-size:12px;padding:14px 44px;border:none;border-radius:4px;cursor:pointer;transition:all .15s}
+.btn-fin{display:block;background:var(--gold);color:#0b0d09;font-family:var(--display);font-weight:900;font-size:12px;padding:14px 44px;border:none;border-radius:4px;cursor:pointer;transition:all .15s}
 .btn-fin:hover{background:var(--gold2);transform:translateY(-2px)}
 
 /* RESULTS */
@@ -420,7 +420,7 @@ function render(){
     }
     h+=`<button class="btn-c" id="bc-${q.id}" onclick="cfm('${q.id}')" ${ans[q.id]!==undefined && !conf[q.id] ? '' : 'disabled'}>${conf[q.id]?'✓ Corregido':'Confirmar Respuesta'}</button>`;
     
-    if(conf[q.id]) {
+    if(conf[q.id] && q.type==='numeric') {
        h += `<button class="btn-c" style="margin-left:10px; border-color:var(--muted); color:var(--muted);" onclick="unlock('${q.id}')">✏️ Editar</button>`;
     }
 
@@ -452,9 +452,9 @@ function cfm(id){
   corr[id]=ok; if(ok)score++;
   render();upd();save();
   
+  // Scroll to bottom to remind them to submit
   if(Object.keys(conf).length===TOTAL){
     const b=document.getElementById('bfin');
-    b.style.display='block';
     setTimeout(()=>b.scrollIntoView({behavior:'smooth',block:'center'}),300);
   }
 }
@@ -518,11 +518,12 @@ async function showRes(){
     const d=document.createElement('div');d.className=`ri ${ok?'rok':'rerr'}`;
     d.innerHTML=`<div class="ri-q">P${String(i+1).padStart(2,'0')} — ${q.text}</div><div class="ri-d">${det}</div>`;rc.appendChild(d);
   });
-  // Save to Supabase
+  // Save to Supabase and clear progress
+  localStorage.removeItem('simulacro1_progress');
   try{await SB.from('exam_resultados').insert({nombre: nombre, puntaje: score, total: TOTAL, porcentaje: pct, errores: failedQs.length ? 'S1: ' + failedQs.join(', ') : 'S1: OK' });}catch(e){console.warn('Supabase error:',e);}
 }
 
-function retry(){ans={};conf={};corr={};score=0;document.getElementById('res').style.display='none';document.getElementById('exam').style.display='block';document.getElementById('bfin').style.display='none';window.scrollTo(0,0);render();upd();}
+function retry(){ans={};conf={};corr={};score=0;localStorage.removeItem('simulacro1_progress');document.getElementById('res').style.display='none';document.getElementById('exam').style.display='block';window.scrollTo(0,0);render();upd();}
 
 /* ═══════ PE CHART ═══════ */
 function drawPE(id,{CF,CVu,PV,PE,maxQ,unit}){

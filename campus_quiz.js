@@ -87,7 +87,8 @@ const CampusQuiz = {
         <div id="feedbackContainer" style="margin-top: 32px; ${prevAns !== undefined ? 'display:block' : 'display:none'}">
           ${prevAns !== undefined ? this.getFeedbackHTML(q) : ''}
         </div>
-        <div style="margin-top: 40px; display: flex; justify-content: flex-end;">
+        <div style="margin-top: 40px; display: flex; justify-content: flex-end; gap: 12px; flex-wrap: wrap;">
+          <button onclick="CampusQuiz.showResults()" style="background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 12px 24px; border-radius: 6px; cursor: pointer; font-family: var(--body); font-weight: 500; font-size: 13px;">Finalizar y ver resultado</button>
           <button id="btnNext" onclick="CampusQuiz.next()" style="${prevAns !== undefined ? 'display:block' : 'display:none'}; background: var(--gold); color: #111; border: none; padding: 12px 32px; border-radius: 6px; cursor: pointer; font-family: var(--body); font-weight: 600;">Siguiente →</button>
         </div>
       </div>
@@ -99,17 +100,18 @@ const CampusQuiz = {
   },
 
   renderInputs(q, prevAns) {
+    const answered = prevAns !== undefined;
     if (q.type === 'mc') {
       return q.opts.map((opt, i) => `
-        <div class="opt-box" id="opt-${i}" onclick="CampusQuiz.submitAnswer(${i})" style="background: var(--surface); border: 1px solid var(--border); padding: 16px; border-radius: 8px; cursor: pointer; transition: all 0.2s;">
+        <div class="opt-box" id="opt-${i}" ${answered ? '' : `onclick="CampusQuiz.submitAnswer(${i})"`} style="background: var(--surface); border: 1px solid var(--border); padding: 16px; border-radius: 8px; cursor: ${answered ? 'default' : 'pointer'}; transition: all 0.2s; ${answered ? 'pointer-events: none; opacity: 0.85;' : ''}">
           ${opt}
         </div>
       `).join('');
     } else if (q.type === 'tf') {
       return `
         <div style="display: flex; gap: 16px;">
-          <div class="opt-box" id="opt-true" onclick="CampusQuiz.submitAnswer(true)" style="flex:1; text-align:center; background: var(--surface); border: 1px solid var(--border); padding: 20px; border-radius: 8px; cursor: pointer;">VERDADERO</div>
-          <div class="opt-box" id="opt-false" onclick="CampusQuiz.submitAnswer(false)" style="flex:1; text-align:center; background: var(--surface); border: 1px solid var(--border); padding: 20px; border-radius: 8px; cursor: pointer;">FALSO</div>
+          <div class="opt-box" id="opt-true" ${answered ? '' : `onclick="CampusQuiz.submitAnswer(true)"`} style="flex:1; text-align:center; background: var(--surface); border: 1px solid var(--border); padding: 20px; border-radius: 8px; cursor: ${answered ? 'default' : 'pointer'}; ${answered ? 'pointer-events: none; opacity: 0.85;' : ''}">VERDADERO</div>
+          <div class="opt-box" id="opt-false" ${answered ? '' : `onclick="CampusQuiz.submitAnswer(false)"`} style="flex:1; text-align:center; background: var(--surface); border: 1px solid var(--border); padding: 20px; border-radius: 8px; cursor: ${answered ? 'default' : 'pointer'}; ${answered ? 'pointer-events: none; opacity: 0.85;' : ''}">FALSO</div>
         </div>
       `;
     } else if (q.type === 'numeric') {
@@ -180,18 +182,23 @@ const CampusQuiz = {
 
   showResults() {
     let score = 0;
+    let answered = 0;
     this.questions.forEach((q, i) => {
-      if (this.answers[i] === q.ans) score++;
+      if (this.answers[i] !== undefined) {
+        answered++;
+        if (this.answers[i] === q.ans) score++;
+      }
     });
 
-    const pct = Math.round((score / this.questions.length) * 100);
-    localStorage.removeItem(`quiz_progress_${this.sectionTitle}`);
+    const total = this.questions.length;
+    const pct = total > 0 ? Math.round((score / total) * 100) : 0;
 
     this.container.innerHTML = `
       <div style="text-align: center; padding: 80px 20px; background: var(--card); border-radius: 12px; border: 1px solid var(--border);">
         <div style="font-size: 64px; margin-bottom: 16px;">${pct >= 70 ? '🎉' : '📚'}</div>
         <h2 style="font-family: var(--display); font-size: 48px; margin-bottom: 8px;">${pct}%</h2>
-        <p style="color: var(--muted); margin-bottom: 40px;">Puntaje Final: ${score} de ${this.questions.length}</p>
+        <p style="color: var(--muted); margin-bottom: 12px;">Puntaje: ${score} correctas de ${total} preguntas</p>
+        <p style="color: var(--muted); margin-bottom: 40px; font-size: 13px;">${answered < total ? `Respondiste ${answered} de ${total} preguntas. Las no respondidas se contaron como incorrectas.` : 'Respondiste todas las preguntas.'}</p>
         <div style="display: flex; justify-content: center; gap: 16px;">
           <button onclick="CampusQuiz.init(document.getElementById('moduleView'), '${this.sectionTitle}')" style="background: var(--gold); color:#111; border: none; padding: 12px 32px; border-radius: 6px; cursor: pointer; font-weight: 600;">Reintentar</button>
           <button onclick="switchMainView('campus')" style="background: transparent; border: 1px solid var(--gold); color: var(--gold); padding: 12px 32px; border-radius: 6px; cursor: pointer;">Volver al Inicio</button>
@@ -199,6 +206,7 @@ const CampusQuiz = {
       </div>
     `;
     
-    // Aquí podrías enviar el resultado a Supabase si lo deseas
+    // Clear progress since they finished
+    localStorage.removeItem(`quiz_progress_${this.sectionTitle}`);
   }
 };

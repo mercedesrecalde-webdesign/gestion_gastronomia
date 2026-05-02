@@ -143,6 +143,10 @@
         <span class="nav-icon">📊</span>
         <span class="nav-label">Panel</span>
       </div>
+      <div class="nav-btn" onclick="switchMainView('downloads')" id="btn-downloads">
+        <span class="nav-icon">📥</span>
+        <span class="nav-label">Descargas</span>
+      </div>
     </div>
 
     <div id="moduleNavContainer" class="module-list">
@@ -199,6 +203,59 @@
         <h2 class="title">Panel de Control de Alumnos</h2>
       </header>
       <iframe src="dashboard.html" id="dashIframe" style="width: 100%; height: 80vh; border: none; border-radius: 12px; background: var(--surface);"></iframe>
+    </div>
+
+    <!-- VISTA DESCARGAS -->
+    <div id="view-downloads" class="main-view" style="display: none;">
+      <header class="content-header">
+        <span class="tag">Material de Lectura</span>
+        <h2 class="title">Descargas y Presentaciones</h2>
+      </header>
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
+        
+        <!-- Apunte Unidad 1 -->
+        <a href="Apunte costos y presupuestos unidad 1 eje 1.pdf" target="_blank" class="calc-card" style="text-decoration: none; display: block; cursor: pointer;">
+          <h3 style="color: var(--gold); font-size: 16px;">📄 Apunte Eje 1</h3>
+          <p style="color: var(--muted); font-size: 13px; margin-top: 10px;">Costos y Presupuestos - Lectura Obligatoria.</p>
+        </a>
+
+        <!-- Costos Clase 1 -->
+        <a href="costos clase 1 eje1.pdf" target="_blank" class="calc-card" style="text-decoration: none; display: block; cursor: pointer;">
+          <h3 style="color: var(--gold); font-size: 16px;">📄 Costos Clase 1</h3>
+          <p style="color: var(--muted); font-size: 13px; margin-top: 10px;">Presentación de la primera clase (Eje 1).</p>
+        </a>
+
+        <!-- Clase Integradora -->
+        <a href="Clase integradora costos y presupuestos .pdf" target="_blank" class="calc-card" style="text-decoration: none; display: block; cursor: pointer;">
+          <h3 style="color: var(--gold); font-size: 16px;">📄 Clase Integradora</h3>
+          <p style="color: var(--muted); font-size: 13px; margin-top: 10px;">Repaso general de la materia.</p>
+        </a>
+
+        <!-- Food Cost -->
+        <a href="Clase_Food_Cost.pdf" target="_blank" class="calc-card" style="text-decoration: none; display: block; cursor: pointer;">
+          <h3 style="color: var(--green); font-size: 16px;">📄 Clase Food Cost</h3>
+          <p style="color: var(--muted); font-size: 13px; margin-top: 10px;">Teoría y práctica de Food Cost.</p>
+        </a>
+
+        <!-- Contribución y PE -->
+        <a href="Contribución Marginal y Punto de Equilibrio.pdf" target="_blank" class="calc-card" style="text-decoration: none; display: block; cursor: pointer;">
+          <h3 style="color: var(--blue); font-size: 16px;">📄 CM y PE</h3>
+          <p style="color: var(--muted); font-size: 13px; margin-top: 10px;">Contribución Marginal y Punto de Equilibrio.</p>
+        </a>
+
+        <!-- Punto de equilibrio (1) -->
+        <a href="Punto de equilibrio .pdf" target="_blank" class="calc-card" style="text-decoration: none; display: block; cursor: pointer;">
+          <h3 style="color: var(--blue); font-size: 16px;">📄 Punto de Equilibrio</h3>
+          <p style="color: var(--muted); font-size: 13px; margin-top: 10px;">Explicación detallada del PE.</p>
+        </a>
+
+        <!-- Apunte PE -->
+        <a href="PE.pdf" target="_blank" class="calc-card" style="text-decoration: none; display: block; cursor: pointer;">
+          <h3 style="color: var(--blue); font-size: 16px;">📄 Apunte de PE</h3>
+          <p style="color: var(--muted); font-size: 13px; margin-top: 10px;">Fórmulas y teoría Unidad 2.</p>
+        </a>
+
+      </div>
     </div>
   </main>
 

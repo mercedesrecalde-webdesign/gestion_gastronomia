@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Metaanálisis · Costos y Presupuestos</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&family=Fraunces:ital,wght@0,300;0,600;0,700;1,300&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+<style>
+:root {
+  --bg: #0d0f0c;
+  --surface: #13160f;
+  --card: #181c14;
+  --card2: #1c2018;
+  --border: #2a3023;
+  --gold: #d4a853;
+  --green: #7bc67a;
+  --red: #e05a5a;
+  --text: #e8ead4;
+  --muted: #7a8470;
+  --mono: 'IBM Plex Mono', monospace;
+  --body: 'DM Sans', sans-serif;
+  --display: 'Fraunces', serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: var(--body); min-height: 100vh;
+}
+body::before {
+  content: ''; position: fixed; inset: 0;
+  background-image: radial-gradient(ellipse 800px 600px at 50% 0%, rgba(212,168,83,.05) 0%, transparent 80%);
+  pointer-events: none; z-index: -1;
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 60px 24px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+.tag {
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 3px; color: var(--gold);
+  text-transform: uppercase; margin-bottom: 12px;
+  display: inline-block;
+}
+.title {
+  font-family: var(--display);
+  font-size: 32px; font-weight: 600;
+  margin-bottom: 12px;
+}
+.subtitle {
+  color: var(--muted); font-size: 14px;
+  line-height: 1.6;
+}
+
+.form-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 32px;
+}
+
+.form-group {
+  margin-bottom: 24px;
+}
+.form-group label {
+  display: block;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.form-group input[type="text"],
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 12px 16px;
+  border-radius: 6px;
+  font-family: var(--body);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.form-group input[type="text"]:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--gold);
+}
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.btn-submit {
+  width: 100%;
+  background: var(--gold);
+  color: #111;
+  border: none;
+  padding: 16px;
+  border-radius: 6px;
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 16px;
+}
+.btn-submit:hover {
+  background: #f0c96a;
+}
+.btn-submit:disabled {
+  background: var(--border);
+  color: var(--muted);
+  cursor: not-allowed;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 32px;
+  color: var(--muted);
+  text-decoration: none;
+  font-family: var(--mono);
+  font-size: 11px;
+  transition: color 0.2s;
+}
+.back-link:hover { color: var(--gold); }
+
+/* Success message */
+.success-msg {
+  display: none;
+  text-align: center;
+  padding: 40px 0;
+}
+.success-icon {
+  font-size: 48px;
+  margin-bottom: 20px;
+}
+.success-title {
+  font-family: var(--display);
+  font-size: 24px;
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+.success-desc {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 32px;
+}
+.btn-home {
+  display: inline-block;
+  border: 1px solid var(--border);
+  padding: 12px 24px;
+  color: var(--text);
+  text-decoration: none;
+  font-family: var(--mono);
+  font-size: 11px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.2s;
+}
+.btn-home:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <a href="index.html" class="back-link">← Volver al Campus</a>
+
+  <div class="header" id="formHeader">
+    <span class="tag">Feedback Estudiantil</span>
+    <h1 class="title">Metaanálisis de la Materia</h1>
+    <p class="subtitle">Completá esta breve encuesta para contarnos cómo venís con Costos y Presupuestos. Tu opinión es súper importante para adaptar las clases y mejorar la cursada.</p>
+  </div>
+
+  <div class="form-card" id="formCard">
+    <form id="encuestaForm" onsubmit="submitForm(event)">
+      
+      <div class="form-group">
+        <label>1. Nombre y Apellido</label>
+        <input type="text" id="q_nombre" required placeholder="Ingresá tu nombre completo">
+      </div>
+
+      <div class="form-group">
+        <label>2. ¿Cómo te sentís respecto a la materia Costos y Presupuestos?</label>
+        <select id="q_sentimiento" required>
+          <option value="" disabled selected>Seleccioná una opción...</option>
+          <option value="Muy motivado/a">Muy motivado/a</option>
+          <option value="Interesado/a pero me cuesta">Interesado/a pero me cuesta</option>
+          <option value="Indiferente">Indiferente</option>
+          <option value="Algo frustrado/a">Algo frustrado/a</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>3. ¿Qué nivel de importancia creés que tiene esta materia para tu futuro profesional?</label>
+        <select id="q_importancia" required>
+          <option value="" disabled selected>Seleccioná una opción...</option>
+          <option value="Fundamental (10/10)">Fundamental (10/10)</option>
+          <option value="Muy importante">Muy importante</option>
+          <option value="Medianamente importante">Medianamente importante</option>
+          <option value="Poco importante">Poco importante</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>4. ¿Cuál es el tema que más te costó entender hasta ahora?</label>
+        <select id="q_dificultad" required>
+          <option value="" disabled selected>Seleccioná una opción...</option>
+          <option value="Clasificación de Costos">Clasificación de Costos</option>
+          <option value="Punto de Equilibrio">Punto de Equilibrio</option>
+          <option value="Food Cost / Recetas">Food Cost / Recetas</option>
+          <option value="Gráficos">Gráficos</option>
+          <option value="Otro">Otro</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>5. ¿Cursaste PP2 (Práctica Profesionalizante 2)?</label>
+        <select id="q_pp2" required>
+          <option value="" disabled selected>Seleccioná una opción...</option>
+          <option value="Sí">Sí</option>
+          <option value="No">No</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>6. Si cursaste PP2, ¿lograste entender la Ficha Técnica?</label>
+        <select id="q_ficha" required>
+          <option value="" disabled selected>Seleccioná una opción...</option>
+          <option value="Sí, la entiendo perfecto">Sí, la entiendo perfecto</option>
+          <option value="Sí, pero tengo dudas">Sí, pero tengo dudas</option>
+          <option value="No, me cuesta mucho">No, me cuesta mucho</option>
+          <option value="No cursé PP2">No cursé PP2</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>7. ¿Creés que es necesario conocer bien el manejo de la Ficha Técnica para comprender Costos?</label>
+        <select id="q_relacion" required>
+          <option value="" disabled selected>Seleccioná una opción...</option>
+          <option value="Sí, es totalmente necesario">Sí, es totalmente necesario</option>
+          <option value="Ayudaría bastante">Ayudaría bastante</option>
+          <option value="No creo que afecte">No creo que afecte</option>
+          <option value="No estoy seguro/a">No estoy seguro/a</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>8. Comentarios adicionales (Opcional)</label>
+        <textarea id="q_comentarios" placeholder="Si hay algo más que quieras compartir sobre la materia, temas a repasar, etc."></textarea>
+      </div>
+
+      <button type="submit" class="btn-submit" id="submitBtn">Enviar Feedback</button>
+    </form>
+  </div>
+
+  <div class="success-msg" id="successMsg">
+    <div class="success-icon">✨</div>
+    <div class="success-title">¡Gracias por tu tiempo!</div>
+    <div class="success-desc">Tu respuesta fue enviada exitosamente. Esta información nos ayuda muchísimo a mejorar el desarrollo de las clases.</div>
+    <a href="index.html" class="btn-home">Volver al inicio</a>
+  </div>
+
+</div>
+
+<script>
+  // SUPABASE INIT
+  const SUPABASE_URL = 'https://dukgjrhyhyxvdqzhthje.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1a2dqcmh5aHl4dmRxemh0aGplIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc5MTQzNjIsImV4cCI6MjA4MzQ5MDM2Mn0.JYZWv2vYwMbTopyL-T8_kjbX2py5IL7Ap6ASZc2B4dM';
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  async function submitForm(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    btn.innerText = 'ENVIANDO...';
+    btn.disabled = true;
+
+    const nombre = document.getElementById('q_nombre').value.trim() || 'Anónimo';
+    
+    // Armar el string de "errores" para guardar las respuestas estructuradas
+    const respuestas = [
+      `Sentimiento||${document.getElementById('q_sentimiento').value}`,
+      `Importancia||${document.getElementById('q_importancia').value}`,
+      `Mayor Dificultad||${document.getElementById('q_dificultad').value}`,
+      `Cursó PP2||${document.getElementById('q_pp2').value}`,
+      `Ficha Técnica||${document.getElementById('q_ficha').value}`,
+      `Relación Ficha/Costos||${document.getElementById('q_relacion').value}`,
+      `Comentarios||${document.getElementById('q_comentarios').value || 'Sin comentarios'}`
+    ];
+
+    const dataString = 'ENCUESTA: ' + respuestas.join(', ');
+
+    try {
+      const { data, error } = await supabase
+        .from('exam_resultados')
+        .insert([{ 
+          nombre: nombre, 
+          total: 0, 
+          puntaje: 0, 
+          porcentaje: 100, 
+          errores: dataString 
+        }]);
+
+      if (error) throw error;
+
+      document.getElementById('formHeader').style.display = 'none';
+      document.getElementById('formCard').style.display = 'none';
+      document.getElementById('successMsg').style.display = 'block';
+
+    } catch (err) {
+      console.error(err);
+      alert('Hubo un error al enviar la encuesta. Por favor, intentá de nuevo.');
+      btn.innerText = 'ENVIAR FEEDBACK';
+      btn.disabled = false;
+    }
+  }
+</script>
+</body>
+</html>

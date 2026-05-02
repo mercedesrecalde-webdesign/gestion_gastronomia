@@ -84,6 +84,7 @@
         <button class="tab" onclick="setFilter('TP')">TP Gráficos PE</button>
         <button class="tab" onclick="setFilter('SIMULACRO1')">Simulacro 1 (Don Burger)</button>
         <button class="tab" onclick="setFilter('SIMULACRO2')">Simulacro 2 (El Mentidero)</button>
+        <button class="tab" onclick="setFilter('ENCUESTA')">Metaanálisis</button>
       </div>
       <div class="grid">
         <div class="card">
@@ -984,6 +985,7 @@
 
     function getExamType(r) {
       if (r.errores) {
+        if (r.errores.startsWith('ENCUESTA:')) return 'ENCUESTA';
         if (r.errores.startsWith('TP GRÁFICOS')) return 'TP';
         if (r.errores.startsWith('S1:')) return 'SIMULACRO1';
         if (r.errores.startsWith('S2:')) return 'SIMULACRO2';
@@ -1012,6 +1014,44 @@
         ? allData 
         : allData.filter(r => getExamType(r) === currentFilter);
 
+      const thead = document.querySelector('thead tr');
+      const grid = document.querySelector('.grid');
+
+      if (currentFilter === 'ENCUESTA') {
+        grid.style.display = 'none';
+        thead.innerHTML = '<th>Alumno</th><th>Sentimiento</th><th>Importancia</th><th>Dificultad</th><th>Ficha Técnica</th><th>Fecha</th>';
+        
+        filteredData.forEach(r => {
+          const date = new Date(r.created_at).toLocaleDateString('es-AR', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'});
+          let eStr = r.errores.replace('ENCUESTA: ', '');
+          let chunks = eStr.split(', ').reduce((acc, curr) => {
+            let [k, v] = curr.split('||');
+            if (k) acc[k.trim()] = v ? v.trim() : '';
+            return acc;
+          }, {});
+
+          tbody.innerHTML += `<tr>
+            <td style="color:#d4a853; font-weight:500;">${r.nombre}</td>
+            <td style="font-size:12px; color:#e8ead4;">${chunks['Sentimiento'] || '-'}</td>
+            <td style="font-size:12px; color:#e8ead4;">${chunks['Importancia'] || '-'}</td>
+            <td style="font-size:12px; color:#e8ead4;">${chunks['Mayor Dificultad'] || '-'}</td>
+            <td style="font-size:12px; color:#7a8470;">
+              PP2: ${chunks['Cursó PP2'] || '-'} <br>
+              Entiende: ${chunks['Ficha Técnica'] || '-'} <br>
+              Relación: ${chunks['Relación Ficha/Costos'] || '-'}
+            </td>
+            <td style="font-size:12px; color:#7a8470;">${date}</td>
+          </tr>`;
+          if (chunks['Comentarios'] && chunks['Comentarios'] !== 'Sin comentarios') {
+             tbody.innerHTML += `<tr><td colspan="6" style="padding-top:0; border-top:none; font-size:12px; color:#7a8470; font-style:italic;">"${chunks['Comentarios']}"</td></tr>`;
+          }
+        });
+        return; // Salimos de la función para no dibujar gráficos
+      } else {
+        grid.style.display = 'grid';
+        thead.innerHTML = '<th>Alumno</th><th>Puntaje</th><th>Porcentaje</th><th>Preguntas Falladas</th><th>Fecha</th>';
+      }
+
       filteredData.forEach(r => {
         if(r.porcentaje >= 60) aprobados++; else reprobados++;
         
@@ -1034,7 +1074,7 @@
                 let parts = chunk.split('||');
                 let code = parts[0].trim();
                 let userAns = parts.length > 1 ? parts[1].trim().replace(/'/g, "&#39;") : '';
-                return `<span class="q-pill" onclick="showModal('${exType}', '${code}', '${userAns}')">${code}</span>`;
+                return \`<span class="q-pill" onclick="showModal('\${exType}', '\${code}', '\${userAns}')">\${code}</span>\`;
               }).join('');
             })()}
           </td>

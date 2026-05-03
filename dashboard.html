@@ -86,6 +86,11 @@
         <button class="tab" onclick="setFilter('SIMULACRO2')">Simulacro 2 (El Mentidero)</button>
         <button class="tab" onclick="setFilter('TRATTORIA')">Examen La Trattoria</button>
         <button class="tab" onclick="setFilter('ENCUESTA')">Metaanálisis</button>
+        <button class="tab" onclick="setFilter('FILES')">📁 Material Extra</button>
+        <div style="margin-left: auto; display: flex; align-items: center; gap: 10px;">
+          <input type="checkbox" id="hideTests" onchange="renderDashboard()">
+          <label for="hideTests" style="font-size: 13px; color: #7a8470; cursor: pointer;">Ocultar pruebas / Mercedes</label>
+        </div>
       </div>
 
       <div class="grid">
@@ -104,9 +109,24 @@
       </div>
       <div class="card">
         <h3>Detalle por Alumno</h3>
-        <table>
-          <thead><tr><th>Alumno</th><th>Puntaje</th><th>Porcentaje</th><th>Nota</th><th>Preguntas Falladas</th><th>Fecha</th></tr></thead>
+        <table id="mainTable">
+          <thead><tr><th>Alumno</th><th>Puntaje</th><th>Porcentaje</th><th>Nota</th><th>Preguntas Falladas</th><th>Fecha</th><th>Acción</th></tr></thead>
           <tbody id="tbody"></tbody>
+        </table>
+      </div>
+
+      <div id="fileManager" class="card" style="display:none;">
+        <h3>Gestión de Material Extra (PDFs)</h3>
+        <div style="background:#181c14; border: 1px dashed #2a3023; padding: 20px; border-radius: 8px; text-align: center; margin-bottom: 20px;">
+          <p style="color:#7a8470; font-size: 14px; margin-bottom: 15px;">Subir nuevo archivo PDF para los alumnos</p>
+          <input type="file" id="fileInput" accept=".pdf" style="display:none">
+          <button class="btn-print" onclick="document.getElementById('fileInput').click()" style="margin-right: 10px;">📎 Seleccionar PDF</button>
+          <button class="tab active" id="uploadBtn" onclick="uploadFile()" style="padding: 8px 20px;">Subir Archivo</button>
+          <div id="uploadStatus" style="font-size: 12px; margin-top: 10px; color: #d4a853;"></div>
+        </div>
+        <table>
+          <thead><tr><th>Nombre del Archivo</th><th>Tamaño</th><th>Fecha</th><th>Acciones</th></tr></thead>
+          <tbody id="fileListBody"></tbody>
         </table>
       </div>
     </div>
@@ -883,9 +903,71 @@
     }
 
     let allData = [];
+    let allFiles = [];
     let currentFilter = 'ALL';
     let chartPieInstance = null;
     let chartBarInstance = null;
+    let sbClient = null;
+
+    async function deleteRecord(id) {
+      if(!confirm('¿Estás seguro de que querés eliminar este registro? No se puede deshacer.')) return;
+      const { error } = await sbClient.from('exam_resultados').delete().eq('id', id);
+      if(error) {
+        alert('Error al eliminar: ' + error.message);
+      } else {
+        allData = allData.filter(r => r.id !== id);
+        renderDashboard();
+      }
+    }
+
+    async function loadFiles() {
+      const { data, error } = await sbClient.storage.from('material').list();
+      if(error) {
+        console.error('Error loading files:', error);
+        return;
+      }
+      allFiles = data || [];
+      renderFileList();
+    }
+
+    function renderFileList() {
+      const tbody = document.getElementById('fileListBody');
+      tbody.innerHTML = '';
+      allFiles.forEach(f => {
+        const date = new Date(f.created_at).toLocaleDateString('es-AR');
+        const size = (f.metadata.size / 1024 / 1024).toFixed(2) + ' MB';
+        tbody.innerHTML += `<tr>
+          <td style="color:#e8ead4">${f.name}</td>
+          <td>${size}</td>
+          <td>${date}</td>
+          <td>
+            <button onclick="deleteFile('${f.name}')" style="background:transparent; border:none; color:#e05a5a; cursor:pointer; font-size:12px;">Eliminar</button>
+          </td>
+        </tr>`;
+      });
+    }
+
+    async function uploadFile() {
+      const file = document.getElementById('fileInput').files[0];
+      if(!file) { alert('Seleccioná un archivo primero.'); return; }
+      const status = document.getElementById('uploadStatus');
+      status.textContent = 'Subiendo...';
+      const fileName = file.name.replace(/[^a-z0-9.]/gi, '_');
+      const { data, error } = await sbClient.storage.from('material').upload(fileName, file);
+      if(error) {
+        status.textContent = 'Error: ' + error.message;
+      } else {
+        status.textContent = '¡Subido con éxito!';
+        loadFiles();
+      }
+    }
+
+    async function deleteFile(name) {
+      if(!confirm('¿Eliminar archivo?')) return;
+      const { error } = await sbClient.storage.from('material').remove([name]);
+      if(error) alert('Error: ' + error.message);
+      else loadFiles();
+    }
 
     function getExamType(r) {
       if (r.errores) {
@@ -923,12 +1005,32 @@
       const tbody = document.getElementById('tbody');
       tbody.innerHTML = '';
       
+      const hideTests = document.getElementById('hideTests').checked;
+      const testNames = ['mer', 'prueba', 'test', 'docente', 'mercedes', 'admin'];
+
+      if(currentFilter === 'FILES') {
+        document.getElementById('fileManager').style.display = 'block';
+        document.querySelector('.grid').style.display = 'none';
+        document.getElementById('mainTable').parentElement.style.display = 'none';
+        loadFiles();
+        return;
+      } else {
+        document.getElementById('fileManager').style.display = 'none';
+      }
+
       let aprobados = 0, reprobados = 0;
       const notas = { 'Desaprobado':0, 'Aprobado (6+)':0, 'Muy Bien (8+)':0, 'Excelente (10)':0 };
       
-      const filteredData = currentFilter === 'ALL' 
+      let filteredData = currentFilter === 'ALL' 
         ? allData 
         : allData.filter(r => getExamType(r) === currentFilter);
+
+      if(hideTests) {
+        filteredData = filteredData.filter(r => {
+          const n = r.nombre.toLowerCase();
+          return !testNames.some(t => n.includes(t));
+        });
+      }
 
       const thead = document.querySelector('thead tr');
       const grid = document.querySelector('.grid');
@@ -965,7 +1067,8 @@
         return; // Salimos de la función para no dibujar gráficos
       } else {
         grid.style.display = 'grid';
-        thead.innerHTML = '<th>Alumno</th><th>Puntaje</th><th>Porcentaje</th><th>Nota</th><th>Preguntas Falladas</th><th>Fecha</th>';
+        document.getElementById('mainTable').parentElement.style.display = 'block';
+        thead.innerHTML = '<th>Alumno</th><th>Puntaje</th><th>Porcentaje</th><th>Nota</th><th>Preguntas Falladas</th><th>Fecha</th><th>Acción</th>';
       }
 
       filteredData.forEach(r => {
@@ -1001,6 +1104,9 @@
             })()}
           </td>
           <td style="font-size:12px; color:#7a8470;">${date}</td>
+          <td>
+            <button onclick="deleteRecord('${r.id}')" style="background:transparent; border:none; color:#e05a5a; cursor:pointer; font-size:12px;">Borrar</button>
+          </td>
         </tr>`;
       });
 
@@ -1049,7 +1155,7 @@
       const url = 'https://dukgjrhyhyxvdqzhthje.supabase.co';
       const key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1a2dqcmh5aHl4dmRxemh0aGplIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc5MTQzNjIsImV4cCI6MjA4MzQ5MDM2Mn0.JYZWv2vYwMbTopyL-T8_kjbX2py5IL7Ap6ASZc2B4dM';
       
-      const sbClient = window.supabase.createClient(url, key);
+      sbClient = window.supabase.createClient(url, key);
       const { data, error } = await sbClient.from('exam_resultados').select('*').order('created_at', { ascending: false });
 
       

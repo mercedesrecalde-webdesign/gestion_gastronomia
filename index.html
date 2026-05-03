@@ -6,6 +6,7 @@
 <title>Campus Virtual · Costos y Presupuestos · IFTS N°23</title>
 <meta name="description" content="Campus virtual de la materia Costos y Presupuestos – Tecnicatura Superior en Gastronomía, IFTS N°23.">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&family=Fraunces:ital,wght@0,300;0,600;0,700;1,300&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root {
   --bg: #0d0f0c;
@@ -303,19 +304,19 @@ body::before {
     </div>
   </a>
 
-  <!-- Simulacro 3 (Trattoria) - VISIBLE PERO BLOQUEADO -->
-  <div class="act-card featured" style="border-color: rgba(200, 240, 60, 0.2); background: linear-gradient(135deg, var(--card) 0%, rgba(200, 240, 60, 0.02) 100%); opacity: 0.8; cursor: default;">
-    <div class="act-icon" style="filter: grayscale(1); opacity: 0.5;">🍝</div>
-    <div class="act-tag" style="color: var(--gold);">Próximamente</div>
-    <div class="act-name">Examen: La Trattoria</div>
-    <div class="act-desc">Caso completo de restaurante italiano. Estará disponible el día del parcial. Podés ver los otros simulacros para practicar.</div>
+  <!-- Simulacro Trattoria (Nuevo) -->
+  <a href="simulacro_trattoria.html" class="act-card featured">
+    <div class="act-icon">🍝</div>
+    <div class="act-tag">Parcial Oficial</div>
+    <div class="act-name">La Trattoria</div>
+    <div class="act-desc">Módulo de evaluación oficial. Solo habilitado durante el horario de clase.</div>
     <div class="act-meta">
-      <span style="color: var(--gold); border: 1px solid var(--gold); padding: 2px 6px; border-radius: 4px; font-size: 8px;">BLOQUEADO</span>
+      <span>34 preguntas</span>
       <span class="dot"></span>
-      <span>Aprobación: 60%</span>
-      <span class="act-arrow" style="opacity: 0;">→</span>
+      <span>Evaluación Final</span>
+      <span class="act-arrow">→</span>
     </div>
-  </div>
+  </a>
 
   <!-- Evaluación General -->
   <a href="evaluacion.html" class="act-card">
@@ -360,6 +361,58 @@ body::before {
   </a>
 
 </div>
+
+<!-- ═══════════ MATERIAL EXTRA ═══════════ -->
+<div class="section-label" style="margin-top: 60px;">// Material de Estudio Adicional</div>
+<div class="activities" id="material-list">
+  <div style="grid-column: 1/-1; text-align: center; color: var(--muted); font-size: 13px;">Cargando material...</div>
+</div>
+
+<script>
+  const SUPABASE_URL = 'https://dukgjrhyhyxvdqzhthje.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1a2dqcmh5aHl4dmRxemh0aGplIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc5MTQzNjIsImV4cCI6MjA4MzQ5MDM2Mn0.JYZWv2vYwMbTopyL-T8_kjbX2py5IL7Ap6ASZc2B4dM';
+  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  async function loadExtraMaterial() {
+    const listEl = document.getElementById('material-list');
+    try {
+      const { data, error } = await sb.storage.from('material').list();
+      if (error) throw error;
+
+      if (!data || data.length === 0) {
+        listEl.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--muted); font-size: 13px;">No hay material adicional disponible por el momento.</div>';
+        return;
+      }
+
+      listEl.innerHTML = '';
+      data.forEach(file => {
+        const { data: publicUrl } = sb.storage.from('material').getPublicUrl(file.name);
+        
+        const card = document.createElement('a');
+        card.href = publicUrl.publicUrl;
+        card.target = '_blank';
+        card.className = 'act-card';
+        card.style.padding = '24px';
+        card.innerHTML = `
+          <div style="display:flex; align-items:center; gap:16px;">
+            <div style="font-size:24px;">📄</div>
+            <div style="flex:1;">
+              <div style="font-family:var(--display); font-size:15px; font-weight:600; margin-bottom:4px;">${file.name.replace(/_/g, ' ')}</div>
+              <div style="font-family:var(--mono); font-size:9px; color:var(--muted); text-transform:uppercase;">Documento PDF</div>
+            </div>
+            <div style="color:var(--gold); font-size:16px;">↓</div>
+          </div>
+        `;
+        listEl.appendChild(card);
+      });
+    } catch (e) {
+      console.error(e);
+      listEl.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--red); font-size: 13px;">Error al cargar el material.</div>';
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', loadExtraMaterial);
+</script>
 
 <footer class="campus-footer">
   IFTS N°23 · Costos y Presupuestos · 2025<br>

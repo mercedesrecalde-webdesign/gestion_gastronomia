@@ -921,7 +921,7 @@
     }
 
     async function loadFiles() {
-      const { data, error } = await sbClient.storage.from('contenido').list();
+      const { data, error } = await sbClient.storage.from('contenido').list('gestion_gastronomia');
       if(error) {
         console.error('Error loading files:', error);
         return;
@@ -953,7 +953,7 @@
       const status = document.getElementById('uploadStatus');
       status.textContent = 'Subiendo...';
       const fileName = file.name.replace(/[^a-z0-9.]/gi, '_');
-      const { data, error } = await sbClient.storage.from('contenido').upload(fileName, file);
+      const { data, error } = await sbClient.storage.from('contenido').upload('gestion_gastronomia/' + fileName, file);
       if(error) {
         status.textContent = 'Error: ' + error.message;
       } else {
@@ -964,7 +964,7 @@
 
     async function deleteFile(name) {
       if(!confirm('¿Eliminar archivo?')) return;
-      const { error } = await sbClient.storage.from('contenido').remove([name]);
+      const { error } = await sbClient.storage.from('contenido').remove(['gestion_gastronomia/' + name]);
       if(error) alert('Error: ' + error.message);
       else loadFiles();
     }

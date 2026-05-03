@@ -376,7 +376,7 @@ body::before {
   async function loadExtraMaterial() {
     const listEl = document.getElementById('material-list');
     try {
-      const { data, error } = await sb.storage.from('material').list();
+      const { data, error } = await sb.storage.from('contenido').list();
       if (error) throw error;
 
       if (!data || data.length === 0) {
@@ -386,7 +386,7 @@ body::before {
 
       listEl.innerHTML = '';
       data.forEach(file => {
-        const { data: publicUrl } = sb.storage.from('material').getPublicUrl(file.name);
+        const { data: publicUrl } = sb.storage.from('contenido').getPublicUrl(file.name);
         
         const card = document.createElement('a');
         card.href = publicUrl.publicUrl;

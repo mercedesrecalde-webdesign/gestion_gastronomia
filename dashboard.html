@@ -62,6 +62,17 @@
     .qm-feedback strong { color: #d4a853; font-weight: normal; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+    /* Stats Cards */
+    .stat-label { font-size: 11px; color: #7a8470; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+    .stat-value { font-size: 32px; font-weight: 600; color: #e8ead4; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 24px; }
+    
+    /* Login Refined */
+    .login-input { padding: 14px; width: 100%; border-radius: 8px; border: 1px solid #2a3023; background: #0d0f0c; color: #e8ead4; text-align: center; font-size: 16px; outline: none; transition: border-color 0.3s; }
+    .login-input:focus { border-color: #d4a853; }
+    .login-btn { background: #d4a853; color: #0d0f0c; border: none; padding: 14px; font-weight: bold; border-radius: 8px; cursor: pointer; width: 100%; font-size: 16px; letter-spacing: 1px; transition: transform 0.2s; }
+    .login-btn:hover { transform: translateY(-2px); background: #f0c96a; }
+
   </style>
 </head>
 <body>
@@ -94,6 +105,38 @@
         <button class="tab" onclick="setFilter('CONFIG')">⚙️ Config</button>
         <div style="margin-left: auto; display: flex; align-items: center; gap: 10px;">
           <input type="checkbox" id="hideTests" onchange="renderDashboard()">
+          <label for="hideTests" style="font-size: 13px; color: #7a8470; cursor: pointer;">Ocultar pruebas</label>
+        </div>
+      </div>
+
+      <div id="mainStats" class="grid-4">
+        <div class="card">
+          <div class="stat-label">Aprobados (>60%)</div>
+          <div class="stat-value" id="countApro" style="color:#7bc67a">0</div>
+        </div>
+        <div class="card">
+          <div class="stat-label">Reprobados</div>
+          <div class="stat-value" id="countRepr" style="color:#e05a5a">0</div>
+        </div>
+        <div class="card">
+          <div class="stat-label">Promedio General</div>
+          <div class="stat-value" id="avgNota">0.0</div>
+        </div>
+        <div class="card" style="border-color: var(--gold);">
+          <div class="stat-label">KPI Asistencia (>80%)</div>
+          <div class="stat-value" id="kpiAsis" style="color:#d4a853">0%</div>
+        </div>
+      </div>
+
+      <div class="grid" id="chartsGrid">
+        <div class="card">
+          <h3>Distribución de Aprobados</h3>
+          <div class="chart-container">
+            <canvas id="chartPie"></canvas>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Calificaciones Generales</h3>
           <div class="chart-container">
             <canvas id="chartBar"></canvas>
           </div>

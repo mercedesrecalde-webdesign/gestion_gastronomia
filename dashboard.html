@@ -84,8 +84,10 @@
         <button class="tab" onclick="setFilter('TP')">TP Gráficos PE</button>
         <button class="tab" onclick="setFilter('SIMULACRO1')">Simulacro 1 (Don Burger)</button>
         <button class="tab" onclick="setFilter('SIMULACRO2')">Simulacro 2 (El Mentidero)</button>
+        <button class="tab" onclick="setFilter('TRATTORIA')">Examen La Trattoria</button>
         <button class="tab" onclick="setFilter('ENCUESTA')">Metaanálisis</button>
       </div>
+
       <div class="grid">
         <div class="card">
           <h3>Distribución de Aprobados</h3>
@@ -103,7 +105,7 @@
       <div class="card">
         <h3>Detalle por Alumno</h3>
         <table>
-          <thead><tr><th>Alumno</th><th>Puntaje</th><th>Porcentaje</th><th>Preguntas Falladas</th><th>Fecha</th></tr></thead>
+          <thead><tr><th>Alumno</th><th>Puntaje</th><th>Porcentaje</th><th>Nota</th><th>Preguntas Falladas</th><th>Fecha</th></tr></thead>
           <tbody id="tbody"></tbody>
         </table>
       </div>
@@ -322,7 +324,7 @@
       "text": "El Costo Variable Unitario ($500 por café) se mantiene constante sin importar cuántos cafés se vendan en el día.",
       "hint": "",
       "correct": "Verdadero",
-      "feedback": "Verdadero. El costo por unidad no cambia (cada café siempre gasta $500 en insumos). Lo que aumenta en total es el Costo Variable TOTAL a medida que hacés más cafés."
+      "feedback": "Verdadero. El costo por unidad no cambia (cada café siempre gasta $500 in insumos). Lo que aumenta in total es el Costo Variable TOTAL a medida que hacés más cafés."
     },
     "P31": {
       "id": "P31",
@@ -384,7 +386,7 @@
     },
     "Q3": {
       "id": "Q3",
-      "text": "La fórmula del Punto de Equilibrio en unidades es:",
+      "text": "La fórmula del Punto de Equilibrio in unidades es:",
       "hint": "",
       "correct": "B) PE = Costos Fijos Totales ÷ Contribución Marginal Unitaria",
       "feedback": "PE = CF ÷ CMu. El PE responde a: ¿cuántos ladrillitos (CMu) necesito para llenar el muro (CF)? El resultado es la cantidad mínima de unidades a vender para no perder dinero."
@@ -419,15 +421,15 @@
     },
     "EX1S3": {
       "id": "EX1S3",
-      "text": "Calculá el Punto de Equilibrio en unidades de pizza.",
+      "text": "Calculá el Punto de Equilibrio in unidades de pizza.",
       "hint": "PE = Costos Fijos Totales ÷ CMu",
       "correct": "200 pizzas",
       "feedback": "PE = $1.000.000 ÷ $5.000 = <strong>200 pizzas/mes</strong>. Necesitás vender exactamente 200 pizzas para no ganar ni perder dinero."
     },
     "EX1S4": {
       "id": "EX1S4",
-      "text": "¿Cuánto debe facturar el negocio para alcanzar el PE? (PE en pesos)",
-      "hint": "PE$ = PE en unidades × Precio de Venta",
+      "text": "¿Cuánto debe facturar el negocio para alcanzar el PE? (PE in pesos)",
+      "hint": "PE$ = PE in unidades × Precio de Venta",
       "correct": "1600000 $",
       "feedback": "PE$ = 200 × $8.000 = <strong>$1.600.000</strong>. Esta es la facturación mínima del mes para no perder dinero."
     },
@@ -492,7 +494,7 @@
       "text": "¿Cuál es la Ganancia (o Pérdida) Neta del mes?",
       "hint": "Resultado = Margen de Contribución Total − Costos Fijos",
       "correct": "1000000 $",
-      "feedback": "Resultado = $3.400.000 − $2.400.000 = <strong>$1.000.000 de Ganancia Neta</strong>. El presupuesto en 5 pasos: Ventas → Costos Variables → MC → Costos Fijos → Resultado. ¡Mirá el tablero! 👇"
+      "feedback": "Resultado = $3.400.000 − $2.400.000 = <strong>$1.000.000 de Ganancia Neta</strong>. El presupuesto in 5 pasos: Ventas → Costos Variables → MC → Costos Fijos → Resultado. ¡Mirá el tablero! 👇"
     },
     "Q6": {
       "id": "Q6",
@@ -503,7 +505,7 @@
     },
     "Q7": {
       "id": "Q7",
-      "text": "Tenés dos productos: Producto A con CMu = $3.000 y Producto B con CMu = $8.000. ¿Cuál conviene priorizar en ventas para alcanzar el PE más rápido?",
+      "text": "Tenés dos productos: Producto A con CMu = $3.000 y Producto B con CMu = $8.000. ¿Cuál conviene priorizar in ventas para alcanzar el PE más rápido?",
       "hint": "",
       "correct": "B) El Producto B, porque aporta $8.000 por unidad al muro de costos fijos — necesitás vender menos unidades.",
       "feedback": "Correcto. Con CMu $8.000 (B), cada unidad \"pone 8 ladrillos\" al muro. Con CMu $3.000 (A), solo \"pone 3 ladrillos\". Para alcanzar el mismo muro de CF más rápido, necesitás vender menos unidades del B. Maximizar la CMu del mix de ventas es estrategia pura de rentabilidad."
@@ -517,6 +519,42 @@
     }
   },
   "TP": {},
+  "TRATTORIA": {
+    "P1": { "id": "P1", "text": "Pregunta 1: Definición de Alquiler.", "correct": "Falso", "feedback": "FALSO. El alquiler es un Costo Fijo: se paga igual sin importar cuántos platos se vendan." },
+    "P2": { "id": "P2", "text": "Pregunta 2: Clasificación de Ingredientes.", "correct": "C) Costos variables", "feedback": "CORRECTO. Los ingredientes son costos variables: si no se produce, no se gastan." },
+    "P3": { "id": "P3", "text": "Pregunta 3: Sueldos base (fijos e indirectos).", "correct": "B) Fijos e Indirectos", "feedback": "CORRECTO. Los sueldos base no varían con la producción (fijos) y no se identifican con un único plato (indirectos)." },
+    "P4": { "id": "P4", "text": "Pregunta 4: Comisión de delivery.", "correct": "Verdadero", "feedback": "VERDADERO. La comisión existe solo cuando hay ventas; a más ventas, más comisión. Es variable." },
+    "P5": { "id": "P5", "text": "Pregunta 5: Costos Directos vs Indirectos.", "correct": "B) Directos", "feedback": "CORRECTO. Costos directos: se asignan sin ambigüedad (ej. ingredientes). Indirectos: requieren un criterio para distribuirse (ej. alquiler entre platos)." },
+    "P6": { "id": "P6", "text": "Pregunta 6: Amortización de la máquina.", "correct": "Falso", "feedback": "FALSO. La amortización es un Costo Fijo: se imputa in cuotas iguales según la vida útil del equipo, independientemente de cuánto se use." },
+    "P7": { "id": "P7", "text": "Pregunta 7: Factura de Gas (Mixto).", "correct": "C) Mixto o Semifijo", "feedback": "CORRECTO. Los costos mixtos o semifijos tienen un componente fijo (el mínimo facturado) y uno variable (el consumo adicional)." },
+    "P8": { "id": "P8", "text": "Pregunta 8: Packaging (Directo).", "correct": "Verdadero", "feedback": "VERDADERO. El packaging se asigna directamente a cada plato; es un costo directo y variable." },
+    "P9": { "id": "P9", "text": "Pregunta 9: Costos Fijos e incremento de actividad.", "correct": "B) No cambian", "feedback": "CORRECTO. Los CF son independientes del volumen de producción. El alquiler, sueldos base y amortización no cambian aunque se duplique la producción." },
+    "P10": { "id": "P10", "text": "Calculá el Costo Total (CT) con 400 platos.", "correct": "$ 3.480.000", "feedback": "CT = $2.600.000 + ($2.200 × 400) = $2.600.000 + $880.000 = $3.480.000" },
+    "P11": { "id": "P11", "text": "Calculá el Costo Fijo Unitario (CFU) con 400 platos.", "correct": "$ 6.500", "feedback": "CFU = $2.600.000 ÷ 400 platos = $6.500 por plato." },
+    "P12": { "id": "P12", "text": "Economías de escala y CFU.", "correct": "Verdadero", "feedback": "VERDADERO. Los CF son una \"torta\" fija que se divide in más porciones al producir más. A mayor volumen, menor CFU → base conceptual de las economías de escala." },
+    "P13": { "id": "P13", "text": "Calculá el Costo Variable Total (CVT) con 600 platos.", "correct": "$ 1.320.000", "feedback": "CVT = $2.200 × 600 platos = $1.320.000." },
+    "P14": { "id": "P14", "text": "Food Cost % (Ingredientes $1.800 / PV $8.000).", "correct": "22.5 %", "feedback": "Food Cost% = ($1.800 ÷ $8.000) × 100 = 22.5%. Es un buen nivel para un restaurante." },
+    "P15": { "id": "P15", "text": "Rango saludable de Food Cost.", "correct": "B) Entre 15% y 35%", "feedback": "CORRECTO. Entre 15% y 35% es el rango saludable para la mayoría de restaurantes. Un FC muy bajo puede indicar porciones pequeñas; muy alto, ineficiencia o precios bajos." },
+    "P16": { "id": "P16", "text": "Food Cost del 60%.", "correct": "Falso", "feedback": "FALSO. Un Food Cost del 60% es muy alto: por cada $100 que ingresa, $60 se van in ingredientes, dejando poco para cubrir otros costos y generar ganancia." },
+    "P17": { "id": "P17", "text": "Contribución Marginal Unitaria (CMu).", "correct": "$ 5.800", "feedback": "CMu = $8.000 − $2.200 = $5.800 por plato. Es el \"aporte\" de cada venta." },
+    "P18": { "id": "P18", "text": "Definición de CMu.", "correct": "B) Contribución a los Costos Fijos", "feedback": "CORRECTO. La CMu no es la ganancia neta; es la contribución al \"pozo\" de CF. Recién cuando ese pozo se llena (se cubre el PE), lo siguiente es ganancia pura." },
+    "P19": { "id": "P19", "text": "Margen de Contribución Total (CMT) con 600 platos.", "correct": "$ 3.480.000", "feedback": "CMT = $5.800 × 600 = $3.480.000. Ese monto debe superar los CF ($2.600.000) para haber ganancia." },
+    "P20": { "id": "P20", "text": "CMu positiva y rentabilidad.", "correct": "Falso", "feedback": "FALSO. Una CMu positiva significa que cada venta aporta algo, pero si el volumen es bajo y no se cubren los CF, el resultado sigue siendo pérdida." },
+    "P21": { "id": "P21", "text": "Calculá el Punto de Equilibrio (PE) in unidades.", "correct": "448 platos", "feedback": "PE = $2.600.000 ÷ $5.800 = 448,27 ≈ 448 platos. (Siempre redondeamos hacia arriba para estar seguros de cubrir los CF.)" },
+    "P22": { "id": "P22", "text": "Punto de Equilibrio in Pesos (PE $).", "correct": "$ 3.584.000", "feedback": "PE ($) = 448 × $8.000 = $3.584.000. Con esa facturación exactamente se cubren todos los costos." },
+    "P23": { "id": "P23", "text": "Ganancia con 600 platos.", "correct": "B) 152 platos por encima del PE", "feedback": "CORRECTO. 600 − 448 = 152 platos por encima del PE. Cada uno de esos 152 platos genera $5.800 de ganancia pura." },
+    "P24": { "id": "P24", "text": "Monto de la ganancia con 600 platos.", "correct": "$ 881.600", "feedback": "Ganancia = 152 × $5.800 = $881.600 netos in el mes." },
+    "P25": { "id": "P25", "text": "Resultado con 300 platos vendidas.", "correct": "Verdadero (Pérdida)", "feedback": "VERDADERO. 300 platos < 448 (PE), por lo tanto el negocio está in zona de pérdida: no alcanza a cubrir sus Costos Fijos." },
+    "P26": { "id": "P26", "text": "Impacto de subir los Costos Fijos.", "correct": "B) El PE sube", "feedback": "CORRECTO. Nuevo PE = $3.200.000 ÷ $5.800 ≈ 552 platos. Al subir los CF, se necesitan más ventas para cubrirlos. El PE sube." },
+    "P27": { "id": "P27", "text": "Impacto de subir el Precio de Venta.", "correct": "A) La CMu aumenta", "feedback": "CORRECTO. Nueva CMu = $9.000 − $2.200 = $6.800. Al subir el PV sin cambiar el CVu, la diferencia (CMu) aumenta." },
+    "P28": { "id": "P28", "text": "Efecto de subir precios in la demanda.", "correct": "Falso", "feedback": "FALSO. Si bien sube la CMu, un precio más alto puede reducir la demanda (menos clientes). El efecto neto depende de la elasticidad de la demanda." },
+    "P29": { "id": "P29", "text": "Acción para bajar el PE.", "correct": "B) Bajar el CVu (negociar materia prima)", "feedback": "CORRECTO. Menos CVu → mayor CMu → PE = CF ÷ CMu → el denominador crece → el PE baja. Contratar más personal o ampliar el local subiría los CF, empeorando la situación." },
+    "P30": { "id": "P30", "text": "Cálculo del Food Cost%.", "correct": "C) Costo de ingredientes / PV", "feedback": "CORRECTO. El Food Cost% = Costo de ingredientes ÷ PV × 100. Mide qué proporción del precio de venta representan los insumos." },
+    "P31": { "id": "P31", "text": "Resultado con 350 platos.", "correct": "B) Pérdida", "feedback": "CORRECTO. 350 platos < 448 (PE) → zona de pérdida. El negocio no generó suficiente CMT para cubrir los $2.600.000 de CF." },
+    "P32": { "id": "P32", "text": "Cálculo de pérdida in Julio.", "correct": "$ 568.400 (Pérdida)", "feedback": "Pérdida = (350 − 448) × $5.800 = −98 × $5.800 = −$568.400. El signo negativo indica pérdida." },
+    "P33": { "id": "P33", "text": "Cálculo de ganancia in Agosto.", "correct": "$ 1.171.600", "feedback": "Ganancia = (650 − 448) × $5.800 = 202 × $5.800 = $1.171.600." },
+    "P34": { "id": "P34", "text": "Comparación Julio vs Agosto.", "correct": "B) Resultados radicalmente distintos", "feedback": "CORRECTO. El PE es la barrera crítica. Julio: pérdida de $568.400. Agosto: ganancia de $1.171.600. La diferencia (1.300 platos de distancia entre ambos meses) genera un resultado radicalmente distinto." }
+  },
   "SIMULACRO1": {
     "Q1": {
         "id": "Q1",
@@ -550,8 +588,8 @@
         "id": "Q5",
         "text": "¿Cuál de los siguientes conceptos corresponde a un GASTO y NO a un costo de producción?",
         "hint": "",
-        "correct": "C) Campaña publicitaria en Instagram",
-        "feedback": "La publicidad es un GASTO de Comercialización: no interviene en la transformación de la materia prima y no se recupera directamente con la venta de un plato específico."
+        "correct": "C) Campaña publicitaria in Instagram",
+        "feedback": "La publicidad es un GASTO de Comercialización: no interviene in la transformación de la materia prima y no se recupera directamente con la venta de un plato específico."
     },
     "Q6": {
         "id": "Q6",
@@ -562,10 +600,10 @@
     },
     "Q7": {
         "id": "Q7",
-        "text": "Si se producen 200 hamburguesas en el mes, ¿cuál es el Costo Variable Total?",
+        "text": "Si se producen 200 hamburguesas in el mes, ¿cuál es el Costo Variable Total?",
         "hint": "",
         "correct": "390000 $",
-        "feedback": "CVT = CVu × Q = $1.950 × 200 = $390.000. El costo variable total escala en proporción directa con las unidades producidas."
+        "feedback": "CVT = CVu × Q = $1.950 × 200 = $390.000. El costo variable total escala in proporción directa con las unidades producidas."
     },
     "Q8": {
         "id": "Q8",
@@ -578,7 +616,7 @@
         "id": "Q9",
         "text": "Cuando la producción aumenta de 200 a 400 hamburguesas, el Costo Variable Unitario (CVu = $1.950):",
         "hint": "",
-        "correct": "C) Permanece constante en $1.950 por hamburguesa",
+        "correct": "C) Permanece constante in $1.950 por hamburguesa",
         "feedback": "El CVu siempre es constante. Es el costo de UNA unidad, y ese valor no cambia con el volumen. Lo que cambia es el CVT (total): $1.950 × 200 = $390k vs $1.950 × 400 = $780k."
     },
     "Q10": {
@@ -590,7 +628,7 @@
     },
     "Q11": {
         "id": "Q11",
-        "text": "Observá el gráfico de \"Don Burger\". ¿En cuántas unidades se cruzan las líneas de Ingresos y Costos Totales? Ese es el Punto de Equilibrio.",
+        "text": "Observá el gráfico de \"Don Burger\". ¿In cuántas unidades se cruzan las líneas de Ingresos y Costos Totales? Ese es el Punto de Equilibrio.",
         "hint": "",
         "correct": "900 hamburguesas",
         "feedback": "PE = CF ÷ CMu = $940.000 ÷ ($3.000 − $1.950) = $940.000 ÷ $1.050 ≈ 895 ≈ 900 hamburguesas/mes."
@@ -606,22 +644,22 @@
         "id": "Q13",
         "text": "En el gráfico, la línea de Costos Totales NO parte del origen (0,0). ¿Por qué?",
         "hint": "",
-        "correct": "C) Porque los Costos Fijos ya existen aunque no se produzca nada — parten desde CF en el eje Y",
-        "feedback": "La línea de CT parte desde el nivel de los Costos Fijos en el eje Y, porque CF = $940.000 existe aunque Q = 0. Fórmula: CT = CF + CVu × Q → cuando Q=0, CT = CF."
+        "correct": "C) Porque los Costos Fijos ya existen aunque no se produzca nada — parten desde CF in el eje Y",
+        "feedback": "La línea de CT parte desde el nivel de los Costos Fijos in el eje Y, porque CF = $940.000 existe aunque Q = 0. Fórmula: CT = CF + CVu × Q → cuando Q=0, CT = CF."
     },
     "Q14": {
         "id": "Q14",
-        "text": "¿Qué representa la zona sombreada en ROJO en el gráfico de PE?",
+        "text": "¿Qué representa la zona sombreada in ROJO in el gráfico de PE?",
         "hint": "",
         "correct": "B) La zona donde los Ingresos son menores a los Costos Totales — el negocio pierde dinero",
         "feedback": "La zona roja (pérdida) muestra el tramo donde CT > Ingresos. El negocio no cubre todos sus costos. El PE es el límite exacto donde esa situación cambia."
     },
     "Q15": {
         "id": "Q15",
-        "text": "Si \"Don Burger\" sólo vende 500 hamburguesas en un mes de baja, ¿cuánto dinero pierde?",
+        "text": "Si \"Don Burger\" sólo vende 500 hamburguesas in un mes de baja, ¿cuánto dinero pierde?",
         "hint": "",
         "correct": "420000 $",
-        "feedback": "Pérdida = (500 − 900) × $1.050 = −400 × $1.050 = −$420.000. El negocio está en zona roja, a 400 hamburguesas de su PE. Ese es el \"hueco\" que está perdiendo."
+        "feedback": "Pérdida = (500 − 900) × $1.050 = −400 × $1.050 = −$420.000. El negocio está in zona roja, a 400 hamburguesas de su PE. Ese es el \"hueco\" que está perdiendo."
     },
     "Q16": {
         "id": "Q16",
@@ -655,150 +693,8 @@
         "id": "Q20",
         "text": "\"Don Burger\" tiene CF=$940.000 y CMu=$1.050. Un mes vendió exactamente 895 hamburguesas. ¿Cuál es el resultado más cercano al real?",
         "hint": "",
-        "correct": "C) El negocio está en el Punto de Equilibrio exacto — ni gana ni pierde",
-        "feedback": "PE = $940.000 ÷ $1.050 ≈ 895 unidades. Si vende exactamente 895, los ingresos cubren exactamente los costos totales. Resultado = $0. Ni gana ni pierde. Del cubierto 896 en adelante, todo es ganancia."
-    }
-},
-  "SIMULACRO1": {
-    "Q1": {
-        "id": "Q1",
-        "text": "El alquiler del local ($420.000/mes) que se paga sin importar cuántas hamburguesas se vendan, se clasifica como:",
-        "hint": "",
-        "correct": "B) Costo Fijo Indirecto",
-        "feedback": "El alquiler es Costo Fijo (no varía con la producción) e Indirecto (no asignable a una hamburguesa específica). Se paga igual con 0 o 1.000 ventas."
-    },
-    "Q2": {
-        "id": "Q2",
-        "text": "La comisión de la app de delivery (15% sobre cada venta) es un costo:",
-        "hint": "",
-        "correct": "B) Variable de Comercialización — sube con cada venta",
-        "feedback": "La comisión de delivery es Variable (depende del volumen vendido) y de Comercialización (vinculada al canal de venta, no a la producción del plato)."
-    },
-    "Q3": {
-        "id": "Q3",
-        "text": "\"Don Burger\" compra una freidora industrial por $2.000.000. Esta erogación se clasifica como:",
-        "hint": "",
-        "correct": "C) Inversión — activo que genera beneficios futuros y se amortiza",
-        "feedback": "La compra de equipamiento es una Inversión. El desembolso se activa como activo y su costo se recupera mediante amortización mensual a lo largo de su vida útil."
-    },
-    "Q4": {
-        "id": "Q4",
-        "text": "Los ingredientes de cada hamburguesa (harina, carne, queso, vegetales) son un Costo Variable Directo porque se pueden asignar exactamente a cada unidad producida y varían con el volumen.",
-        "hint": "",
-        "correct": "Verdadero",
-        "feedback": "Verdadero. Son directos (cuantificables por porción en la receta) y variables (si no producís, no consumís ingredientes). Son el núcleo de la Materia Prima."
-    },
-    "Q5": {
-        "id": "Q5",
-        "text": "¿Cuál de los siguientes conceptos corresponde a un GASTO y NO a un costo de producción?",
-        "hint": "",
-        "correct": "C) Campaña publicitaria en Instagram",
-        "feedback": "La publicidad es un GASTO de Comercialización: no interviene en la transformación de la materia prima y no se recupera directamente con la venta de un plato específico."
-    },
-    "Q6": {
-        "id": "Q6",
-        "text": "Con 0 hamburguesas vendidas, ¿cuál es el Costo Total del mes?",
-        "hint": "",
-        "correct": "940000 $",
-        "feedback": "CT(0) = CF + CV = $940.000 + $0 = $940.000. Los costos fijos existen aunque no haya producción. El negocio ya está perdiendo dinero desde el día 1."
-    },
-    "Q7": {
-        "id": "Q7",
-        "text": "Si se producen 200 hamburguesas en el mes, ¿cuál es el Costo Variable Total?",
-        "hint": "",
-        "correct": "390000 $",
-        "feedback": "CVT = CVu × Q = $1.950 × 200 = $390.000. El costo variable total escala en proporción directa con las unidades producidas."
-    },
-    "Q8": {
-        "id": "Q8",
-        "text": "Con 200 hamburguesas, ¿cuál es el Costo Fijo Unitario (CFU)?",
-        "hint": "",
-        "correct": "4700 $",
-        "feedback": "CFU = CF ÷ Q = $940.000 ÷ 200 = $4.700. Como los CF se reparten entre más unidades, el CFU disminuye a medida que aumenta la producción."
-    },
-    "Q9": {
-        "id": "Q9",
-        "text": "Cuando la producción aumenta de 200 a 400 hamburguesas, el Costo Variable Unitario (CVu = $1.950):",
-        "hint": "",
-        "correct": "C) Permanece constante en $1.950 por hamburguesa",
-        "feedback": "El CVu siempre es constante. Es el costo de UNA unidad, y ese valor no cambia con el volumen. Lo que cambia es el CVT (total): $1.950 × 200 = $390k vs $1.950 × 400 = $780k."
-    },
-    "Q10": {
-        "id": "Q10",
-        "text": "A medida que la producción crece, el Costo Total Unitario (CTU) se acerca progresivamente al Costo Variable Unitario porque el componente fijo por unidad tiende a cero.",
-        "hint": "",
-        "correct": "Verdadero",
-        "feedback": "Verdadero. CTU = CFU + CVu. Como CFU → 0 al crecer Q, CTU → CVu. Ejemplo: con Q=10, CTU = $94.000+$1.950 = $95.950; con Q=1.000, CTU ≈ $940+$1.950 = $2.890 ≈ CVu."
-    },
-    "Q11": {
-        "id": "Q11",
-        "text": "Observá el gráfico de \"Don Burger\". ¿En cuántas unidades se cruzan las líneas de Ingresos y Costos Totales? Ese es el Punto de Equilibrio.",
-        "hint": "",
-        "correct": "900 hamburguesas",
-        "feedback": "PE = CF ÷ CMu = $940.000 ÷ ($3.000 − $1.950) = $940.000 ÷ $1.050 ≈ 895 ≈ 900 hamburguesas/mes."
-    },
-    "Q12": {
-        "id": "Q12",
-        "text": "Si Don Burger vendió 1.300 hamburguesas este mes (sobre el PE), ¿cuál es la ganancia neta?",
-        "hint": "",
-        "correct": "420000 $",
-        "feedback": "Ganancia = (Q − PE) × CMu = (1.300 − 900) × $1.050 = 400 × $1.050 = $420.000. Las primeras 900 cubrieron el muro de CF; las 400 extras son ganancia pura."
-    },
-    "Q13": {
-        "id": "Q13",
-        "text": "En el gráfico, la línea de Costos Totales NO parte del origen (0,0). ¿Por qué?",
-        "hint": "",
-        "correct": "C) Porque los Costos Fijos ya existen aunque no se produzca nada — parten desde CF en el eje Y",
-        "feedback": "La línea de CT parte desde el nivel de los Costos Fijos en el eje Y, porque CF = $940.000 existe aunque Q = 0. Fórmula: CT = CF + CVu × Q → cuando Q=0, CT = CF."
-    },
-    "Q14": {
-        "id": "Q14",
-        "text": "¿Qué representa la zona sombreada en ROJO en el gráfico de PE?",
-        "hint": "",
-        "correct": "B) La zona donde los Ingresos son menores a los Costos Totales — el negocio pierde dinero",
-        "feedback": "La zona roja (pérdida) muestra el tramo donde CT > Ingresos. El negocio no cubre todos sus costos. El PE es el límite exacto donde esa situación cambia."
-    },
-    "Q15": {
-        "id": "Q15",
-        "text": "Si \"Don Burger\" sólo vende 500 hamburguesas en un mes de baja, ¿cuánto dinero pierde?",
-        "hint": "",
-        "correct": "420000 $",
-        "feedback": "Pérdida = (500 − 900) × $1.050 = −400 × $1.050 = −$420.000. El negocio está en zona roja, a 400 hamburguesas de su PE. Ese es el \"hueco\" que está perdiendo."
-    },
-    "Q16": {
-        "id": "Q16",
-        "text": "¿Cuál es la Contribución Marginal Unitaria (CMu) de cada hamburguesa?",
-        "hint": "",
-        "correct": "1050 $",
-        "feedback": "CMu = PV − CVu = $3.000 − $1.950 = $1.050. Cada hamburguesa vendida aporta $1.050 al \"muro\" de los Costos Fijos. Una vez cubiertos $940.000, cada CMu es ganancia pura."
-    },
-    "Q17": {
-        "id": "Q17",
-        "text": "Don Burger evalúa bajar el precio a $2.500 para atraer más clientes. Con el nuevo precio y el mismo CVu, ¿cuántas hamburguesas necesitaría vender para alcanzar el PE?",
-        "hint": "",
-        "correct": "1711 hamburguesas",
-        "feedback": "Nueva CMu = $2.500 − $1.950 = $550 → Nuevo PE = $940.000 ÷ $550 ≈ 1.709 hamburguesas. Bajar el precio casi duplica el PE. La CMu es la palanca más sensible."
-    },
-    "Q18": {
-        "id": "Q18",
-        "text": "¿Cuál de estas acciones reduciría el Punto de Equilibrio de \"Don Burger\"?",
-        "hint": "",
-        "correct": "C) Negociar con el proveedor de carne para bajar el CVu a $1.600",
-        "feedback": "Bajar el CVu de $1.950 a $1.600 sube la CMu a $1.400 → PE = $940.000 ÷ $1.400 = 671 hamburguesas (vs 900 actual). Reducir el CVu es la acción más eficiente: baja el PE sin tocar el precio."
-    },
-    "Q19": {
-        "id": "Q19",
-        "text": "El Food Cost % se calcula como: (Costo de Ingredientes ÷ Precio de Venta) × 100. Si los ingredientes de la hamburguesa cuestan $1.200 y el PV es $3.000, el Food Cost es 40%.",
-        "hint": "",
-        "correct": "Verdadero",
-        "feedback": "Verdadero. FC% = ($1.200 ÷ $3.000) × 100 = 40%. El rango ideal es 25%-35%. Un FC de 40% indica que los ingredientes consumen demasiado del precio — hay que revisar el PV o los insumos."
-    },
-    "Q20": {
-        "id": "Q20",
-        "text": "\"Don Burger\" tiene CF=$940.000 y CMu=$1.050. Un mes vendió exactamente 895 hamburguesas. ¿Cuál es el resultado más cercano al real?",
-        "hint": "",
-        "correct": "C) El negocio está en el Punto de Equilibrio exacto — ni gana ni pierde",
-        "feedback": "PE = $940.000 ÷ $1.050 ≈ 895 unidades. Si vende exactamente 895, los ingresos cubren exactamente los costos totales. Resultado = $0. Ni gana ni pierde. Del cubierto 896 en adelante, todo es ganancia."
+        "correct": "C) El negocio está in el Punto de Equilibrio exacto — ni gana ni pierde",
+        "feedback": "PE = $940.000 ÷ $1.050 ≈ 895 unidades. Si vende exactamente 895, los ingresos cubren exactamente los costos totales. Resultado = $0. Ni gana ni pierde. Del cubierto 896 in adelante, todo es ganancia."
     }
 },
   "SIMULACRO2": {
@@ -814,32 +710,32 @@
         "text": "La factura de gas de la cafetería tiene un cargo fijo mensual de $40.000 más un componente variable según el consumo. ¿Cómo se clasifica?",
         "hint": "",
         "correct": "C) Costo Mixto o Semifijo — porque tiene parte fija y parte variable",
-        "feedback": "Luz, gas y agua son Costos Mixtos (o Semifijos): tienen una obligación fija inamovible mensual + un componente variable que crece con el uso. En temporada alta se disparan; en baja bajan pero nunca desaparecen."
+        "feedback": "Luz, gas y agua son Costos Mixtos (o Semifijos): tienen una obligación fija inamovible mensual + un componente variable que crece con el uso. En temporada alta se disparan; in baja bajan pero nunca desaparecen."
     },
     "Q3": {
         "id": "Q3",
         "text": "La comisión que cobra la plataforma de delivery por cada pedido procesado es un Costo Variable de Comercialización porque solo existe si hay ventas.",
         "hint": "",
         "correct": "Verdadero",
-        "feedback": "Verdadero. Sin venta, no hay comisión. La comisión escala en proporción directa al volumen de pedidos. Es Variable (cambia con las ventas) y de Comercialización (vinculada al canal, no a la producción)."
+        "feedback": "Verdadero. Sin venta, no hay comisión. La comisión escala in proporción directa al volumen de pedidos. Es Variable (cambia con las ventas) y de Comercialización (vinculada al canal, no a la producción)."
     },
     "Q4": {
         "id": "Q4",
         "text": "\"El Mentidero\" adquiere una máquina de espresso italiana por $1.800.000. Esta erogación es:",
         "hint": "",
         "correct": "B) Inversión — activo que genera beneficios futuros y se amortiza mensualmente",
-        "feedback": "Es una Inversión. El desembolso no se reconoce como costo total en un solo mes. Se activa como activo y se amortiza (por ejemplo: $1.800.000 ÷ 60 meses = $30.000/mes de depreciación)."
+        "feedback": "Es una Inversión. El desembolso no se reconoce como costo total in un solo mes. Se activa como activo y se amortiza (por ejemplo: $1.800.000 ÷ 60 meses = $30.000/mes de depreciación)."
     },
     "Q5": {
         "id": "Q5",
         "text": "¿Cuál de los siguientes es un Costo INDIRECTO de Fabricación (CIF)?",
         "hint": "",
         "correct": "C) El gas de la cocina — necesario para todo pero no cuantificable por porción exacta",
-        "feedback": "El gas es un CIF: vital para la operación, pero imposible de medir con exactitud en una porción específica. Por eso se asigna al plato mediante un criterio de prorrateo (CIF mensual ÷ cubiertos estimados)."
+        "feedback": "El gas es un CIF: vital para la operación, pero imposible de medir con exactitud in una porción específica. Por eso se asigna al plato mediante un criterio de prorrateo (CIF mensual ÷ cubiertos estimados)."
     },
     "Q6": {
         "id": "Q6",
-        "text": "Si se producen 300 combos en el mes, ¿cuál es el Costo Variable Total?",
+        "text": "Si se producen 300 combos in el mes, ¿cuál es el Costo Variable Total?",
         "hint": "",
         "correct": "750000 $",
         "feedback": "CVT = CVu × Q = $2.500 × 300 = $750.000. El costo variable total es proporcional al volumen. Si no se produce, el CVT es cero."
@@ -869,7 +765,7 @@
         "id": "Q10",
         "text": "Si la cafetería duplica sus ventas de 600 a 1.200 combos, ¿qué le pasa al Costo Fijo Total?",
         "hint": "",
-        "correct": "C) Permanece en $1.200.000 — los CF no cambian con el volumen",
+        "correct": "C) Permanece in $1.200.000 — los CF no cambian con el volumen",
         "feedback": "Los Costos Fijos TOTALES no cambian con el volumen de producción. Esa es su definición. Lo que cambia es el CFU (Costo Fijo por unidad), que baja a medida que se producen más combos."
     },
     "Q11": {
@@ -888,10 +784,10 @@
     },
     "Q13": {
         "id": "Q13",
-        "text": "En el gráfico, la distancia vertical entre la línea de Ingresos y la línea de Costos Totales en cualquier punto de la zona verde representa:",
+        "text": "En el gráfico, la distancia vertical entre la línea de Ingresos y la línea de Costos Totales in cualquier punto de la zona verde representa:",
         "hint": "",
-        "correct": "C) La Ganancia Neta en ese nivel de ventas",
-        "feedback": "La distancia vertical entre Ingresos y CT en la zona verde es exactamente la ganancia neta. Matemáticamente: Ingresos − CT = (PV × Q) − (CF + CVu × Q) = (PV − CVu) × Q − CF = CMu × Q − CF."
+        "correct": "C) La Ganancia Neta in ese nivel de ventas",
+        "feedback": "La distancia vertical entre Ingresos y CT in la zona verde es exactamente la ganancia neta. Matemáticamente: Ingresos − CT = (PV × Q) − (CF + CVu × Q) = (PV − CVu) × Q − CF = CMu × Q − CF."
     },
     "Q14": {
         "id": "Q14",
@@ -902,7 +798,7 @@
     },
     "Q15": {
         "id": "Q15",
-        "text": "¿Qué representa la línea horizontal de Costos Fijos en el gráfico?",
+        "text": "¿Qué representa la línea horizontal de Costos Fijos in el gráfico?",
         "hint": "",
         "correct": "B) El \"muro\" que el negocio paga desde el día 1, sin importar si vende o no — es el punto de partida de la línea de CT",
         "feedback": "La línea de CF es horizontal porque los costos fijos no se mueven con la producción. La línea de Costos TOTALES parte desde ese nivel (no desde cero) porque CT = CF + CVu × Q. Con Q=0, CT = CF."
@@ -937,7 +833,7 @@
     },
     "Q20": {
         "id": "Q20",
-        "text": "La cafetería evalúa agregar personal de 18:00 a 20:00, sumando $200.000/mes en sueldos (CF). ¿Cuántos combos adicionales necesita vender para que ese costo esté cubierto?",
+        "text": "La cafetería evalúa agregar personal de 18:00 a 20:00, sumando $200.000/mes in sueldos (CF). ¿Cuántos combos adicionales necesita vender para que ese costo esté cubierto?",
         "hint": "",
         "correct": "B) 80 combos adicionales",
         "feedback": "Combos adicionales = CF adicional ÷ CMu = $200.000 ÷ $2.500 = 80 combos. El nuevo turno debe generar al menos 80 combos de venta incremental para autofinanciarse. Si vende más, genera ganancia extra."
@@ -966,7 +862,15 @@
       }
 
       document.getElementById('qmCode').textContent = code;
-      const exLabels = { 'SIMULACRO': 'SIMULACRO GENERAL', 'CM_PE': 'RECETA RENTABILIDAD (CM Y PE)', 'TP': 'TP GRÁFICOS', 'SIMULACRO1': 'SIMULACRO 1 (DON BURGER)', 'SIMULACRO2': 'SIMULACRO 2 (EL MENTIDERO)' };
+      const exLabels = { 
+        'SIMULACRO': 'SIMULACRO GENERAL', 
+        'CM_PE': 'RECETA RENTABILIDAD (CM Y PE)', 
+        'TP': 'TP GRÁFICOS', 
+        'SIMULACRO1': 'SIMULACRO 1 (DON BURGER)', 
+        'SIMULACRO2': 'SIMULACRO 2 (EL MENTIDERO)',
+        'TRATTORIA': 'EXAMEN LA TRATTORIA'
+      };
+
       document.getElementById('qmExam').textContent = exLabels[examType] || examType;
       
       document.getElementById('qModalOverlay').classList.add('active');
@@ -989,11 +893,23 @@
         if (r.errores.startsWith('TP GRÁFICOS')) return 'TP';
         if (r.errores.startsWith('S1:')) return 'SIMULACRO1';
         if (r.errores.startsWith('S2:')) return 'SIMULACRO2';
+        if (r.errores.startsWith('TRATTORIA')) return 'TRATTORIA';
       }
+
       if (r.total === 13) return 'TP';
       if (r.total === 21) return 'CM_PE';
       if (r.total === 20) return 'SIMULACRO2'; // fallback for backward compatibility
       return 'SIMULACRO';
+    }
+
+    function calculateGrade(pct) {
+      if (pct >= 60) {
+        // Escala 60% = 4, 100% = 10
+        return (4 + (pct - 60) * 0.15).toFixed(1);
+      } else {
+        // Escala 0% = 1, 60% = 3.9
+        return (1 + (pct / 60) * 2.9).toFixed(1);
+      }
     }
 
     function setFilter(filterId) {
@@ -1049,7 +965,7 @@
         return; // Salimos de la función para no dibujar gráficos
       } else {
         grid.style.display = 'grid';
-        thead.innerHTML = '<th>Alumno</th><th>Puntaje</th><th>Porcentaje</th><th>Preguntas Falladas</th><th>Fecha</th>';
+        thead.innerHTML = '<th>Alumno</th><th>Puntaje</th><th>Porcentaje</th><th>Nota</th><th>Preguntas Falladas</th><th>Fecha</th>';
       }
 
       filteredData.forEach(r => {
@@ -1064,17 +980,23 @@
           <td style="color:#d4a853; font-weight:500;">${r.nombre}</td>
           <td>${r.puntaje} / ${r.total}</td>
           <td style="color:${r.porcentaje>=60 ? '#7bc67a' : '#e05a5a'}">${r.porcentaje}%</td>
+          <td style="font-weight:bold; color:${r.porcentaje>=60 ? '#d4a853' : '#7a8470'}">${calculateGrade(r.porcentaje)}</td>
           <td style="font-size:12px; color:#7a8470; line-height:1.4;">
             ${(() => {
               if (!r.errores) return '-';
-              let eStr = r.errores.replace('TP GRÁFICOS: ', '').replace('S1: OK', '').replace('S2: OK', '').replace('S1: ', '').replace('S2: ', '');
+              let eStr = r.errores
+                .replace(/^TRATTORIA\s*\([^)]+\):\s*/, '')
+                .replace(/^TRATTORIA:\s*/, '')
+                .replace(/^TP GRÁFICOS:\s*/, '')
+                .replace(/^S1:\s*(OK)?\s*/, '')
+                .replace(/^S2:\s*(OK)?\s*/, '');
               let chunks = eStr.split(',').map(s => s.trim()).filter(Boolean);
               let exType = getExamType(r);
               return chunks.map(chunk => {
                 let parts = chunk.split('||');
                 let code = parts[0].trim();
                 let userAns = parts.length > 1 ? parts[1].trim().replace(/'/g, "&#39;") : '';
-                return \`<span class="q-pill" onclick="showModal('\${exType}', '\${code}', '\${userAns}')">\${code}</span>\`;
+                return `<span class="q-pill" onclick="showModal('${exType}', '${code}', '${userAns}')">${code}</span>`;
               }).join('');
             })()}
           </td>
@@ -1126,8 +1048,10 @@
     async function loadData() {
       const url = 'https://dukgjrhyhyxvdqzhthje.supabase.co';
       const key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1a2dqcmh5aHl4dmRxemh0aGplIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc5MTQzNjIsImV4cCI6MjA4MzQ5MDM2Mn0.JYZWv2vYwMbTopyL-T8_kjbX2py5IL7Ap6ASZc2B4dM';
-      const supabase = window.supabase.createClient(url, key);
-      const { data, error } = await supabase.from('exam_resultados').select('*').order('created_at', { ascending: false });
+      
+      const sbClient = window.supabase.createClient(url, key);
+      const { data, error } = await sbClient.from('exam_resultados').select('*').order('created_at', { ascending: false });
+
       
       if(error) {
         alert('Error al conectar con la base de datos: ' + error.message);

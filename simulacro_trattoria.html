@@ -1,0 +1,1537 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Primer Parcial · Costos y Presupuestos · IFTS N°23</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+  :root {
+    --bg: #0c0d0f;
+    --surface: #141518;
+    --surface2: #1c1e22;
+    --border: #2a2d33;
+    --accent: #c8f03c;
+    --accent2: #3cf0a8;
+    --accent3: #f0703c;
+    --text: #e8eaed;
+    --muted: #7a8090;
+    --correct: #22c55e;
+    --wrong: #ef4444;
+    --warn: #f59e0b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ─────────────────────────────────── */
+  .site-header {
+    border-bottom: 1px solid var(--border);
+    padding: 12px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky; top: 0;
+    background: rgba(12,13,15,0.92);
+    backdrop-filter: blur(12px);
+    z-index: 100;
+  }
+  .site-header .brand {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .site-header .brand span { color: var(--accent); }
+  .badge-header {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    padding: 4px 10px;
+    border-radius: 4px;
+  }
+
+  /* ── HERO ────────────────────────────────────── */
+  .hero {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 80px 32px 40px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+  .hero h1 em { font-style: italic; color: var(--accent); }
+  .hero p.sub {
+    color: var(--muted);
+    font-size: 15px;
+    max-width: 560px;
+    margin-bottom: 32px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+
+  .stats-row {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-bottom: 36px;
+    justify-content: center;
+  }
+
+  .stat-pill {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 20px;
+    min-width: 90px;
+  }
+  .stat-pill .num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.8rem;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .stat-pill .label {
+    font-size: 11px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .warning-box {
+    border: 1px solid #f59e0b40;
+    background: #f59e0b0c;
+    border-radius: 8px;
+    padding: 12px 18px;
+    font-size: 13px;
+    color: var(--warn);
+    margin-bottom: 32px;
+  }
+
+  /* NAME INPUT */
+  .name-section { margin-bottom: 40px; width: 100%; max-width: 440px; }
+
+  .name-section label {
+    display: block;
+    font-size: 11px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+  .name-section input {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    padding: 12px 18px;
+    width: 100%;
+    max-width: 440px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .name-section input:focus { border-color: var(--accent); }
+  .name-section input::placeholder { color: var(--muted); }
+
+  .btn-start {
+    background: var(--accent);
+    color: #0c0d0f;
+    border: none;
+    border-radius: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    padding: 14px 32px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: opacity 0.15s, transform 0.15s;
+  }
+  .btn-start:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  /* ── CASO / DATOS ────────────────────────────── */
+  .caso-section {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 0 32px 48px;
+  }
+  .caso-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 10px;
+  }
+  .caso-card h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    margin-bottom: 4px;
+  }
+  .caso-card .caso-sub {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 20px;
+  }
+  .caso-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  @media (max-width: 600px) { .caso-grid { grid-template-columns: 1fr; } }
+  .caso-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  .caso-table th {
+    text-align: left;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 6px;
+  }
+  .caso-table td {
+    padding: 7px 0;
+    border-bottom: 1px solid #ffffff08;
+    vertical-align: top;
+  }
+  .caso-table td:last-child { text-align: right; font-family: 'DM Mono', monospace; color: var(--accent); }
+  .caso-table tr.total td { border-top: 1px solid var(--border); font-weight: 600; color: var(--accent2); }
+  .caso-table tr.total td:last-child { color: var(--accent2); }
+
+  /* ── EXAM AREA ───────────────────────────────── */
+  .exam-area {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 0 32px 80px;
+  }
+
+  .block-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin: 48px 0 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .block-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+  .block-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.3rem;
+  }
+  .block-count {
+    margin-left: auto;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  /* QUESTION CARD */
+  .q-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 14px;
+    transition: border-color 0.2s;
+  }
+  .q-card.answered { border-color: #2a2d33; }
+  .q-card.correct-card { border-color: #22c55e40; background: #22c55e08; }
+  .q-card.wrong-card { border-color: #ef444440; background: #ef444408; }
+
+  .q-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .q-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  .q-type {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .q-type.mc { border-color: #3cf0a840; color: var(--accent2); }
+  .q-type.vf { border-color: #c8f03c40; color: var(--accent); }
+  .q-type.calc { border-color: #f0703c40; color: var(--accent3); }
+
+  .q-text {
+    font-size: 15px;
+    color: var(--text);
+    margin-bottom: 18px;
+    line-height: 1.65;
+  }
+  .q-hint {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    margin-bottom: 14px;
+    padding: 8px 12px;
+    background: var(--surface2);
+    border-radius: 6px;
+    border-left: 2px solid var(--border);
+  }
+
+  /* OPTIONS */
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .option-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    cursor: pointer;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    padding: 11px 16px;
+    text-align: left;
+    transition: border-color 0.15s, background 0.15s;
+    width: 100%;
+  }
+  .option-btn:hover:not(:disabled) { border-color: var(--accent); background: #c8f03c0a; }
+  .option-btn .opt-key {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    min-width: 18px;
+    padding-top: 1px;
+    text-transform: uppercase;
+  }
+  .option-btn.selected { border-color: var(--accent); background: #c8f03c10; }
+  .option-btn.selected .opt-key { color: var(--accent); }
+  .option-btn.correct-opt { border-color: var(--correct) !important; background: #22c55e15 !important; }
+  .option-btn.correct-opt .opt-key { color: var(--correct); }
+  .option-btn.wrong-opt { border-color: var(--wrong) !important; background: #ef444415 !important; }
+  .option-btn.wrong-opt .opt-key { color: var(--wrong); }
+  .option-btn:disabled { cursor: default; }
+
+  /* CALC INPUT */
+  .calc-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .calc-row input {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    font-size: 15px;
+    padding: 10px 16px;
+    width: 200px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .calc-row input:focus { border-color: var(--accent); }
+  .calc-row .unit {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .btn-confirm {
+    background: transparent;
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    color: var(--accent);
+    cursor: pointer;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    padding: 10px 20px;
+    text-transform: uppercase;
+    transition: background 0.15s;
+  }
+  .btn-confirm:hover { background: #c8f03c15; }
+  .btn-confirm:disabled { opacity: 0.4; cursor: default; }
+
+  /* FEEDBACK */
+  .q-feedback {
+    margin-top: 14px;
+    font-size: 13px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    display: none;
+    line-height: 1.6;
+  }
+  .q-feedback.show { display: block; }
+  .q-feedback.ok { background: #22c55e18; color: #4ade80; border: 1px solid #22c55e30; }
+  .q-feedback.fail { background: #ef444418; color: #f87171; border: 1px solid #ef444430; }
+
+  /* ── SCOREBOARD ──────────────────────────────── */
+  .score-bar {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 20px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    z-index: 90;
+    box-shadow: 0 8px 32px #00000060;
+  }
+  .score-bar .sc { display: flex; flex-direction: column; gap: 2px; }
+  .score-bar .sc-val { font-size: 1.3rem; line-height: 1; }
+  .score-bar .sc-label { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+  .score-bar .sc-val.green { color: var(--correct); }
+  .score-bar .sc-val.red { color: var(--wrong); }
+  .score-bar .sc-val.gray { color: var(--muted); }
+
+  /* ── RESULTS ─────────────────────────────────── */
+  #results-section {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 0 32px 80px;
+    display: none;
+  }
+  .result-hero {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 40px;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .result-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+  .result-score {
+    font-family: 'DM Serif Display', serif;
+    font-size: 5rem;
+    line-height: 1;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .result-label {
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+  .result-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .result-cell {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+  }
+  .result-cell .rv {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .result-cell .rl {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .result-cell.g .rv { color: var(--correct); }
+  .result-cell.r .rv { color: var(--wrong); }
+  .result-cell.p .rv { color: var(--accent2); }
+  .result-nota {
+    font-size: 1.1rem;
+    font-weight: 500;
+    padding: 12px 24px;
+    border-radius: 8px;
+    display: inline-block;
+    border: 1px solid var(--border);
+  }
+  .result-nota.aprobado { border-color: var(--correct); color: var(--correct); background: #22c55e12; }
+  .result-nota.desaprobado { border-color: var(--wrong); color: var(--wrong); background: #ef444412; }
+
+  .btn-retry {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--muted);
+    cursor: pointer;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    margin-top: 20px;
+    padding: 12px 24px;
+    text-transform: uppercase;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .btn-retry:hover { border-color: var(--text); color: var(--text); }
+  .btn-print {
+    background: var(--accent);
+    border: none;
+    border-radius: 8px;
+    color: #0c0d0f;
+    cursor: pointer;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    margin-top: 20px;
+    margin-left: 12px;
+    padding: 12px 24px;
+    text-transform: uppercase;
+  }
+  .btn-print:hover { opacity: 0.85; }
+
+  .review-section { margin-top: 32px; }
+  .review-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .review-item {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+  .review-item.ok { border-color: #22c55e30; }
+  .review-item.fail { border-color: #ef444430; }
+  .review-item .ri-q { color: var(--text); margin-bottom: 6px; line-height: 1.5; }
+  .review-item .ri-answer { font-family: 'DM Mono', monospace; font-size: 12px; }
+  .review-item .ri-answer .corr { color: var(--correct); }
+  .review-item .ri-answer .wrong { color: var(--wrong); }
+  .review-item .ri-icon { float: right; font-size: 1rem; }
+
+  /* PROGRESS */
+  .progress-line {
+    height: 2px;
+    background: var(--border);
+    border-radius: 2px;
+    margin-bottom: 40px;
+    overflow: hidden;
+  }
+  .progress-line-inner {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  /* SUBMIT AREA */
+  .submit-area {
+    margin-top: 48px;
+    text-align: center;
+    border-top: 1px solid var(--border);
+    padding-top: 40px;
+  }
+  .submit-area p { color: var(--muted); font-size: 13px; margin-bottom: 20px; }
+  .btn-submit {
+    background: var(--accent);
+    border: none;
+    border-radius: 10px;
+    color: #0c0d0f;
+    cursor: pointer;
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    padding: 16px 48px;
+    text-transform: uppercase;
+    transition: opacity 0.15s, transform 0.15s;
+  }
+  .btn-submit:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  @media print {
+    .site-header, .score-bar, .btn-submit, .submit-area, .btn-retry, .btn-print { display: none !important; }
+    body { background: white; color: black; }
+    .q-card, .caso-card, .result-hero { background: white; border-color: #ddd; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="brand">IFTS N°23 · <span>Costos & Presupuestos</span></div>
+  <div class="badge-header">Primer Parcial · IFTS N°23</div>
+</header>
+
+<!-- LANDING -->
+<div id="landing">
+  <div class="hero">
+    <div class="hero-tag">// Primer Parcial · Costos y Presupuestos · IFTS N°23</div>
+    <h1>La <em>Trattoria</em><br>del Norte</h1>
+    <p class="sub">Caso completo de restaurante italiano en Buenos Aires. Clasificación de costos, Food Cost, Contribución Marginal, Punto de Equilibrio y análisis de situación.</p>
+
+    <div class="stats-row">
+      <div class="stat-pill"><span class="num">34</span><span class="label">Preguntas</span></div>
+      <div class="stat-pill"><span class="num">5</span><span class="label">Bloques</span></div>
+      <div class="stat-pill"><span class="num">45'</span><span class="label">Estimado</span></div>
+      <div class="stat-pill"><span class="num">MC · V/F · Calc</span><span class="label">Tipos</span></div>
+    </div>
+
+    <div class="warning-box">⚠️ Este examen no incluye fórmulas de ayuda. Debés recordar y aplicar los conceptos vistos en clase.</div>
+
+    <div class="name-section">
+      <label for="student-name">Nombre y Apellido del Alumno</label>
+      <input type="text" id="student-name" placeholder="Escribí tu nombre completo" autocomplete="off">
+    </div>
+
+
+    <button class="btn-start" onclick="startExam()">Comenzar examen →</button>
+  </div>
+</div>
+
+<!-- EXAM -->
+<div id="exam-area" style="display:none;">
+
+  <!-- CASO -->
+  <div class="caso-section">
+    <div class="caso-card">
+      <h2>🍝 La Trattoria del Norte</h2>
+      <div class="caso-sub">// Restaurante Italiano · Buenos Aires · Datos del Mes</div>
+      <div class="caso-grid">
+        <div>
+          <table class="caso-table">
+            <tr><th colspan="2">Costos Fijos Mensuales</th></tr>
+            <tr><td>Alquiler del local</td><td>$900.000</td></tr>
+            <tr><td>Sueldos base (cocina + salón)</td><td>$1.200.000</td></tr>
+            <tr><td>Amortización de equipos</td><td>$300.000</td></tr>
+            <tr><td>Servicios básicos (parte fija)</td><td>$200.000</td></tr>
+            <tr class="total"><td><strong>CF Total</strong></td><td>$2.600.000</td></tr>
+          </table>
+        </div>
+        <div>
+          <table class="caso-table">
+            <tr><th colspan="2">Costos Variables por Plato</th></tr>
+            <tr><td>Ingredientes</td><td>$1.800</td></tr>
+            <tr><td>Packaging delivery</td><td>$200</td></tr>
+            <tr><td>Comisión delivery (5% PV)</td><td>$200</td></tr>
+            <tr class="total"><td><strong>CVu</strong></td><td>$2.200</td></tr>
+            <tr><td>Precio de Venta (PV)</td><td>$8.000</td></tr>
+            <tr><td>Platos vendidos en el mes</td><td>600</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="exam-area">
+    <div class="progress-line"><div class="progress-line-inner" id="prog-bar"></div></div>
+
+    <!-- BLOQUE I -->
+    <div class="block-header">
+      <span class="block-num">Bloque I</span>
+      <span class="block-title">Clasificación de Costos</span>
+      <span class="block-count">8 preguntas</span>
+    </div>
+
+    <!-- Q1 -->
+    <div class="q-card" id="qc-1">
+      <div class="q-meta">
+        <span class="q-num">1.1</span>
+        <span class="q-type vf">V/F</span>
+      </div>
+      <p class="q-text">El alquiler del local es un costo variable porque depende de cuántos platos se vendan en el mes.</p>
+      <div class="options">
+        <button class="option-btn" onclick="answerVF(1,'V')"><span class="opt-key">V</span> Verdadero</button>
+        <button class="option-btn" onclick="answerVF(1,'F')"><span class="opt-key">F</span> Falso</button>
+      </div>
+      <div class="q-feedback" id="fb-1"></div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="q-card" id="qc-2">
+      <div class="q-meta">
+        <span class="q-num">1.2</span>
+        <span class="q-type mc">MC</span>
+      </div>
+      <p class="q-text">¿Cuál de los siguientes es un <strong>costo variable</strong> en "La Trattoria del Norte"?</p>
+      <div class="options">
+        <button class="option-btn" onclick="answerMC(2,'A')"><span class="opt-key">A</span> El alquiler del local</button>
+        <button class="option-btn" onclick="answerMC(2,'B')"><span class="opt-key">B</span> El sueldo base del chef</button>
+        <button class="option-btn" onclick="answerMC(2,'C')"><span class="opt-key">C</span> Los ingredientes por plato</button>
+        <button class="option-btn" onclick="answerMC(2,'D')"><span class="opt-key">D</span> La amortización de equipos</button>
+      </div>
+      <div class="q-feedback" id="fb-2"></div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="q-card" id="qc-3">
+      <div class="q-meta">
+        <span class="q-num">1.3</span>
+        <span class="q-type mc">MC</span>
+      </div>
+      <p class="q-text">Los sueldos base del personal de cocina y salón son costos:</p>
+      <div class="options">
+        <button class="option-btn" onclick="answerMC(3,'A')"><span class="opt-key">A</span> Variables directos</button>
+        <button class="option-btn" onclick="answerMC(3,'B')"><span class="opt-key">B</span> Fijos indirectos</button>
+        <button class="option-btn" onclick="answerMC(3,'C')"><span class="opt-key">C</span> Variables indirectos</button>
+        <button class="option-btn" onclick="answerMC(3,'D')"><span class="opt-key">D</span> Mixtos directos</button>
+      </div>
+      <div class="q-feedback" id="fb-3"></div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="q-card" id="qc-4">
+      <div class="q-meta">
+        <span class="q-num">1.4</span>
+        <span class="q-type vf">V/F</span>
+      </div>
+      <p class="q-text">La comisión de delivery del 5% sobre el precio de venta es un costo variable, porque solo existe cuando hay ventas.</p>
+      <div class="options">
+        <button class="option-btn" onclick="answerVF(4,'V')"><span class="opt-key">V</span> Verdadero</button>
+        <button class="option-btn" onclick="answerVF(4,'F')"><span class="opt-key">F</span> Falso</button>
+      </div>
+      <div class="q-feedback" id="fb-4"></div>
+    </div>
+
+    <!-- Q5 -->
+    <div class="q-card" id="qc-5">
+      <div class="q-meta">
+        <span class="q-num">1.5</span>
+        <span class="q-type mc">MC</span>
+      </div>
+      <p class="q-text">¿Cuál es la diferencia principal entre un costo <strong>directo</strong> e <strong>indirecto</strong>?</p>
+      <div class="options">
+        <button class="option-btn" onclick="answerMC(5,'A')"><span class="opt-key">A</span> Los directos son siempre variables y los indirectos siempre fijos</button>
+        <button class="option-btn" onclick="answerMC(5,'B')"><span class="opt-key">B</span> Los directos se identifican claramente con el producto; los indirectos necesitan criterios de distribución</button>
+        <button class="option-btn" onclick="answerMC(5,'C')"><span class="opt-key">C</span> Los directos son más importantes para calcular el Punto de Equilibrio</button>
+        <button class="option-btn" onclick="answerMC(5,'D')"><span class="opt-key">D</span> No hay diferencia práctica en gastronomía</button>
+      </div>
+      <div class="q-feedback" id="fb-5"></div>
+    </div>
+
+    <!-- Q6 -->
+    <div class="q-card" id="qc-6">
+      <div class="q-meta">
+        <span class="q-num">1.6</span>
+        <span class="q-type vf">V/F</span>
+      </div>
+      <p class="q-text">La amortización de equipos es un costo variable porque los equipos se desgastan más cuando se producen más platos.</p>
+      <div class="options">
+        <button class="option-btn" onclick="answerVF(6,'V')"><span class="opt-key">V</span> Verdadero</button>
+        <button class="option-btn" onclick="answerVF(6,'F')"><span class="opt-key">F</span> Falso</button>
+      </div>
+      <div class="q-feedback" id="fb-6"></div>
+    </div>
+
+    <!-- Q7 -->
+    <div class="q-card" id="qc-7">
+      <div class="q-meta">
+        <span class="q-num">1.7</span>
+        <span class="q-type mc">MC</span>
+      </div>
+      <p class="q-text">Los servicios básicos (luz, gas) que tienen una parte fija mensual y una parte que varía con la producción se denominan:</p>
+      <div class="options">
+        <button class="option-btn" onclick="answerMC(7,'A')"><span class="opt-key">A</span> Costos fijos totales</button>
+        <button class="option-btn" onclick="answerMC(7,'B')"><span class="opt-key">B</span> Costos variables puros</button>
+        <button class="option-btn" onclick="answerMC(7,'C')"><span class="opt-key">C</span> Costos mixtos o semifijos</button>
+        <button class="option-btn" onclick="answerMC(7,'D')"><span class="opt-key">D</span> Costos directos proporcionales</button>
+      </div>
+      <div class="q-feedback" id="fb-7"></div>
+    </div>
+
+    <!-- Q8 -->
+    <div class="q-card" id="qc-8">
+      <div class="q-meta">
+        <span class="q-num">1.8</span>
+        <span class="q-type vf">V/F</span>
+      </div>
+      <p class="q-text">El packaging de delivery es un costo directo porque se puede asociar claramente a cada plato producido.</p>
+      <div class="options">
+        <button class="option-btn" onclick="answerVF(8,'V')"><span class="opt-key">V</span> Verdadero</button>
+        <button class="option-btn" onclick="answerVF(8,'F')"><span class="opt-key">F</span> Falso</button>
+      </div>
+      <div class="q-feedback" id="fb-8"></div>
+    </div>
+
+    <!-- BLOQUE II -->
+    <div class="block-header">
+      <span class="block-num">Bloque II</span>
+      <span class="block-title">Comportamiento de Costos y Tabla</span>
+      <span class="block-count">5 preguntas</span>
+    </div>
+
+    <!-- Q9 -->
+    <div class="q-card" id="qc-9">
+      <div class="q-meta">
+        <span class="q-num">2.1</span>
+        <span class="q-type mc">MC</span>
+      </div>
+      <p class="q-text">Si "La Trattoria" duplica su producción de 300 a 600 platos en el mes, ¿qué ocurre con los <strong>Costos Fijos Totales</strong>?</p>
+      <div class="options">
+        <button class="option-btn" onclick="answerMC(9,'A')"><span class="opt-key">A</span> Se duplican también, pasando a $5.200.000</button>
+        <button class="option-btn" onclick="answerMC(9,'B')"><span class="opt-key">B</span> Se mantienen iguales en $2.600.000</button>
+        <button class="option-btn" onclick="answerMC(9,'C')"><span class="opt-key">C</span> Bajan a la mitad porque se distribuyen en más platos</button>
+        <button class="option-btn" onclick="answerMC(9,'D')"><span class="opt-key">D</span> Aumentan un 50% por mayor desgaste de equipos</button>
+      </div>
+      <div class="q-feedback" id="fb-9"></div>
+    </div>
+
+    <!-- Q10 -->
+    <div class="q-card" id="qc-10">
+      <div class="q-meta">
+        <span class="q-num">2.2</span>
+        <span class="q-type calc">Cálculo</span>
+      </div>
+      <p class="q-text">Si se producen <strong>400 platos</strong> en el mes, ¿cuál es el <strong>Costo Total</strong> de "La Trattoria"?</p>
+      <div class="calc-row">
+        <input type="number" id="inp-10" placeholder="0">
+        <span class="unit">$</span>
+        <button class="btn-confirm" onclick="answerCalc(10)">Confirmar</button>
+      </div>
+      <div class="q-feedback" id="fb-10"></div>
+    </div>
+
+    <!-- Q11 -->
+    <div class="q-card" id="qc-11">
+      <div class="q-meta">
+        <span class="q-num">2.3</span>
+        <span class="q-type calc">Cálculo</span>
+      </div>
+      <p class="q-text">¿Cuál es el <strong>Costo Fijo Unitario (CFU)</strong> cuando se producen 400 platos?</p>
+      <div class="calc-row">
+        <input type="number" id="inp-11" placeholder="0">
+        <span class="unit">$/plato</span>
+        <button class="btn-confirm" onclick="answerCalc(11)">Confirmar</button>
+      </div>
+      <div class="q-feedback" id="fb-11"></div>
+    </div>
+
+    <!-- Q12 -->
+    <div class="q-card" id="qc-12">
+      <div class="q-meta">
+        <span class="q-num">2.4</span>
+        <span class="q-type vf">V/F</span>
+      </div>
+      <p class="q-text">A mayor producción, el Costo Fijo Unitario (CFU) disminuye, porque los costos fijos se distribuyen entre más unidades.</p>
+      <div class="options">
+        <button class="option-btn" onclick="answerVF(12,'V')"><span class="opt-key">V</span> Verdadero</button>
+        <button class="option-btn" onclick="answerVF(12,'F')"><span class="opt-key">F</span> Falso</button>
+      </div>
+      <div class="q-feedback" id="fb-12"></div>
+    </div>
+
+    <!-- Q13 -->
+    <div class="q-card" id="qc-13">
+      <div class="q-meta">
+        <span class="q-num">2.5</span>
+        <span class="q-type calc">Cálculo</span>
+      </div>
+      <p class="q-text">Si "La Trattoria" vende <strong>600 platos</strong> en el mes, ¿cuáles son los <strong>Costos Variables Totales</strong>?</p>
+      <div class="calc-row">
+        <input type="number" id="inp-13" placeholder="0">
+        <span class="unit">$</span>
+        <button class="btn-confirm" onclick="answerCalc(13)">Confirmar</button>
+      </div>
+      <div class="q-feedback" id="fb-13"></div>
+    </div>
+
+    <!-- BLOQUE III -->
+    <div class="block-header">
+      <span class="block-num">Bloque III</span>
+      <span class="block-title">Cálculos Prácticos · Food Cost, CM y PE</span>
+      <span class="block-count">12 preguntas</span>
+    </div>
+
+    <!-- Q14 -->
+    <div class="q-card" id="qc-14">
+      <div class="q-meta">
+        <span class="q-num">3.1</span>
+        <span class="q-type calc">Cálculo</span>
+      </div>
+      <p class="q-text">¿Cuál es el <strong>Food Cost%</strong> de "La Trattoria"? (Considerá sólo el costo de ingredientes sobre el precio de venta)</p>
+      <div class="calc-row">
+        <input type="number" id="inp-14" placeholder="0" step="0.1">
+        <span class="unit">%</span>
+        <button class="btn-confirm" onclick="answerCalc(14)">Confirmar</button>
+      </div>
+      <div class="q-feedback" id="fb-14"></div>
+    </div>
+
+    <!-- Q15 -->
+    <div class="q-card" id="qc-15">
+      <div class="q-meta">
+        <span class="q-num">3.2</span>
+        <span class="q-type mc">MC</span>
+      </div>
+      <p class="q-text">El Food Cost% ideal para un restaurante de categoría media generalmente se encuentra entre:</p>
+      <div class="options">
+        <button class="option-btn" onclick="answerMC(15,'A')"><span class="opt-key">A</span> 5% y 10%</button>
+        <button class="option-btn" onclick="answerMC(15,'B')"><span class="opt-key">B</span> 15% y 35%</button>
+        <button class="option-btn" onclick="answerMC(15,'C')"><span class="opt-key">C</span> 40% y 60%</button>
+        <button class="option-btn" onclick="answerMC(15,'D')"><span class="opt-key">D</span> 60% y 80%</button>
+      </div>
+      <div class="q-feedback" id="fb-15"></div>
+    </div>
+
+    <!-- Q16 -->
+    <div class="q-card" id="qc-16">
+      <div class="q-meta">
+        <span class="q-num">3.3</span>
+        <span class="q-type vf">V/F</span>
+      </div>
+      <p class="q-text">Un Food Cost del 60% indica que el restaurante es muy eficiente, porque está vendiendo a buen precio.</p>
+      <div class="options">
+        <button class="option-btn" onclick="answerVF(16,'V')"><span class="opt-key">V</span> Verdadero</button>
+        <button class="option-btn" onclick="answerVF(16,'F')"><span class="opt-key">F</span> Falso</button>
+      </div>
+      <div class="q-feedback" id="fb-16"></div>
+    </div>
+
+    <!-- Q17 -->
+    <div class="q-card" id="qc-17">
+      <div class="q-meta">
+        <span class="q-num">3.4</span>
+        <span class="q-type calc">Cálculo</span>
+      </div>
+      <p class="q-text">¿Cuál es la <strong>Contribución Marginal unitaria (CMu)</strong> de "La Trattoria"?</p>
+      <div class="calc-row">
+        <input type="number" id="inp-17" placeholder="0">
+        <span class="unit">$/plato</span>
+        <button class="btn-confirm" onclick="answerCalc(17)">Confirmar</button>
+      </div>
+      <div class="q-feedback" id="fb-17"></div>
+    </div>
+
+    <!-- Q18 -->
+    <div class="q-card" id="qc-18">
+      <div class="q-meta">
+        <span class="q-num">3.5</span>
+        <span class="q-type mc">MC</span>
+      </div>
+      <p class="q-text">La Contribución Marginal unitaria representa:</p>
+      <div class="options">
+        <button class="option-btn" onclick="answerMC(18,'A')"><span class="opt-key">A</span> La ganancia neta que obtiene el dueño por cada plato vendido</button>
+        <button class="option-btn" onclick="answerMC(18,'B')"><span class="opt-key">B</span> Lo que aporta cada unidad vendida para cubrir los CF y, una vez cubiertos, generar ganancia</button>
+        <button class="option-btn" onclick="answerMC(18,'C')"><span class="opt-key">C</span> El costo de producción de cada plato</button>
+        <button class="option-btn" onclick="answerMC(18,'D')"><span class="opt-key">D</span> El margen bruto antes de impuestos e intereses</button>
+      </div>
+      <div class="q-feedback" id="fb-18"></div>
+    </div>
+
+    <!-- Q19 -->
+    <div class="q-card" id="qc-19">
+      <div class="q-meta">
+        <span class="q-num">3.6</span>
+        <span class="q-type calc">Cálculo</span>
+      </div>
+      <p class="q-text">Si "La Trattoria" vende <strong>600 platos</strong> en el mes, ¿cuál es la <strong>Contribución Marginal Total (CMT)</strong>?</p>
+      <div class="calc-row">
+        <input type="number" id="inp-19" placeholder="0">
+        <span class="unit">$</span>
+        <button class="btn-confirm" onclick="answerCalc(19)">Confirmar</button>
+      </div>
+      <div class="q-feedback" id="fb-19"></div>
+    </div>
+
+    <!-- Q20 -->
+    <div class="q-card" id="qc-20">
+      <div class="q-meta">
+        <span class="q-num">3.7</span>
+        <span class="q-type vf">V/F</span>
+      </div>
+      <p class="q-text">Si la CMu es positiva, el negocio siempre está obteniendo ganancia neta.</p>
+      <div class="options">
+        <button class="option-btn" onclick="answerVF(20,'V')"><span class="opt-key">V</span> Verdadero</button>
+        <button class="option-btn" onclick="answerVF(20,'F')"><span class="opt-key">F</span> Falso</button>
+      </div>
+      <div class="q-feedback" id="fb-20"></div>
+    </div>
+
+    <!-- Q21 -->
+    <div class="q-card" id="qc-21">
+      <div class="q-meta">
+        <span class="q-num">3.8</span>
+        <span class="q-type calc">Cálculo</span>
+      </div>
+      <p class="q-text">¿Cuál es el <strong>Punto de Equilibrio en unidades</strong> de "La Trattoria del Norte"?</p>
+      <div class="calc-row">
+        <input type="number" id="inp-21" placeholder="0">
+        <span class="unit">platos</span>
+        <button class="btn-confirm" onclick="answerCalc(21)">Confirmar</button>
+      </div>
+      <div class="q-feedback" id="fb-21"></div>
+    </div>
+
+    <!-- Q22 -->
+    <div class="q-card" id="qc-22">
+      <div class="q-meta">
+        <span class="q-num">3.9</span>
+        <span class="q-type calc">Cálculo</span>
+      </div>
+      <p class="q-text">¿Cuál es el <strong>Punto de Equilibrio en pesos ($)</strong>?</p>
+      <div class="calc-row">
+        <input type="number" id="inp-22" placeholder="0">
+        <span class="unit">$</span>
+        <button class="btn-confirm" onclick="answerCalc(22)">Confirmar</button>
+      </div>
+      <div class="q-feedback" id="fb-22"></div>
+    </div>
+
+    <!-- Q23 -->
+    <div class="q-card" id="qc-23">
+      <div class="q-meta">
+        <span class="q-num">3.10</span>
+        <span class="q-type mc">MC</span>
+      </div>
+      <p class="q-text">Si "La Trattoria" vende <strong>600 platos</strong>, ¿cuántas unidades por encima del Punto de Equilibrio está operando?</p>
+      <div class="options">
+        <button class="option-btn" onclick="answerMC(23,'A')"><span class="opt-key">A</span> 448 platos sobre el PE</button>
+        <button class="option-btn" onclick="answerMC(23,'B')"><span class="opt-key">B</span> 152 platos sobre el PE</button>
+        <button class="option-btn" onclick="answerMC(23,'C')"><span class="opt-key">C</span> 600 platos sobre el PE</button>
+        <button class="option-btn" onclick="answerMC(23,'D')"><span class="opt-key">D</span> 248 platos sobre el PE</button>
+      </div>
+      <div class="q-feedback" id="fb-23"></div>
+    </div>
+
+    <!-- Q24 -->
+    <div class="q-card" id="qc-24">
+      <div class="q-meta">
+        <span class="q-num">3.11</span>
+        <span class="q-type calc">Cálculo</span>
+      </div>
+      <p class="q-text">¿Cuál es la <strong>ganancia neta del mes</strong> si se venden 600 platos?</p>
+      <div class="calc-row">
+        <input type="number" id="inp-24" placeholder="0">
+        <span class="unit">$</span>
+        <button class="btn-confirm" onclick="answerCalc(24)">Confirmar</button>
+      </div>
+      <div class="q-feedback" id="fb-24"></div>
+    </div>
+
+    <!-- Q25 -->
+    <div class="q-card" id="qc-25">
+      <div class="q-meta">
+        <span class="q-num">3.12</span>
+        <span class="q-type vf">V/F</span>
+      </div>
+      <p class="q-text">Si "La Trattoria" vende sólo 300 platos en un mes, estaría operando en zona de pérdida.</p>
+      <div class="options">
+        <button class="option-btn" onclick="answerVF(25,'V')"><span class="opt-key">V</span> Verdadero</button>
+        <button class="option-btn" onclick="answerVF(25,'F')"><span class="opt-key">F</span> Falso</button>
+      </div>
+      <div class="q-feedback" id="fb-25"></div>
+    </div>
+
+    <!-- BLOQUE IV -->
+    <div class="block-header">
+      <span class="block-num">Bloque IV</span>
+      <span class="block-title">Análisis Rápido · Sensibilidad</span>
+      <span class="block-count">5 preguntas</span>
+    </div>
+
+    <!-- Q26 -->
+    <div class="q-card" id="qc-26">
+      <div class="q-meta">
+        <span class="q-num">4.1</span>
+        <span class="q-type mc">MC</span>
+      </div>
+      <p class="q-text">Si los Costos Fijos de "La Trattoria" aumentan a <strong>$3.200.000</strong> (todo lo demás igual), ¿qué ocurre con el Punto de Equilibrio?</p>
+      <div class="options">
+        <button class="option-btn" onclick="answerMC(26,'A')"><span class="opt-key">A</span> El PE baja, porque con más costos el negocio necesita vender menos para cubrirlos</button>
+        <button class="option-btn" onclick="answerMC(26,'B')"><span class="opt-key">B</span> El PE sube, porque se necesitan más unidades para cubrir los mayores CF</button>
+        <button class="option-btn" onclick="answerMC(26,'C')"><span class="opt-key">C</span> El PE no cambia, porque la CMu no varió</button>
+        <button class="option-btn" onclick="answerMC(26,'D')"><span class="opt-key">D</span> El PE se duplica exactamente</button>
+      </div>
+      <div class="q-feedback" id="fb-26"></div>
+    </div>
+
+    <!-- Q27 -->
+    <div class="q-card" id="qc-27">
+      <div class="q-meta">
+        <span class="q-num">4.2</span>
+        <span class="q-type mc">MC</span>
+      </div>
+      <p class="q-text">Si el precio de venta sube a <strong>$9.000</strong> (y el CVu se mantiene en $2.200), ¿qué pasa con la CMu?</p>
+      <div class="options">
+        <button class="option-btn" onclick="answerMC(27,'A')"><span class="opt-key">A</span> La CMu sube a $6.800</button>
+        <button class="option-btn" onclick="answerMC(27,'B')"><span class="opt-key">B</span> La CMu no cambia porque depende solo de los costos</button>
+        <button class="option-btn" onclick="answerMC(27,'C')"><span class="opt-key">C</span> La CMu baja porque un precio más alto reduce las ventas</button>
+        <button class="option-btn" onclick="answerMC(27,'D')"><span class="opt-key">D</span> La CMu baja a $4.800</button>
+      </div>
+      <div class="q-feedback" id="fb-27"></div>
+    </div>
+
+    <!-- Q28 -->
+    <div class="q-card" id="qc-28">
+      <div class="q-meta">
+        <span class="q-num">4.3</span>
+        <span class="q-type vf">V/F</span>
+      </div>
+      <p class="q-text">Aumentar el precio de venta siempre mejora la rentabilidad del negocio gastronómico.</p>
+      <div class="options">
+        <button class="option-btn" onclick="answerVF(28,'V')"><span class="opt-key">V</span> Verdadero</button>
+        <button class="option-btn" onclick="answerVF(28,'F')"><span class="opt-key">F</span> Falso</button>
+      </div>
+      <div class="q-feedback" id="fb-28"></div>
+    </div>
+
+    <!-- Q29 -->
+    <div class="q-card" id="qc-29">
+      <div class="q-meta">
+        <span class="q-num">4.4</span>
+        <span class="q-type mc">MC</span>
+      </div>
+      <p class="q-text">"La Trattoria" quiere <strong>reducir su Punto de Equilibrio</strong>. ¿Cuál de las siguientes acciones lo logra directamente?</p>
+      <div class="options">
+        <button class="option-btn" onclick="answerMC(29,'A')"><span class="opt-key">A</span> Contratar más personal de salón (sube los CF)</button>
+        <button class="option-btn" onclick="answerMC(29,'B')"><span class="opt-key">B</span> Reducir el desperdicio de ingredientes (baja CVu → sube CMu → baja PE)</button>
+        <button class="option-btn" onclick="answerMC(29,'C')"><span class="opt-key">C</span> Vender más platos por mes (no cambia el PE, cambia la posición respecto a él)</button>
+        <button class="option-btn" onclick="answerMC(29,'D')"><span class="opt-key">D</span> Ampliar el local a un espacio más grande (sube los CF)</button>
+      </div>
+      <div class="q-feedback" id="fb-29"></div>
+    </div>
+
+    <!-- Q30 -->
+    <div class="q-card" id="qc-30">
+      <div class="q-meta">
+        <span class="q-num">4.5</span>
+        <span class="q-type mc">MC</span>
+      </div>
+      <p class="q-text">¿Qué concepto mide específicamente la relación entre el <strong>costo de ingredientes y el precio de venta</strong> de un plato?</p>
+      <div class="options">
+        <button class="option-btn" onclick="answerMC(30,'A')"><span class="opt-key">A</span> Contribución Marginal unitaria</button>
+        <button class="option-btn" onclick="answerMC(30,'B')"><span class="opt-key">B</span> Punto de Equilibrio en pesos</button>
+        <button class="option-btn" onclick="answerMC(30,'C')"><span class="opt-key">C</span> Food Cost porcentual</button>
+        <button class="option-btn" onclick="answerMC(30,'D')"><span class="opt-key">D</span> Costo Fijo Unitario</button>
+      </div>
+      <div class="q-feedback" id="fb-30"></div>
+    </div>
+
+    <!-- BLOQUE V -->
+    <div class="block-header">
+      <span class="block-num">Bloque V</span>
+      <span class="block-title">Análisis de Situación · Dos Escenarios</span>
+      <span class="block-count">4 preguntas</span>
+    </div>
+
+    <div class="caso-card" style="margin-bottom:24px; border-color:#2a2d3380;">
+      <div class="caso-sub" style="margin-bottom:12px;">// Escenario — Comparación Mensual</div>
+      <p style="font-size:14px; color:var(--muted); margin-bottom:16px;">La Trattoria compara dos meses con distintos niveles de producción:</p>
+      <table class="caso-table">
+        <tr><th>Mes</th><th>Platos Vendidos</th><th>Situación</th></tr>
+        <tr><td>🔵 Julio</td><td>350 platos</td><td style="text-align:right; color:var(--wrong); font-family:'DM Mono',monospace;">¿?</td></tr>
+        <tr><td>🟢 Agosto</td><td>650 platos</td><td style="text-align:right; color:var(--correct); font-family:'DM Mono',monospace;">¿?</td></tr>
+      </table>
+    </div>
+
+    <!-- Q31 -->
+    <div class="q-card" id="qc-31">
+      <div class="q-meta">
+        <span class="q-num">5.1</span>
+        <span class="q-type mc">MC</span>
+      </div>
+      <p class="q-text">En <strong>julio (350 platos)</strong>, "La Trattoria" se encuentra:</p>
+      <div class="options">
+        <button class="option-btn" onclick="answerMC(31,'A')"><span class="opt-key">A</span> En zona de ganancia, porque 350 es más de la mitad del PE</button>
+        <button class="option-btn" onclick="answerMC(31,'B')"><span class="opt-key">B</span> En zona de pérdida, porque no alcanzó el Punto de Equilibrio</button>
+        <button class="option-btn" onclick="answerMC(31,'C')"><span class="opt-key">C</span> Exactamente en el Punto de Equilibrio</button>
+        <button class="option-btn" onclick="answerMC(31,'D')"><span class="opt-key">D</span> En equilibrio porque cubrió todos los costos variables</button>
+      </div>
+      <div class="q-feedback" id="fb-31"></div>
+    </div>
+
+    <!-- Q32 -->
+    <div class="q-card" id="qc-32">
+      <div class="q-meta">
+        <span class="q-num">5.2</span>
+        <span class="q-type calc">Cálculo</span>
+      </div>
+      <p class="q-text">¿Cuánto <strong>pierde</strong> "La Trattoria" en julio con 350 platos vendidos?</p>
+      <div class="calc-row">
+        <input type="number" id="inp-32" placeholder="0">
+        <span class="unit">$ (pérdida)</span>
+        <button class="btn-confirm" onclick="answerCalc(32)">Confirmar</button>
+      </div>
+      <div class="q-feedback" id="fb-32"></div>
+    </div>
+
+    <!-- Q33 -->
+    <div class="q-card" id="qc-33">
+      <div class="q-meta">
+        <span class="q-num">5.3</span>
+        <span class="q-type calc">Cálculo</span>
+      </div>
+      <p class="q-text">¿Cuánto <strong>gana</strong> "La Trattoria" en agosto con 650 platos vendidos?</p>
+      <div class="calc-row">
+        <input type="number" id="inp-33" placeholder="0">
+        <span class="unit">$</span>
+        <button class="btn-confirm" onclick="answerCalc(33)">Confirmar</button>
+      </div>
+      <div class="q-feedback" id="fb-33"></div>
+    </div>
+
+    <!-- Q34 -->
+    <div class="q-card" id="qc-34">
+      <div class="q-meta">
+        <span class="q-num">5.4</span>
+        <span class="q-type mc">MC</span>
+      </div>
+      <p class="q-text">Comparando julio y agosto, ¿qué conclusión se puede sacar sobre la importancia del volumen de ventas para este negocio?</p>
+      <div class="options">
+        <button class="option-btn" onclick="answerMC(34,'A')"><span class="opt-key">A</span> El volumen no importa si los costos están controlados</button>
+        <button class="option-btn" onclick="answerMC(34,'B')"><span class="opt-key">B</span> Superar el PE es la barrera crítica: pasar de 350 a 650 platos transforma una pérdida significativa en una ganancia importante</button>
+        <button class="option-btn" onclick="answerMC(34,'C')"><span class="opt-key">C</span> Los meses siempre se compensan entre sí sin importar el volumen</button>
+        <button class="option-btn" onclick="answerMC(34,'D')"><span class="opt-key">D</span> La CMu cambia automáticamente con el volumen, por eso hay tanta diferencia</button>
+      </div>
+      <div class="q-feedback" id="fb-34"></div>
+    </div>
+
+    <!-- SUBMIT -->
+    <div class="submit-area">
+      <p id="submit-hint">Respondé todas las preguntas para ver tus resultados.</p>
+      <button class="btn-submit" onclick="showResults()">Ver resultados →</button>
+    </div>
+  </div>
+</div>
+
+<!-- SCORE BAR -->
+<div class="score-bar" id="score-bar" style="display:none;">
+  <div class="sc"><span class="sc-val gray" id="sb-total">0/34</span><span class="sc-label">Respondidas</span></div>
+  <div class="sc"><span class="sc-val green" id="sb-correct">0</span><span class="sc-label">Correctas</span></div>
+  <div class="sc"><span class="sc-val red" id="sb-wrong">0</span><span class="sc-label">Incorrectas</span></div>
+</div>
+
+<!-- RESULTS -->
+<div id="results-section">
+  <div class="result-hero">
+    <div class="result-tag">// Resultado Final · Primer Parcial · Costos y Presupuestos · IFTS N°23</div>
+    <div class="result-score" id="res-pct">—</div>
+    <div class="result-label" id="res-name-display">Alumno/a</div>
+    <div class="result-grid">
+      <div class="result-cell g"><div class="rv" id="res-correct">0</div><div class="rl">Correctas</div></div>
+      <div class="result-cell r"><div class="rv" id="res-wrong">0</div><div class="rl">Incorrectas</div></div>
+      <div class="result-cell p"><div class="rv" id="res-total">34</div><div class="rl">Total</div></div>
+    </div>
+    <div class="result-nota" id="res-nota">—</div>
+    <br>
+    <button class="btn-print" onclick="window.print()">🖨 Imprimir</button>
+    <button class="btn-retry" onclick="location.reload()">↺ Reintentar</button>
+  </div>
+  <div class="review-section">
+    <div class="review-title">// Revisión completa — pregunta a pregunta</div>
+    <div id="review-list"></div>
+  </div>
+</div>
+
+<script>
+// ── DATA ─────────────────────────────────────────
+// correct answers: MC=letter, VF='V'/'F', calc=number (with tolerance)
+const answers = {
+  1:  { type:'vf',   correct:'F', feedback:'FALSO. El alquiler es un Costo Fijo: se paga igual sin importar cuántos platos se vendan.' },
+  2:  { type:'mc',   correct:'C', feedback:'CORRECTO. Los ingredientes son costos variables: si no se produce, no se gastan.' },
+  3:  { type:'mc',   correct:'B', feedback:'CORRECTO. Los sueldos base no varían con la producción (fijos) y no se identifican con un único plato (indirectos).' },
+  4:  { type:'vf',   correct:'V', feedback:'VERDADERO. La comisión existe solo cuando hay ventas; a más ventas, más comisión. Es variable.' },
+  5:  { type:'mc',   correct:'B', feedback:'CORRECTO. Costos directos: se asignan sin ambigüedad (ej. ingredientes). Indirectos: requieren un criterio para distribuirse (ej. alquiler entre platos).' },
+  6:  { type:'vf',   correct:'F', feedback:'FALSO. La amortización es un Costo Fijo: se imputa en cuotas iguales según la vida útil del equipo, independientemente de cuánto se use.' },
+  7:  { type:'mc',   correct:'C', feedback:'CORRECTO. Los costos mixtos o semifijos tienen un componente fijo (el mínimo facturado) y uno variable (el consumo adicional).' },
+  8:  { type:'vf',   correct:'V', feedback:'VERDADERO. El packaging se asigna directamente a cada plato; es un costo directo y variable.' },
+  9:  { type:'mc',   correct:'B', feedback:'CORRECTO. Los CF son independientes del volumen de producción. El alquiler, sueldos base y amortización no cambian aunque se duplique la producción.' },
+  10: { type:'calc', correct:3480000, tol:1000, unit:'$', feedback:'CT = $2.600.000 + ($2.200 × 400) = $2.600.000 + $880.000 = $3.480.000' },
+  11: { type:'calc', correct:6500, tol:10, unit:'$/plato', feedback:'CFU = $2.600.000 ÷ 400 platos = $6.500 por plato.' },
+  12: { type:'vf',   correct:'V', feedback:'VERDADERO. Los CF son una "torta" fija que se divide en más porciones al producir más. A mayor volumen, menor CFU → base conceptual de las economías de escala.' },
+  13: { type:'calc', correct:1320000, tol:100, unit:'$', feedback:'CVT = $2.200 × 600 platos = $1.320.000.' },
+  14: { type:'calc', correct:22.5, tol:0.6, unit:'%', feedback:'Food Cost% = ($1.800 ÷ $8.000) × 100 = 22.5%. Es un buen nivel para un restaurante.' },
+  15: { type:'mc',   correct:'B', feedback:'CORRECTO. Entre 15% y 35% es el rango saludable para la mayoría de restaurantes. Un FC muy bajo puede indicar porciones pequeñas; muy alto, ineficiencia o precios bajos.' },
+  16: { type:'vf',   correct:'F', feedback:'FALSO. Un Food Cost del 60% es muy alto: por cada $100 que ingresa, $60 se van en ingredientes, dejando poco para cubrir otros costos y generar ganancia.' },
+  17: { type:'calc', correct:5800, tol:10, unit:'$/plato', feedback:'CMu = $8.000 − $2.200 = $5.800 por plato. Es el "aporte" de cada venta.' },
+  18: { type:'mc',   correct:'B', feedback:'CORRECTO. La CMu no es la ganancia neta; es la contribución al "pozo" de CF. Recién cuando ese pozo se llena (se cubre el PE), lo siguiente es ganancia pura.' },
+  19: { type:'calc', correct:3480000, tol:1000, unit:'$', feedback:'CMT = $5.800 × 600 = $3.480.000. Ese monto debe superar los CF ($2.600.000) para haber ganancia.' },
+  20: { type:'vf',   correct:'F', feedback:'FALSO. Una CMu positiva significa que cada venta aporta algo, pero si el volumen es bajo y no se cubren los CF, el resultado sigue siendo pérdida.' },
+  21: { type:'calc', correct:448, tol:2, unit:'platos', feedback:'PE = $2.600.000 ÷ $5.800 = 448,27 ≈ 448 platos. (Siempre redondeamos hacia arriba para estar seguros de cubrir los CF.)' },
+  22: { type:'calc', correct:3584000, tol:20000, unit:'$', feedback:'PE ($) = 448 × $8.000 = $3.584.000. Con esa facturación exactamente se cubren todos los costos.' },
+  23: { type:'mc',   correct:'B', feedback:'CORRECTO. 600 − 448 = 152 platos por encima del PE. Cada uno de esos 152 platos genera $5.800 de ganancia pura.' },
+  24: { type:'calc', correct:881600, tol:5000, unit:'$', feedback:'Ganancia = 152 × $5.800 = $881.600 netos en el mes.' },
+  25: { type:'vf',   correct:'V', feedback:'VERDADERO. 300 platos < 448 (PE), por lo tanto el negocio está en zona de pérdida: no alcanza a cubrir sus Costos Fijos.' },
+  26: { type:'mc',   correct:'B', feedback:'CORRECTO. Nuevo PE = $3.200.000 ÷ $5.800 ≈ 552 platos. Al subir los CF, se necesitan más ventas para cubrirlos. El PE sube.' },
+  27: { type:'mc',   correct:'A', feedback:'CORRECTO. Nueva CMu = $9.000 − $2.200 = $6.800. Al subir el PV sin cambiar el CVu, la diferencia (CMu) aumenta.' },
+  28: { type:'vf',   correct:'F', feedback:'FALSO. Si bien sube la CMu, un precio más alto puede reducir la demanda (menos clientes). El efecto neto depende de la elasticidad de la demanda.' },
+  29: { type:'mc',   correct:'B', feedback:'CORRECTO. Menos CVu → mayor CMu → PE = CF ÷ CMu → el denominador crece → el PE baja. Contratar más personal o ampliar el local subiría los CF, empeorando la situación.' },
+  30: { type:'mc',   correct:'C', feedback:'CORRECTO. El Food Cost% = Costo de ingredientes ÷ PV × 100. Mide qué proporción del precio de venta representan los insumos.' },
+  31: { type:'mc',   correct:'B', feedback:'CORRECTO. 350 platos < 448 (PE) → zona de pérdida. El negocio no generó suficiente CMT para cubrir los $2.600.000 de CF.' },
+  32: { type:'calc', correct:568400, tol:5000, unit:'$ (pérdida)', feedback:'Pérdida = (350 − 448) × $5.800 = −98 × $5.800 = −$568.400. El signo negativo indica pérdida.' },
+  33: { type:'calc', correct:1171600, tol:5000, unit:'$', feedback:'Ganancia = (650 − 448) × $5.800 = 202 × $5.800 = $1.171.600.' },
+  34: { type:'mc',   correct:'B', feedback:'CORRECTO. El PE es la barrera crítica. Julio: pérdida de $568.400. Agosto: ganancia de $1.171.600. La diferencia (1.300 platos de distancia entre ambos meses) genera un resultado radicalmente distinto.' },
+};
+
+// ── SUPABASE CONFIG ──────────────────────────────
+const SUPABASE_URL = 'https://dukgjrhyhyxvdqzhthje.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR1a2dqcmh5aHl4dmRxemh0aGplIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc5MTQzNjIsImV4cCI6MjA4MzQ5MDM2Mn0.JYZWv2vYwMbTopyL-T8_kjbX2py5IL7Ap6ASZc2B4dM';
+const SB = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let examRecordId = null;
+
+async function initExamRecord(name) {
+  try {
+    const { data, error } = await SB.from('exam_resultados').insert({
+      nombre: name,
+      puntaje: 0,
+      total: TOTAL,
+      porcentaje: 0,
+      errores: 'TRATTORIA: [EN CURSO 0/' + TOTAL + ']'
+    }).select('id').single();
+    if (data) examRecordId = data.id;
+  } catch (e) { console.error('Error init record:', e); }
+}
+
+async function updateExamRecord() {
+  if (!examRecordId) return;
+  const pct = Math.round((correct / TOTAL) * 100);
+  const failedList = [];
+  for (let i = 1; i <= TOTAL; i++) {
+    if (state[i] === false) {
+      failedList.push('P' + i);
+    }
+  }
+  const status = answered === TOTAL ? 'COMPLETO' : 'PROGRESO ' + answered + '/' + TOTAL;
+  const errorStr = 'TRATTORIA (' + status + '): ' + (failedList.length ? failedList.join(', ') : 'OK');
+  
+  try {
+    await SB.from('exam_resultados').update({
+      puntaje: correct,
+      porcentaje: pct,
+      errores: errorStr
+    }).eq('id', examRecordId);
+  } catch (e) { console.error('Error update record:', e); }
+}
+
+
+// ── STATE ────────────────────────────────────────
+const state = {};
+let answered = 0, correct = 0, wrong = 0;
+const TOTAL = 34;
+
+function startExam() {
+  const name = document.getElementById('student-name').value.trim();
+  if (!name) { alert('Ingresá tu nombre para comenzar.'); return; }
+  document.getElementById('landing').style.display = 'none';
+  document.getElementById('exam-area').style.display = 'block';
+  document.getElementById('score-bar').style.display = 'flex';
+  window._studentName = name;
+  updateScoreBar();
+  initExamRecord(name);
+}
+
+
+function updateScoreBar() {
+  document.getElementById('sb-total').textContent = `${answered}/${TOTAL}`;
+  document.getElementById('sb-correct').textContent = correct;
+  document.getElementById('sb-wrong').textContent = wrong;
+  document.getElementById('prog-bar').style.width = `${(answered/TOTAL)*100}%`;
+  const hint = answered === TOTAL
+    ? `✓ Completaste las ${TOTAL} preguntas. Podés ver tus resultados.`
+    : `Respondiste ${answered} de ${TOTAL} preguntas.`;
+  document.getElementById('submit-hint').textContent = hint;
+}
+
+function markQuestion(qid, isCorrect) {
+  const card = document.getElementById(`qc-${qid}`);
+  card.classList.add(isCorrect ? 'correct-card' : 'wrong-card');
+  card.classList.add('answered');
+}
+
+function showFeedback(qid, isCorrect, feedbackText) {
+  const fb = document.getElementById(`fb-${qid}`);
+  fb.textContent = (isCorrect ? '✓ ' : '✗ ') + feedbackText;
+  fb.className = `q-feedback show ${isCorrect ? 'ok' : 'fail'}`;
+}
+
+function disableOptions(qid) {
+  const card = document.getElementById(`qc-${qid}`);
+  card.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+  card.querySelectorAll('.btn-confirm').forEach(b => b.disabled = true);
+  card.querySelectorAll('input').forEach(i => i.disabled = true);
+}
+
+function recordAnswer(qid, isCorrect) {
+  if (state[qid] !== undefined) return;
+  state[qid] = isCorrect;
+  answered++;
+  if (isCorrect) correct++; else wrong++;
+  updateScoreBar();
+  disableOptions(qid);
+  updateExamRecord();
+}
+
+
+// MC answer
+function answerMC(qid, chosen) {
+  if (state[qid] !== undefined) return;
+  const data = answers[qid];
+  const isCorrect = chosen === data.correct;
+  const card = document.getElementById(`qc-${qid}`);
+  card.querySelectorAll('.option-btn').forEach((btn, i) => {
+    const key = ['A','B','C','D'][i];
+    if (key === data.correct) btn.classList.add('correct-opt');
+    else if (key === chosen && !isCorrect) btn.classList.add('wrong-opt');
+  });
+  recordAnswer(qid, isCorrect);
+  markQuestion(qid, isCorrect);
+  showFeedback(qid, isCorrect, data.feedback);
+}
+
+// V/F answer
+function answerVF(qid, chosen) {
+  if (state[qid] !== undefined) return;
+  const data = answers[qid];
+  const isCorrect = chosen === data.correct;
+  const card = document.getElementById(`qc-${qid}`);
+  card.querySelectorAll('.option-btn').forEach(btn => {
+    const key = btn.querySelector('.opt-key').textContent.trim();
+    if (key === data.correct) btn.classList.add('correct-opt');
+    else if (key === chosen && !isCorrect) btn.classList.add('wrong-opt');
+  });
+  recordAnswer(qid, isCorrect);
+  markQuestion(qid, isCorrect);
+  showFeedback(qid, isCorrect, data.feedback);
+}
+
+// Calc answer
+function answerCalc(qid) {
+  if (state[qid] !== undefined) return;
+  const data = answers[qid];
+  const raw = parseFloat(document.getElementById(`inp-${qid}`).value);
+  if (isNaN(raw)) { alert('Ingresá un número válido.'); return; }
+  const isCorrect = Math.abs(raw - data.correct) <= (data.tol || 0);
+  recordAnswer(qid, isCorrect);
+  markQuestion(qid, isCorrect);
+  showFeedback(qid, isCorrect, data.feedback);
+}
+
+// ── RESULTS ──────────────────────────────────────
+function showResults() {
+  const pct = Math.round((correct / TOTAL) * 100);
+  document.getElementById('exam-area').style.display = 'none';
+  document.getElementById('score-bar').style.display = 'none';
+  const rs = document.getElementById('results-section');
+  rs.style.display = 'block';
+
+  document.getElementById('res-pct').textContent = pct + '%';
+  document.getElementById('res-name-display').textContent = window._studentName || 'Alumno/a';
+  document.getElementById('res-correct').textContent = correct;
+  document.getElementById('res-wrong').textContent = wrong;
+  document.getElementById('res-total').textContent = TOTAL;
+
+  const nota = document.getElementById('res-nota');
+  let notaNum;
+  if (pct < 60) {
+    notaNum = (pct / 60) * 4;
+  } else {
+    notaNum = 4 + ((pct - 60) / 40) * 6;
+  }
+  
+  const notaLabel = pct >= 60
+    ? `✓ Aprobado · Nota: ${notaNum.toFixed(1)}`
+    : `✗ Desaprobado · Nota: ${notaNum.toFixed(1)}`;
+  nota.textContent = notaLabel;
+  nota.className = `result-nota ${pct >= 60 ? 'aprobado' : 'desaprobado'}`;
+
+  // Build review
+  const list = document.getElementById('review-list');
+  list.innerHTML = '';
+  for (let i = 1; i <= TOTAL; i++) {
+    const isCorrect = state[i];
+    const data = answers[i];
+    const div = document.createElement('div');
+    div.className = `review-item ${isCorrect ? 'ok' : 'fail'}`;
+    const icon = isCorrect ? '✓' : '✗';
+    const typeLabel = { mc:'MC', vf:'V/F', calc:'Cálculo' }[data.type];
+    let answerText = '';
+    if (data.type === 'calc') {
+      const val = document.getElementById(`inp-${i}`)?.value;
+      answerText = val ? `Ingresaste: ${Number(val).toLocaleString('es-AR')} · Correcto: ${data.correct.toLocaleString('es-AR')} ${data.unit}` : `Correcto: ${data.correct.toLocaleString('es-AR')} ${data.unit}`;
+    } else {
+      answerText = `Respuesta correcta: ${data.correct}`;
+    }
+    div.innerHTML = `
+      <span class="ri-icon">${isCorrect ? '✅' : '❌'}</span>
+      <div class="ri-q"><strong>[${typeLabel}] P.${i}:</strong> ${data.feedback}</div>
+      <div class="ri-answer">
+        <span class="${isCorrect ? 'corr' : 'wrong'}">${answerText}</span>
+      </div>
+    `;
+    list.appendChild(div);
+  }
+  rs.scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+</body>
+</html>

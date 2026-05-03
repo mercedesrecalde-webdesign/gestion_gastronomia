@@ -86,22 +86,11 @@
         <button class="tab" onclick="setFilter('SIMULACRO2')">Simulacro 2 (El Mentidero)</button>
         <button class="tab" onclick="setFilter('TRATTORIA')">Examen La Trattoria</button>
         <button class="tab" onclick="setFilter('ENCUESTA')">Metaanálisis</button>
+        <button class="tab" onclick="setFilter('KPI')">📊 KPIs y Alumnos</button>
         <button class="tab" onclick="setFilter('FILES')">📁 Material Extra</button>
+        <button class="tab" onclick="setFilter('CONFIG')">⚙️ Config</button>
         <div style="margin-left: auto; display: flex; align-items: center; gap: 10px;">
           <input type="checkbox" id="hideTests" onchange="renderDashboard()">
-          <label for="hideTests" style="font-size: 13px; color: #7a8470; cursor: pointer;">Ocultar pruebas / Mercedes</label>
-        </div>
-      </div>
-
-      <div class="grid">
-        <div class="card">
-          <h3>Distribución de Aprobados</h3>
-          <div class="chart-container">
-            <canvas id="chartPie"></canvas>
-          </div>
-        </div>
-        <div class="card">
-          <h3>Calificaciones Generales</h3>
           <div class="chart-container">
             <canvas id="chartBar"></canvas>
           </div>
@@ -129,8 +118,45 @@
           <tbody id="fileListBody"></tbody>
         </table>
       </div>
+
+      <div id="kpiManager" class="card" style="display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+          <h3>Seguimiento Académico (KPIs)</h3>
+          <button class="btn-print" onclick="addStudentKPI()" style="font-size:12px;">+ Agregar Alumno</button>
+        </div>
+        <p style="font-size:12px; color:#7a8470; margin-bottom:20px;">Meta: Asistencia ≥ 80% | TPs ≥ 70% | Examen ≥ 60%</p>
+        <table>
+          <thead><tr><th>Alumno</th><th>Asistencia (%)</th><th>TPs Completos (%)</th><th>Examen (Mejor %)</th><th>Estado</th><th>Acciones</th></tr></thead>
+          <tbody id="kpiTableBody"></tbody>
+        </table>
+      </div>
+
+      <div id="configPanel" class="card" style="display:none;">
+        <h3>Configuración del Campus</h3>
+        <div style="margin-top:20px; display:flex; align-items:center; gap:20px; background:#181c14; padding:20px; border-radius:8px;">
+          <div style="flex:1;">
+            <div style="font-weight:bold; color:var(--gold);">Habilitar Examen "La Trattoria"</div>
+            <div style="font-size:12px; color:#7a8470;">Si está desactivado, los alumnos verán "Próximamente" y no podrán entrar.</div>
+          </div>
+          <div>
+             <label class="switch">
+              <input type="checkbox" id="trattoriaToggle" onchange="toggleTrattoria(this.checked)">
+              <span class="slider round"></span>
+            </label>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
+
+  <style>
+    .switch { position: relative; display: inline-block; width: 50px; height: 24px; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #2a3023; transition: .4s; border-radius: 24px; }
+    .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+    input:checked + .slider { background-color: var(--gold); }
+    input:checked + .slider:before { transform: translateX(26px); }
+  </style>
 
   <script>
 
@@ -904,10 +930,83 @@
 
     let allData = [];
     let allFiles = [];
+    let kpiData = [];
     let currentFilter = 'ALL';
     let chartPieInstance = null;
     let chartBarInstance = null;
     let sbClient = null;
+
+    async function loadConfig() {
+      const { data } = await sbClient.from('docente_config').select('*').eq('key', 'trattoria_enabled').single();
+      if(data) document.getElementById('trattoriaToggle').checked = data.value === 'true';
+    }
+
+    async function toggleTrattoria(enabled) {
+      await sbClient.from('docente_config').upsert({ key: 'trattoria_enabled', value: String(enabled) });
+    }
+
+    async function loadKPIs() {
+      const { data } = await sbClient.from('estudiantes_kpi').select('*').order('nombre');
+      kpiData = data || [];
+      renderKPITable();
+    }
+
+    function renderKPITable() {
+      const tbody = document.getElementById('kpiTableBody');
+      tbody.innerHTML = '';
+      
+      let countAsisGoal = 0;
+      
+      kpiData.forEach(k => {
+        const bestExam = allData
+          .filter(r => r.nombre.toLowerCase() === k.nombre.toLowerCase())
+          .reduce((max, r) => Math.max(max, r.porcentaje), 0);
+
+        const okAsis = k.asistencia >= 80;
+        const okTPs = k.tps_porcentaje >= 70;
+        const okExam = bestExam >= 60;
+        const totalOk = okAsis && okTPs && okExam;
+
+        if(okAsis) countAsisGoal++;
+
+        tbody.innerHTML += `<tr>
+          <td style="color:var(--gold)">${k.nombre}</td>
+          <td><input type="number" value="${k.asistencia}" onchange="updateKPI('${k.id}', 'asistencia', this.value)" style="width:60px; background:none; border:1px solid #2a3023; color:var(--text); text-align:center;"> %</td>
+          <td><input type="number" value="${k.tps_porcentaje}" onchange="updateKPI('${k.id}', 'tps_porcentaje', this.value)" style="width:60px; background:none; border:1px solid #2a3023; color:var(--text); text-align:center;"> %</td>
+          <td style="color:${okExam?'#7bc67a':'#e05a5a'}">${bestExam}%</td>
+          <td>
+            <span style="color:${totalOk?'#7bc67a':'#7a8470'}; font-size:11px;">
+              ${totalOk ? '✅ CUMPLE' : '⚠️ Pendiente'}
+            </span>
+          </td>
+          <td>
+            <button onclick="deleteKPI('${k.id}')" style="background:none; border:none; color:#e05a5a; cursor:pointer;">Borrar</button>
+          </td>
+        </tr>`;
+      });
+      
+      const asisPct = kpiData.length ? Math.round((countAsisGoal / kpiData.length) * 100) : 0;
+      document.getElementById('kpiAsis').textContent = asisPct + '%';
+    }
+
+    async function updateKPI(id, field, value) {
+      await sbClient.from('estudiantes_kpi').update({ [field]: parseInt(value) }).eq('id', id);
+      loadKPIs();
+    }
+
+    async function addStudentKPI() {
+      const name = prompt('Nombre del alumno:');
+      if(!name) return;
+      await sbClient.from('estudiantes_kpi').insert({ nombre: name, asistencia: 0, tps_porcentaje: 0 });
+      loadKPIs();
+    }
+
+    async function deleteKPI(id) {
+      if(confirm('¿Borrar alumno de KPIs?')) {
+        await sbClient.from('estudiantes_kpi').delete().eq('id', id);
+        loadKPIs();
+      }
+    }
 
     async function deleteRecord(id) {
       if(!confirm('¿Estás seguro de que querés eliminar este registro? No se puede deshacer.')) return;
@@ -1010,12 +1109,33 @@
 
       if(currentFilter === 'FILES') {
         document.getElementById('fileManager').style.display = 'block';
+        document.getElementById('kpiManager').style.display = 'none';
+        document.getElementById('configPanel').style.display = 'none';
         document.querySelector('.grid').style.display = 'none';
         document.getElementById('mainTable').parentElement.style.display = 'none';
         loadFiles();
         return;
+      } else if(currentFilter === 'KPI') {
+        document.getElementById('fileManager').style.display = 'none';
+        document.getElementById('kpiManager').style.display = 'block';
+        document.getElementById('configPanel').style.display = 'none';
+        document.querySelector('.grid').style.display = 'grid';
+        document.getElementById('mainTable').parentElement.style.display = 'none';
+        loadKPIs();
+        return;
+      } else if(currentFilter === 'CONFIG') {
+        document.getElementById('fileManager').style.display = 'none';
+        document.getElementById('kpiManager').style.display = 'none';
+        document.getElementById('configPanel').style.display = 'block';
+        document.querySelector('.grid').style.display = 'none';
+        document.getElementById('mainTable').parentElement.style.display = 'none';
+        loadConfig();
+        return;
       } else {
         document.getElementById('fileManager').style.display = 'none';
+        document.getElementById('kpiManager').style.display = 'none';
+        document.getElementById('configPanel').style.display = 'none';
+        document.getElementById('mainStats').style.display = 'grid';
       }
 
       let aprobados = 0, reprobados = 0;

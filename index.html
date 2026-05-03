@@ -305,18 +305,14 @@ body::before {
   </a>
 
   <!-- Simulacro Trattoria (Nuevo) -->
-  <a href="simulacro_trattoria.html" class="act-card featured">
-    <div class="act-icon">🍝</div>
-    <div class="act-tag">Parcial Oficial</div>
-    <div class="act-name">La Trattoria</div>
-    <div class="act-desc">Módulo de evaluación oficial. Solo habilitado durante el horario de clase.</div>
-    <div class="act-meta">
-      <span>34 preguntas</span>
-      <span class="dot"></span>
-      <span>Evaluación Final</span>
-      <span class="act-arrow">→</span>
+  <div id="trattoria-container">
+    <div class="act-card featured" style="opacity: 0.5; cursor: default;">
+      <div class="act-icon">🍝</div>
+      <div class="act-tag">Examen Oficial</div>
+      <div class="act-name">La Trattoria</div>
+      <div class="act-desc">Cargando estado del examen...</div>
     </div>
-  </a>
+  </div>
 
   <!-- Evaluación General -->
   <a href="evaluacion.html" class="act-card">
@@ -411,7 +407,53 @@ body::before {
     }
   }
 
-  document.addEventListener('DOMContentLoaded', loadExtraMaterial);
+  async function initCampus() {
+    await loadExtraMaterial();
+    await checkExamStatus();
+  }
+
+  async function checkExamStatus() {
+    const container = document.getElementById('trattoria-container');
+    try {
+      const { data } = await sb.from('docente_config').select('*').eq('key', 'trattoria_enabled').single();
+      const enabled = data && data.value === 'true';
+
+      if (enabled) {
+        container.innerHTML = `
+          <a href="simulacro_trattoria.html" class="act-card featured">
+            <div class="act-icon">🍝</div>
+            <div class="act-tag">Examen Oficial</div>
+            <div class="act-name">La Trattoria</div>
+            <div class="act-desc">Módulo de evaluación oficial. Habilitado ahora.</div>
+            <div class="act-meta">
+              <span>34 preguntas</span>
+              <span class="dot"></span>
+              <span>Evaluación Final</span>
+              <span class="act-arrow">→</span>
+            </div>
+          </a>
+        `;
+      } else {
+        container.innerHTML = `
+          <div class="act-card featured" style="border-color: rgba(200, 240, 60, 0.2); background: linear-gradient(135deg, var(--card) 0%, rgba(200, 240, 60, 0.02) 100%); opacity: 0.8; cursor: default;">
+            <div class="act-icon" style="filter: grayscale(1); opacity: 0.5;">🍝</div>
+            <div class="act-tag" style="color: var(--gold);">Próximamente</div>
+            <div class="act-name">Examen: La Trattoria</div>
+            <div class="act-desc">Estará disponible el día del parcial. Podés practicar con los simulacros.</div>
+            <div class="act-meta">
+              <span style="color: var(--gold); border: 1px solid var(--gold); padding: 2px 6px; border-radius: 4px; font-size: 8px;">BLOQUEADO</span>
+              <span class="dot"></span>
+              <span>Aprobación: 60%</span>
+            </div>
+          </div>
+        `;
+      }
+    } catch (e) {
+      console.error('Error checking exam status:', e);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', initCampus);
 </script>
 
 <footer class="campus-footer">

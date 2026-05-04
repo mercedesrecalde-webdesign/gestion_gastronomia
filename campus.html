@@ -140,6 +140,10 @@
         <span class="nav-icon">📊</span>
         <span class="nav-label">Panel</span>
       </div>
+      <div class="nav-btn" onclick="window.open('apunte.html', '_blank')">
+        <span class="nav-icon">📖</span>
+        <span class="nav-label">Apunte Teórico</span>
+      </div>
       <div class="nav-btn" onclick="switchMainView('downloads')" id="btn-downloads">
         <span class="nav-icon">📥</span>
         <span class="nav-label">Descargas</span>
@@ -185,6 +189,15 @@
       </header>
       <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
         
+        <!-- Manual de Gestión Gastronómica (NUEVO) -->
+        <a href="apunte.html" target="_blank" class="calc-card" style="text-decoration: none; display: block; cursor: pointer; border: 1px solid var(--gold); background: rgba(212,168,83,0.05);">
+          <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+             <h3 style="color: var(--gold); font-size: 18px;">📖 Manual de Gestión Gastronómica</h3>
+             <span style="background: var(--gold); color: #111; font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 4px; text-transform: uppercase;">Nuevo HTML</span>
+          </div>
+          <p style="color: var(--text); font-size: 13px; margin-top: 10px;">Versión interactiva del apunte: Ficha Técnica, Costos, Sueldo Propio y Matriz BCG.</p>
+        </a>
+
         <!-- Apunte Unidad 1 -->
         <a href="Apunte costos y presupuestos unidad 1 eje 1.pdf" target="_blank" class="calc-card" style="text-decoration: none; display: block; cursor: pointer;">
           <h3 style="color: var(--gold); font-size: 16px;">📄 Apunte Eje 1</h3>
